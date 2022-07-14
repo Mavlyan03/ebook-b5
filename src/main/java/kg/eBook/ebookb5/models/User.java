@@ -35,11 +35,12 @@ public class User {
     @OneToMany
     private List<PromoCode> promoCodes = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany
     private List<Book> basket = new ArrayList<>();
 
     @OneToMany
     private List<Book> favorite = new ArrayList<>();
+
 
 }
 

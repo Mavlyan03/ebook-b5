@@ -81,6 +81,8 @@ public class Book {
 
     private boolean isEnabled;
 
+    @ManyToMany
+    private List<User> basket;
 
 
 }

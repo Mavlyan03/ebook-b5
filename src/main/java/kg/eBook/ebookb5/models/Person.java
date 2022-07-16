@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 
 @Entity
 @Table
@@ -17,34 +16,42 @@ import java.util.ArrayList;
 @Setter
 public class Person {
 
+    public Person(String firstName, String lastName, String phoneNumber, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public Person(String firstName, String email) {
+        this.firstName = firstName;
+        this.email = email;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Name should not be empty")
     private String firstName;
 
-    @NotEmpty(message = "Last name should not be empty")
     private String lastName;
 
-    @Email
     private String email;
 
-    @NotEmpty(message = "Phone number should not be empty")
     private String phoneNumber;
     private String password;
 
-    @OneToMany
-    private List<Book> book = new ArrayList();
+//    @OneToMany
+//    private List<Book> book = new ArrayList();
 
-    @OneToMany
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
-    private List<PromoCode> promoCodes = new ArrayList<>();
-
-    private List<Book> basket = new ArrayList<>();
-
-    private List<Book> favorite = new ArrayList<>();
+//    @OneToMany
+//    private List<PromoCode> promoCodes = new ArrayList<>();
+//
+//    private List<Book> basket = new ArrayList<>();
+//
+//    private List<Book> favorite = new ArrayList<>();
 
 }

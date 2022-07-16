@@ -42,13 +42,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain authorization(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable()
+        http.csrf().disable()
                 .authorizeRequests( auth -> auth
-//                        .antMatchers("/swagg", "/swagger-ui/index.html").permitAll()
+                        .antMatchers("/swagger", "/swagger-ui/index.html").permitAll()
                         .anyRequest()
                         .permitAll()
                 )
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

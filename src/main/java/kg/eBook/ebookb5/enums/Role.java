@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public enum Roles implements GrantedAuthority {
+public enum Role implements GrantedAuthority {
 
     ADMIN,
     USER,

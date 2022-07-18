@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.models;
 
-import kg.eBook.ebookb5.enums.Roles;
+import kg.eBook.ebookb5.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +30,7 @@ public class User {
     @OneToMany
     private List<Book> books = new ArrayList();
 
-    private Roles role;
+    private Role role;
 
     @OneToMany
     private List<PromoCode> promoCodes = new ArrayList<>();

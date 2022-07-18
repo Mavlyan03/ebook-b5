@@ -7,6 +7,9 @@ public enum Language {
 
     ENGLISH("Английский");
 
+    private String language;
+
     Language(String language) {
+        this.language = language;
     }
 }

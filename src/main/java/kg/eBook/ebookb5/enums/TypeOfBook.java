@@ -5,7 +5,9 @@ public enum TypeOfBook {
     AUDIO_BOOK("Аудиокнига"),
     ELECTRONIC_BOOK("Электронная книга");
 
-    TypeOfBook(String book) {
+    private String book;
 
+    TypeOfBook(String book) {
+        this.book = book;
     }
 }

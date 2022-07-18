@@ -31,7 +31,7 @@ public class Book {
     @ManyToOne
     private Genre genre;
 
-    private int sellingPrice;
+    private int price;
 
     private String author;
 

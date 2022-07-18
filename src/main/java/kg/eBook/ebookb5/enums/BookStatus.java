@@ -6,6 +6,9 @@ public enum BookStatus {
     ACCEPTED("Принятый"),
     REJECTED("Отклоненный");
 
+    private String status;
+
     BookStatus(String status) {
+        this.status = status;
     }
 }

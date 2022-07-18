@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.services;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.enums.Role;
-import kg.eBook.ebookb5.exceptions.EmailIsAlreadyExistException;
+import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.models.Person;
 import kg.eBook.ebookb5.repositories.PersonRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
@@ -33,7 +33,7 @@ public class VendorService {
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
         if(personRepository.findByEmail(vendorRegisterRequest.getEmail()).orElse(null) != null)
-            throw new EmailIsAlreadyExistException("The email " + vendorRegisterRequest.getEmail() + " is already in use!");
+            throw new AlreadyExistException("The email " + vendorRegisterRequest.getEmail() + " is already in use!");
 
         Person savedVendor = personRepository.save(vendor);
 

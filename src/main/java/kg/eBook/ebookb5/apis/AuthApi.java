@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.apis;
 
 import kg.eBook.ebookb5.dto.requests.LoginRequest;
-import kg.eBook.ebookb5.dto.requests.PersonRegisterRequest;
+import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@PreAuthorize("permitAll()")
 public class AuthApi {
 
     private final JWTUtil jwtUtil;
@@ -26,20 +27,19 @@ public class AuthApi {
     private final LoginService loginService;
 
     @PostMapping("/vendor/register")
-    @PreAuthorize("permitAll()")
     public JwtResponse registrationVendor(@RequestBody VendorRegisterRequest vendorRegisterRequest) {
         return vendorService.registerVendor(vendorRegisterRequest);
     }
 
     @PostMapping("/user/register")
-    @PreAuthorize("permitAll()")
-    public JwtResponse registrationPerson(@RequestBody PersonRegisterRequest personRequest) {
+    public JwtResponse registrationPerson(@RequestBody UserRegisterRequest personRequest) {
         return personService.registerPerson(personRequest);
     }
 
     @PostMapping("/login")
-    @PreAuthorize("permitAll()")
     public JwtResponse performLogin(@RequestBody LoginRequest loginResponse) {
-        return loginService.loginMethod(loginResponse);
+       return loginService.loginMethod(loginResponse);
     }
 }
+
+

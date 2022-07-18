@@ -6,7 +6,6 @@ import kg.eBook.ebookb5.models.Person;
 import kg.eBook.ebookb5.repositories.PersonRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,13 +31,12 @@ public class LoginService {
             );
         }
 
-        String token = jwtUtil.generateToken(loginRequest.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
 
         return new JwtResponse(
                 user.getId(),
                 token,
                 user.getRole()
         );
-
     }
 }

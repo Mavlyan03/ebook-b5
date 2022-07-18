@@ -1,9 +1,10 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.requests.PersonRegisterRequest;
+import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.enums.Role;
-import kg.eBook.ebookb5.exceptions.EmailIsAlreadyExistException;
+import kg.eBook.ebookb5.exceptions.AlreadyExistException;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Person;
 import kg.eBook.ebookb5.repositories.PersonRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
@@ -19,7 +20,7 @@ public class PersonService {
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
 
-    public JwtResponse registerPerson(PersonRegisterRequest personRegisterRequest) {
+    public JwtResponse registerPerson(UserRegisterRequest personRegisterRequest) {
 
         Person person = new Person(
                 personRegisterRequest.getFirstName(),
@@ -30,7 +31,7 @@ public class PersonService {
         person.setPassword(passwordEncoder.encode(personRegisterRequest.getPassword()));
 
         if(personRepository.findByEmail(personRegisterRequest.getEmail()).orElse(null) != null)
-            throw new EmailIsAlreadyExistException("The email " + personRegisterRequest.getEmail() + " is already in use!");
+            throw new AlreadyExistException("The email " + personRegisterRequest.getEmail() + " is already in use!");
 
         Person savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(personRegisterRequest.getEmail());
@@ -40,6 +41,14 @@ public class PersonService {
                 token,
                 savedPerson.getRole()
         );
+    }
+
+    public Person findByEmail(String email) {
+        return personRepository.findByEmail(email).orElseThrow();
+    }
+
+    public Person findById(Long id) {
+        return personRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
 }

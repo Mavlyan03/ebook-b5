@@ -30,6 +30,7 @@ public class User {
     @OneToMany
     private List<Book> books = new ArrayList();
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany

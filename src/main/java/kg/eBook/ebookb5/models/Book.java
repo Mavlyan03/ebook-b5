@@ -74,7 +74,7 @@ public class Book {
 
     private String electronicBook;
 
-    @OneToMany
+    @ManyToMany
     private List<User> likes;
 
     private BookStatus bookStatus;

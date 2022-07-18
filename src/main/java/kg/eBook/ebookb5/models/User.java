@@ -27,19 +27,19 @@ public class User {
     private String phoneNumber;
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "owner")
     private List<Book> books = new ArrayList();
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
+    @OneToMany(mappedBy = "vendor")
     private List<PromoCode> promoCodes = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "basket")
     private List<Book> basket = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany(mappedBy = "likes")
     private List<Book> favorite = new ArrayList<>();
 
 

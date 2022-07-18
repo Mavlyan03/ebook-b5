@@ -18,13 +18,13 @@ public class MailingApi {
     private final PersonService personService;
     private String message;
 
-    @PostMapping("/{userId}")
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<HttpStatus> sendMail(@PathVariable Long userId) {
-        message = "Congratulations! You were registered to mailing list";
-        Person byId = personService.findById(userId);
-        emailService.send(byId.getEmail(), message);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
+//    @PostMapping("") //TODO
+//    @PreAuthorize("permitAll()")
+//    public ResponseEntity<HttpStatus> sendMail() {
+//        message = "Congratulations! You were registered to mailing list";
+//        Person byId = personService.findById(userId);
+//        emailService.send(byId.getEmail(), message);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
 
 }

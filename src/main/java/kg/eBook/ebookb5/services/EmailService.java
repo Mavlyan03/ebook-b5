@@ -1,15 +1,20 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.models.MailingList;
+import kg.eBook.ebookb5.repositories.MailingListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+    private final MailingListRepository mailingListRepository;
 
     public void send(String to, String message) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -19,6 +24,12 @@ public class EmailService {
         simpleMailMessage.setText(message);
         this.javaMailSender.send(simpleMailMessage);
     }
+
+    public List<MailingList> collectAndSendEmails(MailingList email) {
+        mailingListRepository.save(email);
+        return mailingListRepository.findAll();
+    }
+
 
 //    public void sendHtmlMessage(String to, String htmlMessage) throws MessagingException {
 //        MimeMessage mimeMessage = javaMailSender.createMimeMessage();

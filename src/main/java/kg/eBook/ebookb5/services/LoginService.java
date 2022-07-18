@@ -2,31 +2,35 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.requests.LoginRequest;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
+import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.Person;
 import kg.eBook.ebookb5.repositories.PersonRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LoginService {
 
     private final JWTUtil jwtUtil;
     private final PersonRepository personRepository;
+    private final PasswordEncoder passwordEncoder;
 
-
-    public JwtResponse loginMethod(LoginRequest loginRequest) {
+    public JwtResponse authenticate(LoginRequest loginRequest) {
 
         Person user = personRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "user with email = " + loginRequest.getEmail() + " not found!"
+                .orElseThrow(() -> new NotFoundException(
+                        "user with email: " + loginRequest.getEmail() + " not found!"
                 ));
 
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
-            throw new BadCredentialsException(
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new WrongPasswordException(
                     "invalid password"
             );
         }

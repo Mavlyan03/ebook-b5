@@ -38,7 +38,7 @@ public class AuthApi {
 
     @PostMapping("/login")
     public JwtResponse performLogin(@RequestBody LoginRequest loginResponse) {
-       return loginService.loginMethod(loginResponse);
+       return loginService.authenticate(loginResponse);
     }
 }
 

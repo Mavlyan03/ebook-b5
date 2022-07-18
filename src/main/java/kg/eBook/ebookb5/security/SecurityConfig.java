@@ -37,7 +37,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain authorization(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .cors().and().csrf().disable()
                 .authorizeRequests( auth -> auth
                         .antMatchers("/swagger", "/swagger-ui/index.html").permitAll()
                         .anyRequest()

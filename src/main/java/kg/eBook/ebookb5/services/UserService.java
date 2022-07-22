@@ -22,21 +22,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
 
-    public JwtResponse registerPerson(UserRegisterRequest personRegisterRequest) {
+    public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
 
         User person = new User(
-                personRegisterRequest.getFirstName(),
-                personRegisterRequest.getEmail()
+                userRegisterRequest.getFirstName(),
+                userRegisterRequest.getEmail()
         );
 
         person.setRole(Role.USER);
-        person.setPassword(passwordEncoder.encode(personRegisterRequest.getPassword()));
+        person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if(personRepository.findByEmail(personRegisterRequest.getEmail()).orElse(null) != null)
-            throw new AlreadyExistException("The email " + personRegisterRequest.getEmail() + " is already in use!");
+        if(personRepository.existsByEmail(userRegisterRequest.getEmail()) != null)
+            throw new AlreadyExistException("The email " + userRegisterRequest.getEmail() + " is already in use!");
 
         User savedPerson = personRepository.save(person);
-        String token = jwtUtil.generateToken(personRegisterRequest.getEmail());
+        String token = jwtUtil.generateToken(userRegisterRequest.getEmail());
 
         return new JwtResponse(
                 savedPerson.getId(),
@@ -45,12 +45,5 @@ public class UserService {
         );
     }
 
-    public User findByEmail(String email) {
-        return personRepository.findByEmail(email).orElseThrow();
-    }
-
-    public User findById(Long id) {
-        return personRepository.findById(id).orElseThrow(NotFoundException::new);
-    }
 
 }

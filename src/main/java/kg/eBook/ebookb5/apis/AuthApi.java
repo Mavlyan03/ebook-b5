@@ -33,7 +33,7 @@ public class AuthApi {
 
     @PostMapping("/user/register")
     public JwtResponse registrationPerson(@RequestBody UserRegisterRequest personRequest) {
-        return personService.registerPerson(personRequest);
+        return personService.registerUser(personRequest);
     }
 
     @PostMapping("/login")

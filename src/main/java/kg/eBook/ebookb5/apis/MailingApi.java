@@ -1,12 +1,8 @@
 package kg.eBook.ebookb5.apis;
 
-import kg.eBook.ebookb5.models.Person;
 import kg.eBook.ebookb5.services.EmailService;
-import kg.eBook.ebookb5.services.PersonService;
+import kg.eBook.ebookb5.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class MailingApi {
 
     private final EmailService emailService;
-    private final PersonService personService;
+    private final UserService personService;
     private String message;
 
 //    @PostMapping("") //TODO

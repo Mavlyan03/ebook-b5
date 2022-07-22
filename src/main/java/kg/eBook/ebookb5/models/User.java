@@ -6,24 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table
 @NoArgsConstructor
 @Getter
 @Setter
-public class Person {
+public class User {
 
-    public Person(String firstName, String lastName, String phoneNumber, String email) {
+    public User(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
-    public Person(String firstName, String email) {
+    public User(String firstName, String email) {
         this.firstName = firstName;
         this.email = email;
     }

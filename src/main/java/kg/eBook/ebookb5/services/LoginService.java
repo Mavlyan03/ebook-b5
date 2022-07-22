@@ -4,8 +4,8 @@ import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.requests.LoginRequest;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
-import kg.eBook.ebookb5.models.Person;
-import kg.eBook.ebookb5.repositories.PersonRepository;
+import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginService {
 
     private final JWTUtil jwtUtil;
-    private final PersonRepository personRepository;
+    private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
 
     public JwtResponse authenticate(LoginRequest loginRequest) {
 
-        Person user = personRepository.findByEmail(loginRequest.getEmail())
+        User user = personRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(
                         "user with email: " + loginRequest.getEmail() + " not found!"
                 ));

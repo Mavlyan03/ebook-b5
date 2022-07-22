@@ -5,8 +5,8 @@ import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
-import kg.eBook.ebookb5.models.Person;
-import kg.eBook.ebookb5.repositories.PersonRepository;
+import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PersonService {
+public class UserService {
 
-    private final PersonRepository personRepository;
+    private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
 
     public JwtResponse registerPerson(UserRegisterRequest personRegisterRequest) {
 
-        Person person = new Person(
+        User person = new User(
                 personRegisterRequest.getFirstName(),
                 personRegisterRequest.getEmail()
         );
@@ -35,7 +35,7 @@ public class PersonService {
         if(personRepository.findByEmail(personRegisterRequest.getEmail()).orElse(null) != null)
             throw new AlreadyExistException("The email " + personRegisterRequest.getEmail() + " is already in use!");
 
-        Person savedPerson = personRepository.save(person);
+        User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(personRegisterRequest.getEmail());
 
         return new JwtResponse(
@@ -45,11 +45,11 @@ public class PersonService {
         );
     }
 
-    public Person findByEmail(String email) {
+    public User findByEmail(String email) {
         return personRepository.findByEmail(email).orElseThrow();
     }
 
-    public Person findById(Long id) {
+    public User findById(Long id) {
         return personRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 

@@ -6,7 +6,7 @@ import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import kg.eBook.ebookb5.services.LoginService;
-import kg.eBook.ebookb5.services.PersonService;
+import kg.eBook.ebookb5.services.UserService;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +23,7 @@ public class AuthApi {
 
     private final JWTUtil jwtUtil;
     private final VendorService vendorService;
-    private final PersonService personService;
+    private final UserService personService;
     private final LoginService loginService;
 
     @PostMapping("/vendor/register")

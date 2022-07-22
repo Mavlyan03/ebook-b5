@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.security.JWT;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import kg.eBook.ebookb5.services.PersonDetailsService;
+import kg.eBook.ebookb5.services.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class TokenVerifierFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
-    private final PersonDetailsService personDetailsService;
+    private final UserDetailsService personDetailsService;
 
 
     @Override

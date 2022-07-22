@@ -1,22 +1,20 @@
 package kg.eBook.ebookb5.security;
 
-import kg.eBook.ebookb5.models.Person;
+import kg.eBook.ebookb5.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @RequiredArgsConstructor
-public class PersonDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
-    private final Person person;
+    private final User person;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole().toString()));
+        return Collections.singletonList(person.getRole());
     }
 
     @Override

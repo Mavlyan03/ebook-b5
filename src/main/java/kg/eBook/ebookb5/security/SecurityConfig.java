@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.security;
 
-import kg.eBook.ebookb5.repositories.PersonRepository;
+import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.TokenVerifierFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class SecurityConfig {
     private final TokenVerifierFilter jwtFilter;
 
     @Bean
-    AuthenticationProvider authenticationProvider(PersonRepository personRepository) {
+    AuthenticationProvider authenticationProvider(UserRepository personRepository) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService((email) -> (UserDetails) personRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -13,18 +15,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class User {
-
-    public User(String firstName, String lastName, String phoneNumber, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
-
-    public User(String firstName, String email) {
-        this.firstName = firstName;
-        this.email = email;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,17 +29,32 @@ public class User {
     private String phoneNumber;
     private String password;
 
-//    @OneToMany
-//    private List<Book> book = new ArrayList();
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books = new ArrayList();
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @OneToMany
-//    private List<PromoCode> promoCodes = new ArrayList<>();
-//
-//    private List<Book> basket = new ArrayList<>();
-//
-//    private List<Book> favorite = new ArrayList<>();
+    @OneToMany(mappedBy = "vendor")
+    private List<PromoCode> promoCodes = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "basket")
+    private List<Book> basket = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "likes")
+    private List<Book> favorite = new ArrayList<>();
+
+    public User(String firstName, String lastName, String phoneNumber, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public User(String firstName, String email) {
+        this.firstName = firstName;
+        this.email = email;
+    }
 
 }
+

@@ -17,13 +17,15 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String phoneNumber;
     private String password;
 
@@ -42,6 +44,17 @@ public class User {
     @ManyToMany(mappedBy = "likes")
     private List<Book> favorite = new ArrayList<>();
 
+    public User(String firstName, String lastName, String phoneNumber, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public User(String firstName, String email) {
+        this.firstName = firstName;
+        this.email = email;
+    }
 
 }
 

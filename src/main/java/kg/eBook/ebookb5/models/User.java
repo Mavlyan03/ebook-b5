@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "users")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -27,6 +27,7 @@ public class User {
     private String email;
 
     private String phoneNumber;
+
     private String password;
 
     @OneToMany(mappedBy = "owner")
@@ -38,8 +39,8 @@ public class User {
     @OneToMany(mappedBy = "vendor")
     private List<PromoCode> promoCodes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "basket")
-    private List<Book> basket = new ArrayList<>();
+    @ManyToMany(mappedBy = "bookBasket")
+    private List<Book> userBasket = new ArrayList<>();
 
     @ManyToMany(mappedBy = "likes")
     private List<Book> favorite = new ArrayList<>();

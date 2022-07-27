@@ -23,11 +23,9 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", allocationSize = 1)
-
     private Long id;
 
     private String name;
-
     @ManyToOne
     private Genre genre;
 
@@ -82,7 +80,5 @@ public class Book {
     private boolean isEnabled;
 
     @ManyToMany
-    private List<User> basket;
-
-
+    private List<User> bookBasket;
 }

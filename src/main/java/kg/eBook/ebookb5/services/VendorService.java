@@ -34,7 +34,7 @@ public class VendorService {
         vendor.setRole(Role.VENDOR);
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(vendorRegisterRequest.getEmail()) != null)
+        if(personRepository.existsByEmail(vendorRegisterRequest.getEmail()))
             throw new AlreadyExistException("The email " + vendorRegisterRequest.getEmail() + " is already in use!");
 
         User savedVendor = personRepository.save(vendor);

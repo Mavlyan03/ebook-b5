@@ -32,7 +32,7 @@ public class UserService {
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(userRegisterRequest.getEmail()) != null)
+        if(personRepository.existsByEmail(userRegisterRequest.getEmail()))
             throw new AlreadyExistException("The email " + userRegisterRequest.getEmail() + " is already in use!");
 
         User savedPerson = personRepository.save(person);

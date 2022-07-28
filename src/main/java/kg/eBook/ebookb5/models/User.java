@@ -42,8 +42,12 @@ public class User {
     @ManyToMany(mappedBy = "bookBasket")
     private List<Book> userBasket = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "likes")
+    @ManyToMany(mappedBy = "likes", cascade = CascadeType.MERGE)
     private List<Book> favorite = new ArrayList<>();
+
+    public void setFavoriteBook(Book book) {
+        this.favorite.add(book);
+    }
 
     public User(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;

@@ -31,7 +31,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "owner")
-    private List<Book> books = new ArrayList();
+    private List<Book> books = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;

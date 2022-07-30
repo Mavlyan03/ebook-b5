@@ -72,8 +72,12 @@ public class Book {
 
     private String electronicBook;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<User> likes;
+
+    public void setUserToBook(User user) {
+        this.likes.add(user);
+    }
 
     private BookStatus bookStatus;
 

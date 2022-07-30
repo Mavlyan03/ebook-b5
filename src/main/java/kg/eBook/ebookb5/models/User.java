@@ -37,7 +37,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "vendor")
-    private List<PromoCode> promoCodes = new ArrayList<>();
+    private List<Promocode> promoCodes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "bookBasket")
     private List<Book> userBasket = new ArrayList<>();

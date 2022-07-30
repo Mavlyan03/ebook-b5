@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "promo_codes")
 @Getter
 @Setter
-public class PromoCode {
+public class Promocode {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promocode_gen")
     @SequenceGenerator(name = "promocode_gen", sequenceName = "promocode_seq", allocationSize = 1)

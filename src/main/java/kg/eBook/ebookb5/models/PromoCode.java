@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @Setter
 public class PromoCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "promoCode_gen", sequenceName = "promoCode_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promocode_gen")
+    @SequenceGenerator(name = "promocode_gen", sequenceName = "promocode_seq", allocationSize = 1)
     private Long id;
 
     private String name;

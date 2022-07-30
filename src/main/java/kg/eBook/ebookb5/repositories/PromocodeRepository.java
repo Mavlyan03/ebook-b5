@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
+
+    Boolean existsByName(String name);
 }

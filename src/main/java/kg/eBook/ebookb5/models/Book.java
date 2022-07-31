@@ -84,5 +84,10 @@ public class Book {
     private boolean isEnabled;
 
     @ManyToMany
+    @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket;
+
+    @Transient
+    private StringBuilder promocode;
 }

@@ -5,13 +5,14 @@ import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimplyResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
+import kg.eBook.ebookb5.exceptions.ThisPromocodeIsInvalid;
 import kg.eBook.ebookb5.models.*;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,9 +48,9 @@ public class PromocodeService {
     public List<BookBasketResponse> findAllBooksWithPromocode(String promocodeName, Authentication authentication) {
 
         Promocode promocode = promocodeRepository.findByName(promocodeName).orElseThrow(
-                () -> new NotFoundException("Данный промокод не действителен"));
+                () -> new ThisPromocodeIsInvalid("Данный промокод не действителен"));
 
-        if (promocode.getDateOfFinish().isAfter(LocalDate.now())) {
+        if (LocalDate.now().isAfter(promocode.getDateOfFinish())) {
             throw new InvalidDateException("Срок действия промокода истек");
         }
 
@@ -57,7 +58,7 @@ public class PromocodeService {
         User vendor = userRepository.findByEmail(promocode.getVendor().getEmail()).get();
 
         if (!thisPromocodeAppliesToBooks(client, vendor)) {
-            throw new NotFoundException("Данный промокод не действителен");
+            throw new ThisPromocodeIsInvalid("Данный промокод не действителен");
         } else {
             for (Book book : client.getUserBasket()) {
                 for (Book vendorBook : vendor.getBooks()) {

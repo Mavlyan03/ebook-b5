@@ -1,9 +1,6 @@
 package kg.eBook.ebookb5.exceptions.handler;
 
-import kg.eBook.ebookb5.exceptions.AlreadyExistException;
-import kg.eBook.ebookb5.exceptions.ExceptionResponse;
-import kg.eBook.ebookb5.exceptions.InvalidDateException;
-import kg.eBook.ebookb5.exceptions.NotFoundException;
+import kg.eBook.ebookb5.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +12,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handlerNotFoundException(InvalidDateException e) {
+        return new ExceptionResponse(
+                HttpStatus.BAD_REQUEST,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(ThisPromocodeIsInvalid.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handlerNotFoundException(ThisPromocodeIsInvalid e) {
         return new ExceptionResponse(
                 HttpStatus.BAD_REQUEST,
                 e.getClass().getSimpleName(),

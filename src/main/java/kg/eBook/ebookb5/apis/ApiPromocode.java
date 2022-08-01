@@ -30,7 +30,7 @@ public class ApiPromocode {
 
     @GetMapping("/check")
     @PreAuthorize("hasAuthority('USER')")
-    @Operation(summary = "find promo code with name", description = "if the promo code is valid, it will return discounted books")
+    @Operation(summary = "you can check promo code with name", description = "if the promo code is valid, it will return discounted books")
     public List<BookBasketResponse> findAllBooksWithPromocode(@RequestParam String promocodeName, Authentication authentication) {
 
         return promocodeService.findAllBooksWithPromocode(promocodeName, authentication);

@@ -44,7 +44,8 @@ public class VendorService {
         return new JwtResponse(
                 savedVendor.getId(),
                 token,
-                savedVendor.getRole());
+                savedVendor.getRole(),
+                savedVendor.getFirstName());
     }
 
 }

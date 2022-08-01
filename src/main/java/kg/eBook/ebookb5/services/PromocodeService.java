@@ -2,10 +2,9 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
-import kg.eBook.ebookb5.dto.responses.SimplyResponse;
+import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
-import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.ThisPromocodeIsInvalid;
 import kg.eBook.ebookb5.models.*;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
@@ -25,7 +24,7 @@ public class PromocodeService {
     private final PromocodeRepository promocodeRepository;
     private final UserRepository userRepository;
 
-    public SimplyResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
+    public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
 
         if (promoCodeRequest.getDateOfStart().isAfter(promoCodeRequest.getDateOfFinish())) {
             throw new InvalidDateException("Дата, которую вы написали, более ранняя, чем дата начала");
@@ -42,7 +41,7 @@ public class PromocodeService {
         User user = userRepository.findByEmail(authentication.getName()).get();
         promocode.setVendor(user);
         promocodeRepository.save(promocode);
-        return new SimplyResponse("Промокод успешно создан!");
+        return new SimpleResponse("Промокод успешно создан!");
     }
 
     public List<BookBasketResponse> findAllBooksWithPromocode(String promocodeName, Authentication authentication) {
@@ -55,13 +54,12 @@ public class PromocodeService {
         }
 
         User client = userRepository.findByEmail(authentication.getName()).get();
-        User vendor = userRepository.findByEmail(promocode.getVendor().getEmail()).get();
 
-        if (!thisPromocodeAppliesToBooks(client, vendor)) {
+        if (!thisPromocodeAppliesToBooks(client, promocode.getVendor())) {
             throw new ThisPromocodeIsInvalid("Данный промокод не действителен");
         } else {
             for (Book book : client.getUserBasket()) {
-                for (Book vendorBook : vendor.getBooks()) {
+                for (Book vendorBook : promocode.getVendor().getBooks()) {
                     if (vendorBook.equals(book)) {
                         if (book.getDiscount() <= 0) {
                             int bookPrice = book.getPrice();

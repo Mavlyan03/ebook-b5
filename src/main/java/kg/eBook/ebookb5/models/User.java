@@ -4,8 +4,10 @@ import kg.eBook.ebookb5.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,9 @@ public class User {
     private String phoneNumber;
 
     private String password;
+
+    @CreatedDate
+    private LocalDate created;
 
     @OneToMany(mappedBy = "owner")
     private List<Book> books = new ArrayList<>();
@@ -60,6 +65,5 @@ public class User {
         this.firstName = firstName;
         this.email = email;
     }
-
 }
 

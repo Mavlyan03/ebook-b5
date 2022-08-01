@@ -2,6 +2,7 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.dto.responses.UserResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
@@ -12,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +33,7 @@ public class UserService {
                 userRegisterRequest.getFirstName(),
                 userRegisterRequest.getEmail()
         );
-
+        person.setCreated(LocalDate.now());
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
@@ -46,5 +51,21 @@ public class UserService {
         );
     }
 
+    public List<UserResponse> findAllUsers() {
+        return view(personRepository.findAllUsers());
+    }
 
+    public List<UserResponse> view(List<User> users) {
+
+        List<UserResponse> userResponses = new ArrayList<>();
+
+        for (User user : users) {
+            userResponses.add(new UserResponse(user));
+        }
+        return userResponses;
+    }
+
+    public UserResponse findById(Long userId) {
+        return new UserResponse(personRepository.findById(userId).get());
+    }
 }

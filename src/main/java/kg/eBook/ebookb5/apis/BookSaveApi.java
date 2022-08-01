@@ -1,13 +1,11 @@
 package kg.eBook.ebookb5.apis;
 
-import kg.eBook.ebookb5.dto.requests.books.BookSave;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
+import kg.eBook.ebookb5.services.book.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class BookSaveApi {
 
+    private final BookService bookService;
+
     @PostMapping("/save/paperBook")
-    public String savePaperBook(Authentication authentication, BookSave<PaperBookSaveRequest> paperBookSaveRequest) {
-
-
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
+    public String savePaperBook(Authentication authentication, @RequestBody PaperBookSaveRequest paperBookSaveRequest) {
+        bookService.saveBook(authentication, paperBookSaveRequest);
         return "Ваш запрос был успешно отправлен!";
     }
 

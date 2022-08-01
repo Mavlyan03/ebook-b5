@@ -34,7 +34,7 @@ public class BookBasketResponse {
 
     private String mainImage;
 
-    private StringBuilder promocode;
+    private String promocode;
 
     public BookBasketResponse(Book book) {
         this.id = book.getId();
@@ -43,6 +43,5 @@ public class BookBasketResponse {
         this.price = book.getPrice();
         this.discount = book.getDiscount();
         this.mainImage = book.getMainImage();
-        this.promocode = book.getPromocode();
     }
 }

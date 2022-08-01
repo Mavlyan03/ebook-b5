@@ -55,6 +55,8 @@ public class PromocodeService {
 
         User client = userRepository.findByEmail(authentication.getName()).get();
 
+        String discountPromocode = "";
+        List<Long> bookId = new ArrayList<>();
         if (!thisPromocodeAppliesToBooks(client, promocode.getVendor())) {
             throw new ThisPromocodeIsInvalid("Данный промокод не действителен");
         } else {
@@ -66,17 +68,17 @@ public class PromocodeService {
                             int priceDiscount = bookPrice * promocode.getDiscount() / 100;
                             int newPrice = bookPrice - priceDiscount;
                             book.setPrice(newPrice);
-                            book.setPromocode(new StringBuilder("Промокод " + promocode.getDiscount() + " %"));
+                            discountPromocode = "Промокод " + promocode.getDiscount() + " %";
+                            bookId.add(book.getId());
                         }
                     }
                 }
             }
         }
-        return viewMapper(client.getUserBasket());
+        return viewMapper(client.getUserBasket(), discountPromocode, bookId);
     }
 
     private boolean thisPromocodeAppliesToBooks(User client, User vendor) {
-
         for (Book book : client.getUserBasket()) {
             for (Book vendorBook : vendor.getBooks()) {
                 if (vendorBook.equals(book)) {
@@ -87,10 +89,17 @@ public class PromocodeService {
         return false;
     }
 
-    private List<BookBasketResponse> viewMapper(List<Book> books) {
+    private List<BookBasketResponse> viewMapper(List<Book> books, String discountPromocode, List<Long> bookId) {
         List<BookBasketResponse> basketResponses = new ArrayList<>();
         for (Book book : books) {
             basketResponses.add(new BookBasketResponse(book));
+        }
+        for (BookBasketResponse basketRespons : basketResponses) {
+            for (Long aLong : bookId) {
+                if (basketRespons.getId().equals(aLong)) {
+                    basketRespons.setPromocode(discountPromocode);
+                }
+            }
         }
         return basketResponses;
     }

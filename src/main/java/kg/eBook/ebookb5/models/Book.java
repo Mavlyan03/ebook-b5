@@ -3,10 +3,7 @@ package kg.eBook.ebookb5.models;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.TypeOfBook;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,11 +12,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "books")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", allocationSize = 1)
@@ -81,4 +78,45 @@ public class Book {
 
     @ManyToMany
     private List<User> bookBasket;
+
+    public Book(String mainImage, String secondImage, String thirdImage, String name, Genre genre, int price, String author,
+                int pageSize, String publishingHouse, String description, Language language, int yearOfIssue,
+                int quantityOfBook, int discount, boolean bestseller) {
+        this.mainImage = mainImage;
+        this.secondImage = secondImage;
+        this.thirdImage = thirdImage;
+        this.name = name;
+        this.genre = genre;
+        this.price = price;
+        this.author = author;
+        this.pageSize = pageSize;
+        this.publishingHouse = publishingHouse; //////////// Paper Book constructor
+        this.description = description;
+        this.language = language;
+        this.yearOfIssue = yearOfIssue;
+        this.quantityOfBook = quantityOfBook;
+        this.discount = discount;
+        this.bestseller = bestseller;
+    }
+
+    public Book(String name, Genre genre, int price, String author, int pageSize, String publishingHouse, String description,
+                Language language, int yearOfIssue, int discount, boolean bestseller, String mainImage, String secondImage,
+                String thirdImage, String fragment, String electronicBook) {
+        this.name = name;
+        this.genre = genre;
+        this.price = price;
+        this.author = author;
+        this.pageSize = pageSize;
+        this.publishingHouse = publishingHouse; //////////// Electronic Book constructor
+        this.description = description;
+        this.language = language;
+        this.yearOfIssue = yearOfIssue;
+        this.discount = discount;
+        this.bestseller = bestseller;
+        this.mainImage = mainImage;
+        this.secondImage = secondImage;
+        this.thirdImage = thirdImage;
+        this.fragment = fragment;
+        this.electronicBook = electronicBook;
+    }
 }

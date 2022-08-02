@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = {MERGE, PERSIST, DETACH})
     private List<Book> books = new ArrayList<>();
 
     public void setBook(Book book) {

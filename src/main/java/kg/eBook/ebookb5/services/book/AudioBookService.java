@@ -54,7 +54,8 @@ public class AudioBookService {
 
     }
 
-    //update
-    //delete
+    public void deleteAudioBook(Long id) {
+
+    }
 
 }

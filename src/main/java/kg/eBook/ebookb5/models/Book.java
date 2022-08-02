@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "books")
 @Getter
@@ -48,7 +50,7 @@ public class Book {
 
     private boolean bestseller;
 
-    @ManyToOne
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REMOVE})
     private User owner;
 
     private String mainImage;

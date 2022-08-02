@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -44,11 +46,14 @@ public class User {
     @OneToMany(mappedBy = "vendor")
     private List<Promocode> promoCodes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "bookBasket")
+    @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "bookBasket")
     private List<Book> userBasket = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "likes", cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "likes", cascade = MERGE)
     private List<Book> favorite = new ArrayList<>();
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<PurchasedUserBooks> purchasedUserBooks = new ArrayList<>();
 
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);

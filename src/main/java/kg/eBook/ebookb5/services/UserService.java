@@ -2,11 +2,14 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.UserResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
+import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class UserService {
     private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
+    private final BookRepository bookRepository;
 
     public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
 
@@ -67,5 +71,20 @@ public class UserService {
 
     public UserResponse findById(Long userId) {
         return new UserResponse(personRepository.findById(userId).get());
+    }
+
+    public SimpleResponse deleteByUserId(Long userId) {
+        User user = personRepository.findById(userId).get();
+
+        // detach table users_basket_books
+        user.getUserBasket().forEach(x-> x.removeUserFromBasket(user));
+        bookRepository.saveAll(user.getUserBasket());
+
+        // detach table users_favorite_books
+        user.getFavorite().forEach(x-> x.removeUserFromLikes(user));
+        bookRepository.saveAll(user.getFavorite());
+
+        personRepository.delete(user);
+        return new SimpleResponse("Пользователь успешно удален!");
     }
 }

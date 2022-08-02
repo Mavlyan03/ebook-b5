@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "books")
 @NoArgsConstructor
@@ -73,6 +75,8 @@ public class Book {
     private String electronicBook;
 
     @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "users_favorite_books", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;
 
     public void setUserToBook(User user) {
@@ -83,6 +87,14 @@ public class Book {
 
     private boolean isEnabled;
 
-    @ManyToMany
+    @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private List<User> bookBasket;
+
+    public void removeUserFromBasket(User user) {
+        this.bookBasket.remove(user);
+    }
+
+    public void removeUserFromLikes(User user) {
+        this.likes.remove(user);
+    }
 }

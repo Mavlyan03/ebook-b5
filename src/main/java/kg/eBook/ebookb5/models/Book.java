@@ -53,6 +53,8 @@ public class Book {
 
     private boolean bestseller;
 
+    private LocalDate dateTheBookWasAddedToFavorites;
+
     @ManyToOne
     private User owner;
 

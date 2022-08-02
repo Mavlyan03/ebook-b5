@@ -2,6 +2,7 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.UserResponse;
 import kg.eBook.ebookb5.enums.Role;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse.viewUserBooks;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class UserService {
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(userRegisterRequest.getEmail()))
+        if (personRepository.existsByEmail(userRegisterRequest.getEmail()))
             throw new AlreadyExistException("The email " + userRegisterRequest.getEmail() + " is already in use!");
 
         User savedPerson = personRepository.save(person);
@@ -77,14 +80,24 @@ public class UserService {
         User user = personRepository.findById(userId).get();
 
         // detach table users_basket_books
-        user.getUserBasket().forEach(x-> x.removeUserFromBasket(user));
+        user.getUserBasket().forEach(x -> x.removeUserFromBasket(user));
         bookRepository.saveAll(user.getUserBasket());
 
         // detach table users_favorite_books
-        user.getFavorite().forEach(x-> x.removeUserFromLikes(user));
+        user.getFavorite().forEach(x -> x.removeUserFromLikes(user));
         bookRepository.saveAll(user.getFavorite());
 
         personRepository.delete(user);
         return new SimpleResponse("Пользователь успешно удален!");
+    }
+
+    public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(Long userId) {
+        User user = personRepository.findById(userId).get();
+        return viewUserBooks(user.getFavorite());
+    }
+
+    public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(Long userId) {
+        User user = personRepository.findById(userId).get();
+        return viewUserBooks(user.getUserBasket());
     }
 }

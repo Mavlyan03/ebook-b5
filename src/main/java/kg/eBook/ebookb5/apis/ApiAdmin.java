@@ -48,4 +48,18 @@ public class ApiAdmin {
     public List<PurchasedUserBooksResponse> purchasedUserBooks(@PathVariable Long userId) {
         return userBooksService.purchasedUserBooks(userId);
     }
+
+    @GetMapping("/favorites/{userId}")
+    @Operation(summary = "find all user favorite books with user id")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(@PathVariable Long userId) {
+        return userService.findAllUsersFavoriteBooks(userId);
+    }
+
+    @GetMapping("/baskets/{userId}")
+    @Operation(summary = "find all user basket books with user id")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(@PathVariable Long userId) {
+        return userService.findAllUserBooksInBasket(userId);
+    }
 }

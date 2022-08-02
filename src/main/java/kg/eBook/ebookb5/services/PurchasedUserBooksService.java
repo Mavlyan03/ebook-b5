@@ -16,14 +16,15 @@ public class PurchasedUserBooksService {
     private final PurchasedUserBooksRepository userBooksRepository;
 
     public List<PurchasedUserBooksResponse> purchasedUserBooks(Long userId) {
-        return view(userBooksRepository.findAllByUserId(userId));
+        return viewUserPurchase(userBooksRepository.findAllByUserId(userId));
     }
 
-    private List<PurchasedUserBooksResponse> view(List<PurchasedUserBooks> userBooks) {
+    public static List<PurchasedUserBooksResponse> viewUserPurchase(List<PurchasedUserBooks> userBooks) {
         List<PurchasedUserBooksResponse> booksResponse = new ArrayList<>();
         for (PurchasedUserBooks userBook : userBooks) {
             booksResponse.add(new PurchasedUserBooksResponse(userBook));
         }
         return booksResponse;
     }
+
 }

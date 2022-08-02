@@ -121,4 +121,24 @@ public class Book {
         this.fragment = fragment;
         this.electronicBook = electronicBook;
     }
+
+    public Book(String name, Genre genre, int price, String author, String description, Language language, int yearOfIssue,
+                int discount, boolean bestseller, String mainImage, String secondImage, String thirdImage, String fragment,
+                LocalTime duration, String audioBook) {
+        this.name = name;
+        this.genre = genre;
+        this.price = price;
+        this.author = author;
+        this.description = description;
+        this.language = language;
+        this.yearOfIssue = yearOfIssue;  //////////// Audio Book constructor
+        this.discount = discount;
+        this.bestseller = bestseller;
+        this.mainImage = mainImage;
+        this.secondImage = secondImage;
+        this.thirdImage = thirdImage;
+        this.fragment = fragment;
+        this.duration = duration;
+        this.audioBook = audioBook;
+    }
 }

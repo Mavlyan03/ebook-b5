@@ -1,21 +1,25 @@
 package kg.eBook.ebookb5.models;
 
+import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-
 @Entity
-@Table(name = "promo_codes")
+@Table(name = "promocodes")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Promocode {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promocode_gen")
-    @SequenceGenerator(name = "promocode_gen", sequenceName = "promocode_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promo_gen")
+    @SequenceGenerator(name = "promo_gen", sequenceName = "promo_seq", allocationSize = 1)
     private Long id;
 
     private String name;
@@ -25,5 +29,11 @@ public class Promocode {
 
     @ManyToOne
     private User vendor;
-}
 
+    public Promocode(PromocodeRequest request) {
+        this.name = request.getName();
+        this.discount = request.getDiscount();
+        this.dateOfStart = request.getDateOfStart();
+        this.dateOfFinish = request.getDateOfFinish();
+    }
+}

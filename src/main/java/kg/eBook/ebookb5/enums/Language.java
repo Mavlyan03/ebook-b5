@@ -1,9 +1,9 @@
 package kg.eBook.ebookb5.enums;
 
 public enum Language {
-    KYRGYZ_LANGUAGE("Кыргызский"),
+    KYRGYZ("Кыргызский"),
 
-    RUSSIAN_LANGUAGE("Русский"),
+    RUSSIAN("Русский"),
 
     ENGLISH("Английский");
 

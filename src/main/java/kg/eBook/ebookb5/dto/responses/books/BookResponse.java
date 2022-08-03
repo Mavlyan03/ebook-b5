@@ -13,8 +13,6 @@ public class BookResponse {
 
     private Long id;
 
-    private String MainImage;
-
     private String name;
 
     private int price;

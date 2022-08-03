@@ -1,5 +1,8 @@
 package kg.eBook.ebookb5.models;
 
+import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
+import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
+import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.TypeOfBook;
@@ -8,6 +11,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -50,7 +54,7 @@ public class Book {
 
     private boolean bestseller;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REMOVE})
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH})
     private User owner;
 
     private String mainImage;
@@ -81,64 +85,57 @@ public class Book {
     @ManyToMany
     private List<User> bookBasket;
 
-    public Book(String mainImage, String secondImage, String thirdImage, String name, Genre genre, int price, String author,
-                int pageSize, String publishingHouse, String description, Language language, int yearOfIssue,
-                int quantityOfBook, int discount, boolean bestseller) {
-        this.mainImage = mainImage;
-        this.secondImage = secondImage;
-        this.thirdImage = thirdImage;
-        this.name = name;
-        this.genre = genre;
-        this.price = price;
-        this.author = author;
-        this.pageSize = pageSize;
-        this.publishingHouse = publishingHouse; //////////// Paper Book constructor
-        this.description = description;
-        this.language = language;
-        this.yearOfIssue = yearOfIssue;
-        this.quantityOfBook = quantityOfBook;
-        this.discount = discount;
-        this.bestseller = bestseller;
+    public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    public Book(ElectronicBookSaveRequest eBook) {
+        this.name = eBook.getName();
+        this.price = eBook.getPrice();
+        this.author = eBook.getAuthor();
+        this.pageSize = eBook.getPageSize();
+        this.publishingHouse = eBook.getPublishingHouse();
+        this.description = eBook.getDescription();
+        this.language = eBook.getLanguage();
+        this.yearOfIssue = eBook.getYearOfIssue();
+        this.discount = eBook.getDiscount();
+        this.bestseller = eBook.isBestseller();
+        this.mainImage = eBook.getMainImage();
+        this.secondImage = eBook.getSecondImage();
+        this.thirdImage = eBook.getThirdImage();
+        this.fragment = eBook.getFragment();
+        this.electronicBook = eBook.getElectronicBook();
     }
 
-    public Book(String name, Genre genre, int price, String author, int pageSize, String publishingHouse, String description,
-                Language language, int yearOfIssue, int discount, boolean bestseller, String mainImage, String secondImage,
-                String thirdImage, String fragment, String electronicBook) {
-        this.name = name;
-        this.genre = genre;
-        this.price = price;
-        this.author = author;
-        this.pageSize = pageSize;
-        this.publishingHouse = publishingHouse; //////////// Electronic Book constructor
-        this.description = description;
-        this.language = language;
-        this.yearOfIssue = yearOfIssue;
-        this.discount = discount;
-        this.bestseller = bestseller;
-        this.mainImage = mainImage;
-        this.secondImage = secondImage;
-        this.thirdImage = thirdImage;
-        this.fragment = fragment;
-        this.electronicBook = electronicBook;
+    public Book(AudioBookSaveRequest audioBook) {
+        this.name = audioBook.getName();
+        this.price = audioBook.getPrice();
+        this.author = audioBook.getAuthor();
+        this.description = audioBook.getDescription();
+        this.language = audioBook.getLanguage();
+        this.yearOfIssue = audioBook.getYearOfIssue();
+        this.discount = audioBook.getDiscount();
+        this.bestseller = audioBook.isBestseller();
+        this.mainImage = audioBook.getMainImage();
+        this.secondImage = audioBook.getSecondImage();
+        this.thirdImage = audioBook.getThirdImage();
+        this.fragment = audioBook.getFragment();
+        this.duration = LocalTime.parse(audioBook.getDuration(), timeFormatter);
+        this.audioBook = audioBook.getAudioBook();
     }
 
-    public Book(String name, Genre genre, int price, String author, String description, Language language, int yearOfIssue,
-                int discount, boolean bestseller, String mainImage, String secondImage, String thirdImage, String fragment,
-                LocalTime duration, String audioBook) {
-        this.name = name;
-        this.genre = genre;
-        this.price = price;
-        this.author = author;
-        this.description = description;
-        this.language = language;
-        this.yearOfIssue = yearOfIssue;  //////////// Audio Book constructor
-        this.discount = discount;
-        this.bestseller = bestseller;
-        this.mainImage = mainImage;
-        this.secondImage = secondImage;
-        this.thirdImage = thirdImage;
-        this.fragment = fragment;
-        this.duration = duration;
-        this.audioBook = audioBook;
+    public Book(PaperBookSaveRequest paperBook) {
+        this.mainImage = paperBook.getMainImage();
+        this.secondImage = paperBook.getSecondImage();
+        this.thirdImage = paperBook.getThirdImage();
+        this.name = paperBook.getName();
+        this.price = paperBook.getPrice();
+        this.author = paperBook.getAuthor();
+        this.pageSize = paperBook.getPageSize();
+        this.publishingHouse = paperBook.getPublishingHouse();
+        this.description = paperBook.getDescription();
+        this.language = paperBook.getLanguage();
+        this.yearOfIssue = paperBook.getYearOfIssue();
+        this.quantityOfBook = paperBook.getQuantityOfBook();
+        this.discount = paperBook.getDiscount();
+        this.bestseller = paperBook.isBestseller();
     }
 }

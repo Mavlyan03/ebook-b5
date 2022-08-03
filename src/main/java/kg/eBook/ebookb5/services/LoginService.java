@@ -25,13 +25,13 @@ public class LoginService {
 
         User user = personRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(
-                        "user with email: " + loginRequest.getEmail() + " not found!"
+                        "Пользователь с почтой " + loginRequest.getEmail() + " не найден"
                 ));
 
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new WrongPasswordException(
-                    "invalid password"
+                    "Неверный пароль"
             );
         }
 

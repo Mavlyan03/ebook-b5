@@ -2,12 +2,14 @@ package kg.eBook.ebookb5.services.book;
 
 import com.sun.jdi.request.InvalidRequestStateException;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
+import kg.eBook.ebookb5.dto.responses.books.BookResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
+import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,34 +28,33 @@ public class PaperBookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final GenreRepository genreRepository;
 
-    public void savePaperBook(Authentication authentication, PaperBookSaveRequest paperBookSaveRequest) {
+    public BookResponse savePaperBook(Authentication authentication, PaperBookSaveRequest paperBook) {
 
-        isBookExists(paperBookSaveRequest);
+        isBookExists(paperBook);
 
-        Book book = new Book(
-                paperBookSaveRequest.getMainImage(),
-                paperBookSaveRequest.getSecondImage(),
-                paperBookSaveRequest.getThirdImage(),
-                paperBookSaveRequest.getName(),
-                paperBookSaveRequest.getGenre(),
-                paperBookSaveRequest.getPrice(),
-                paperBookSaveRequest.getAuthor(),
-                paperBookSaveRequest.getPageSize(),
-                paperBookSaveRequest.getPublishingHouse(),
-                paperBookSaveRequest.getDescription(),
-                paperBookSaveRequest.getLanguage(),
-                paperBookSaveRequest.getYearOfIssue(),
-                paperBookSaveRequest.getQuantityOfBook(),
-                paperBookSaveRequest.getDiscount(),
-                paperBookSaveRequest.isBestseller()
-        );
+        Book book = new Book(paperBook);
+
+        book.setTypeOfBook(PAPER_BOOK);
+
+        book.setGenre(genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
+        )));
 
         User user = userRepository.findByEmail(authentication.getName()).get();
+
         book.setOwner(user);
         user.setBook(book);
 
-        ResponseEntity.ok(HttpStatus.CREATED);
+        Book savedBook = bookRepository.save(book);
+
+        return new BookResponse(
+                savedBook.getId(),
+                savedBook.getName(),
+                savedBook.getPrice(),
+                savedBook.getYearOfIssue()
+        );
     }
 
     private void isBookExists(PaperBookSaveRequest paperBookSaveRequest) {
@@ -61,10 +62,9 @@ public class PaperBookService {
         Book book = bookRepository.findByName(paperBookSaveRequest.getName()).orElse(null);
 
         if(book != null) {
-            if(book.getGenre().equals(paperBookSaveRequest.getGenre()) &&
-                    book.getLanguage().equals(paperBookSaveRequest.getLanguage()) &&
+            if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) &&
                     book.getTypeOfBook().equals(PAPER_BOOK))
-                throw new AlreadyExistException("This book is already exists");
+                throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
     }
@@ -82,8 +82,11 @@ public class PaperBookService {
         ResponseEntity.ok(HttpStatus.OK);
     }
 
+
     public void updateBook(Authentication authentication, Long bookId, PaperBookSaveRequest paperBook) {
+
         User user = userRepository.findByEmail(authentication.getName()).get();
+
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Book with id: " + bookId + " not found"));
 
@@ -93,7 +96,9 @@ public class PaperBookService {
             book.setThirdImage(paperBook.getThirdImage());
             book.setName(paperBook.getName());
             book.setAuthor(paperBook.getAuthor());
-            book.setGenre(paperBook.getGenre());
+            genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                    "Genre with id: " + paperBook.getGenreId() + " not found"
+            ));
             book.setPublishingHouse(paperBook.getPublishingHouse());
             book.setDescription(paperBook.getDescription());
             book.setFragment(paperBook.getFragment());
@@ -105,14 +110,8 @@ public class PaperBookService {
             book.setDiscount(paperBook.getDiscount());
             book.setBestseller(paperBook.isBestseller());
 
-            user.setBook(book);
-            book.setOwner(user);
-
             ResponseEntity.ok(HttpStatus.OK);
         } else
             throw new IllegalStateException("You cannot update this book!");
-
-
-
     }
 }

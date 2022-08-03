@@ -1,20 +1,23 @@
 package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
+import kg.eBook.ebookb5.dto.responses.books.BookResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
+import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static kg.eBook.ebookb5.enums.TypeOfBook.*;
 
@@ -26,43 +29,44 @@ public class AudioBookService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    public void saveAudioBook(Authentication authentication, AudioBookSaveRequest audioBook) {
-        isBookExists(audioBook);
+    private final GenreRepository genreRepository;
 
-        Book book = new Book(
-            audioBook.getName(),
-            audioBook.getGenre(),
-            audioBook.getPrice(),
-            audioBook.getAuthor(),
-            audioBook.getDescription(),
-            audioBook.getLanguage(),
-            audioBook.getYearOfIssue(),
-            audioBook.getDiscount(),
-            audioBook.isBestseller(),
-            audioBook.getMainImage(),
-            audioBook.getSecondImage(),
-            audioBook.getThirdImage(),
-            audioBook.getFragment(),
-            audioBook.getDuration(),
-            audioBook.getAudioBook()
-        );
+    public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    public BookResponse saveAudioBook(Authentication authentication, AudioBookSaveRequest audioBook) {
+
+        CheckIfBookExists(audioBook);
+
+        Book book = new Book(audioBook);
+
+        book.setTypeOfBook(AUDIO_BOOK);
+
+        book.setGenre(genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                "Жанр с ID: " + audioBook.getGenreId() + " не был найден"
+        )));
 
         User user = userRepository.findByEmail(authentication.getName()).get();
         book.setOwner(user);
         user.setBook(book);
 
-        ResponseEntity.ok(HttpStatus.CREATED);
+        Book savedBook = bookRepository.save(book);
+
+        return new BookResponse(
+                savedBook.getId(),
+                savedBook.getName(),
+                savedBook.getPrice(),
+                savedBook.getYearOfIssue()
+        );
     }
 
-    private void isBookExists(AudioBookSaveRequest audioBook) {
+    private void CheckIfBookExists(AudioBookSaveRequest audioBook) {
 
         Book book = bookRepository.findByName(audioBook.getName()).orElse(null);
 
-        if(book != null) {
-            if(book.getGenre().equals(audioBook.getGenre()) &&
-                    book.getLanguage().equals(audioBook.getLanguage()) &&
-                        book.getTypeOfBook().equals(AUDIO_BOOK))
-                throw new AlreadyExistException("This book is already exists");
+        if (book != null) {
+            if (book.getLanguage().equals(audioBook.getLanguage()) &&
+                    book.getTypeOfBook().equals(AUDIO_BOOK))
+                throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
     }
@@ -71,11 +75,13 @@ public class AudioBookService {
 
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundException("Book with id: " + bookId + " not found"));
+                () -> new NotFoundException("Книга с  ID: " + bookId + " не найдена"));
 
-        if(user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR) && book.getTypeOfBook().equals(AUDIO_BOOK)) {
+        if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR) && book.getTypeOfBook().equals(AUDIO_BOOK)) {
             book.setName(audioBook.getName());
-            book.setGenre(audioBook.getGenre());
+            genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                    "Жанр с  ID: " + audioBook.getGenreId() + " не найден"
+            ));
             book.setPrice(audioBook.getPrice());
             book.setAuthor(audioBook.getAuthor());
             book.setDescription(audioBook.getDescription());
@@ -87,12 +93,12 @@ public class AudioBookService {
             book.setSecondImage(audioBook.getSecondImage());
             book.setThirdImage(audioBook.getThirdImage());
             book.setFragment(audioBook.getFragment());
-            book.setDuration(audioBook.getDuration());
+            book.setDuration(LocalTime.parse(audioBook.getDuration(), timeFormatter));
             book.setAudioBook(audioBook.getAudioBook());
 
             user.setBook(book);
             book.setOwner(user);
         } else
-            throw new IllegalStateException("You cannot update this book!");
+            throw new IllegalStateException("Вы не можете редактировать этк книгу!");
     }
 }

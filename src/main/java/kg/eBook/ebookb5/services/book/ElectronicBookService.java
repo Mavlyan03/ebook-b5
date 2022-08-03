@@ -1,11 +1,13 @@
 package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
+import kg.eBook.ebookb5.dto.responses.books.BookResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
+import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,34 +27,31 @@ public class ElectronicBookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final GenreRepository genreRepository;
 
-    public ResponseEntity<HttpStatus> saveElectronicBook(Authentication authentication, ElectronicBookSaveRequest eBook) {
+    public BookResponse saveElectronicBook(Authentication authentication, ElectronicBookSaveRequest eBook) {
         isBookExists(eBook);
 
-        Book book = new Book(
-                eBook.getName(),
-                eBook.getGenre(),
-                eBook.getPrice(),
-                eBook.getAuthor(),
-                eBook.getPageSize(),
-                eBook.getPublishingHouse(),
-                eBook.getDescription(),
-                eBook.getLanguage(),
-                eBook.getYearOfIssue(),
-                eBook.getDiscount(),
-                eBook.isBestseller(),
-                eBook.getMainImage(),
-                eBook.getSecondImage(),
-                eBook.getThirdImage(),
-                eBook.getFragment(),
-                eBook.getElectronicBook()
-        );
+        Book book = new Book(eBook);
+
+        book.setTypeOfBook(ELECTRONIC_BOOK);
+
+        book.setGenre(genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                "Жанр с ID: " + eBook.getGenreId() + " не был найден"
+        )));
 
         User user = userRepository.findByEmail(authentication.getName()).get();
         book.setOwner(user);
         user.setBook(book);
 
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        Book savedBook = bookRepository.save(book);
+
+        return new BookResponse(
+                savedBook.getId(),
+                savedBook.getName(),
+                savedBook.getPrice(),
+                savedBook.getYearOfIssue()
+        );
     }
 
     private void isBookExists(ElectronicBookSaveRequest electronicBookSaveRequest) {
@@ -60,10 +59,9 @@ public class ElectronicBookService {
         Book book = bookRepository.findByName(electronicBookSaveRequest.getName()).orElse(null);
 
         if(book != null) {
-            if(book.getGenre().equals(electronicBookSaveRequest.getGenre()) &&
-                    book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) &&
+            if(book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) &&
                     book.getTypeOfBook().equals(ELECTRONIC_BOOK))
-                throw new AlreadyExistException("This book is already exists");
+                throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
     }
@@ -71,11 +69,13 @@ public class ElectronicBookService {
     public ResponseEntity<HttpStatus> updateBook(Authentication authentication, Long bookId, ElectronicBookSaveRequest eBook) {
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundException("Book with id: " + bookId + " not found"));
+                () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"));
 
         if(user.getRole().equals(ADMIN) || (user.getRole().equals(VENDOR) && book.getTypeOfBook().equals(ELECTRONIC_BOOK))) {
             book.setName(eBook.getName());
-            book.setGenre(eBook.getGenre());
+            genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+                    "Жанр с ID: " + eBook.getGenreId() + " не найден"
+            ));
             book.setPrice(eBook.getPrice());
             book.setAuthor(eBook.getAuthor());
             book.setPageSize(eBook.getPageSize());
@@ -95,7 +95,7 @@ public class ElectronicBookService {
             book.setOwner(user);
             return ResponseEntity.ok(HttpStatus.OK);
         } else
-            throw new IllegalStateException("You cannot update this book!");
+            throw new IllegalStateException("Вы не можете редактировать эту книгу");
 
     }
 }

@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.Authentication;
-
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -14,7 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class AudioBookSaveRequest extends BookSaveRequestGeneral{
 
-    private LocalTime duration;
+    private String duration;
 
     private String audioBook;
 

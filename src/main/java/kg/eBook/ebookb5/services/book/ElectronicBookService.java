@@ -71,7 +71,7 @@ public class ElectronicBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"));
 
-        if(user.getRole().equals(ADMIN) || (user.getRole().equals(VENDOR) && book.getTypeOfBook().equals(ELECTRONIC_BOOK))) {
+        if(book.getTypeOfBook().equals(ELECTRONIC_BOOK)) {
             book.setName(eBook.getName());
             genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с ID: " + eBook.getGenreId() + " не найден"

@@ -90,7 +90,7 @@ public class PaperBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Book with id: " + bookId + " not found"));
 
-        if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.VENDOR) && book.getTypeOfBook().equals(PAPER_BOOK))) {
+        if(book.getTypeOfBook().equals(PAPER_BOOK)) {
             book.setMainImage(paperBook.getMainImage());
             book.setSecondImage(paperBook.getSecondImage());
             book.setThirdImage(paperBook.getThirdImage());

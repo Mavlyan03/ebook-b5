@@ -35,7 +35,7 @@ public class AudioBookService {
 
     public BookResponse saveAudioBook(Authentication authentication, AudioBookSaveRequest audioBook) {
 
-        CheckIfBookExists(audioBook);
+        checkIfBookExists(audioBook);
 
         Book book = new Book(audioBook);
 
@@ -59,7 +59,7 @@ public class AudioBookService {
         );
     }
 
-    private void CheckIfBookExists(AudioBookSaveRequest audioBook) {
+    private void checkIfBookExists(AudioBookSaveRequest audioBook) {
 
         Book book = bookRepository.findByName(audioBook.getName()).orElse(null);
 
@@ -77,7 +77,7 @@ public class AudioBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с  ID: " + bookId + " не найдена"));
 
-        if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR) && book.getTypeOfBook().equals(AUDIO_BOOK)) {
+        if (book.getTypeOfBook().equals(AUDIO_BOOK)) {
             book.setName(audioBook.getName());
             genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с  ID: " + audioBook.getGenreId() + " не найден"

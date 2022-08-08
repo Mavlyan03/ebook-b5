@@ -75,14 +75,20 @@ public class Book {
 
     private String electronicBook;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<User> likes;
+
+    public void setUserToBook(User user) {
+        this.likes.add(user);
+    }
 
     private BookStatus bookStatus;
 
     private boolean isEnabled;
 
     @ManyToMany
+    @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket;
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");

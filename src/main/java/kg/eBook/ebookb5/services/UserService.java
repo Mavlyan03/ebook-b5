@@ -40,7 +40,8 @@ public class UserService {
         return new JwtResponse(
                 savedPerson.getId(),
                 token,
-                savedPerson.getRole()
+                savedPerson.getRole(),
+                savedPerson.getFirstName()
         );
     }
 

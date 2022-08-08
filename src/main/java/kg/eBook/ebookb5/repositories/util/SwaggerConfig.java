@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.util;
+package kg.eBook.ebookb5.repositories.util;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

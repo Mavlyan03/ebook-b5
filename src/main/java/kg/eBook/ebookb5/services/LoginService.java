@@ -40,7 +40,8 @@ public class LoginService {
         return new JwtResponse(
                 user.getId(),
                 token,
-                user.getRole()
+                user.getRole(),
+                user.getFirstName()
         );
     }
 }

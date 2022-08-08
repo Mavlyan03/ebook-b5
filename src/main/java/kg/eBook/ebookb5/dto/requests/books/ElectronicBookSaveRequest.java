@@ -16,11 +16,9 @@ import javax.validation.constraints.Size;
 public class ElectronicBookSaveRequest extends BookSaveRequestGeneral{
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Max(value = 3000)
     private int pageSize;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Size(max = 1000)
     private String publishingHouse;
 
     @NotEmpty(message = "Поле не может быть пустым")

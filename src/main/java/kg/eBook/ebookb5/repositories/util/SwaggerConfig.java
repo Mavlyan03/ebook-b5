@@ -18,14 +18,14 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes("Bearer Token",apiKeySecurityScheme()))
-                .info(new Info().title("Ebook").description("Written by Ebook Team"))
+                .info(new Info().title("Ebook Project").description("Written by Ebook Team"))
                 .security(List.of(new SecurityRequirement().addList("Bearer Token")));
     }
 
     private SecurityScheme apiKeySecurityScheme() {
         return new SecurityScheme()
                 .name("Authorization")
-                .description("paste jwt token here")
+                .description("Вставьте токен здесь")
                 .in(SecurityScheme.In.HEADER)
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("Bearer");

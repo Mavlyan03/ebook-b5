@@ -32,12 +32,8 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "owner", cascade = {MERGE, PERSIST, DETACH})
+    @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Book> books = new ArrayList<>();
-
-    public void setBook(Book book) {
-        this.books.add(book);
-    }
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -51,6 +47,9 @@ public class User {
     @ManyToMany(mappedBy = "likes", cascade = CascadeType.MERGE)
     private List<Book> favorite = new ArrayList<>();
 
+    public void setBook(Book book) {
+        this.books.add(book);
+    }
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }

@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,4 +32,10 @@ public class WishListService {
         book.setUserToBook(user1);
     }
 
+    public List<Book> getBooks(Authentication authentication) {
+
+        User user = userRepository.findByEmail(authentication.getName()).get();
+
+        return user.getFavorite();
+    }
 }

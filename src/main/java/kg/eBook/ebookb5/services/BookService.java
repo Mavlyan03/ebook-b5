@@ -37,7 +37,7 @@ public class BookService {
                 priceTo,
                 languages,
                 search,
-                sortBy.getValue(),
+                sortBy == null ? "all" : sortBy.getValue(),
                 pageable
         );
     }

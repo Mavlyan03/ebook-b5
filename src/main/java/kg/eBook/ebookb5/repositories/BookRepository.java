@@ -25,7 +25,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " (:languages is null or b.language in (:languages)) and "+
             "  (upper(b.genre.name) like upper(concat('%', :search, '%')) "+
             " or :search = 'all' or :search is null)) " +
-            "order by case when :sortBy = 'Новинки' then b.isNew else case when :sortBy='Бестселлеры' " +
+            " order by case when :sortBy = 'Новинки' then b.isNew else case when :sortBy = 'Бестселлеры' " +
             " then b.bestseller else true end end desc ")
     List<BookResponse> customFindAll(List<Long> genres,
                                      BookType bookType,

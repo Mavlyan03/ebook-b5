@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Book> books = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -45,6 +47,9 @@ public class User {
     @ManyToMany(mappedBy = "likes", cascade = CascadeType.MERGE)
     private List<Book> favorite = new ArrayList<>();
 
+    public void setBook(Book book) {
+        this.books.add(book);
+    }
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }

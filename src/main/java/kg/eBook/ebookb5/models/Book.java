@@ -1,8 +1,8 @@
 package kg.eBook.ebookb5.models;
 
 import kg.eBook.ebookb5.enums.BookStatus;
-import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
+import kg.eBook.ebookb5.enums.TypeOfBook;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,6 @@ public class Book {
 
     private String name;
     @ManyToOne
-    @JoinColumn(name = "genre_id")
     private Genre genre;
 
     private int price;
@@ -53,7 +52,6 @@ public class Book {
     private boolean bestseller;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
     private User owner;
 
     private String mainImage;
@@ -62,7 +60,7 @@ public class Book {
 
     private String thirdImage;
 
-    private BookType bookType;
+    private TypeOfBook typeOfBook;
 
     private String fragment;
 
@@ -87,6 +85,4 @@ public class Book {
 
     @ManyToMany
     private List<User> bookBasket;
-
-    private Boolean isNew;
 }

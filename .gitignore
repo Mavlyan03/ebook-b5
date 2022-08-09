@@ -31,5 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/application-timur.properties
 
 src/main/resources/application-aychu.properties

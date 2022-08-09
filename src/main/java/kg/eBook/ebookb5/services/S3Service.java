@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.amazons3;
+package kg.eBook.ebookb5.services;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,19 +33,16 @@ public class S3Service {
     // upload
     public Map<String, String> upload(MultipartFile file) throws IOException {
 
-        System.out.println("00");
         log.info("Uploading file ...");
         String key = System.currentTimeMillis() + file.getOriginalFilename();
 
-        System.out.println("11");
         PutObjectRequest por = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
 
-        System.out.println("22");
         s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-        System.out.println("33");
+
         log.info("Upload complete.");
 
         return Map.of(

@@ -1,5 +1,6 @@
-package kg.eBook.ebookb5.amazons3;
+package kg.eBook.ebookb5.apis;
 
+import kg.eBook.ebookb5.services.S3Service;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

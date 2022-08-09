@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.amazons3;
+package kg.eBook.ebookb5.configs;
 
 import lombok.Getter;
 import lombok.Setter;

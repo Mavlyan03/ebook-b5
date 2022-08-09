@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kg.eBook.ebookb5.enums.TypeOfBook.*;
+import static kg.eBook.ebookb5.enums.BookType.PAPER_BOOK;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class PaperBookService {
 
         Book book = new Book(paperBook);
 
-        book.setTypeOfBook(PAPER_BOOK);
+        book.setBookType(PAPER_BOOK);
 
         book.setGenre(genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                 "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
@@ -63,7 +63,7 @@ public class PaperBookService {
 
         if(book != null) {
             if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) &&
-                    book.getTypeOfBook().equals(PAPER_BOOK))
+                    book.getBookType().equals(PAPER_BOOK))
                 throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
@@ -90,7 +90,7 @@ public class PaperBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Book with id: " + bookId + " not found"));
 
-        if(book.getTypeOfBook().equals(PAPER_BOOK)) {
+        if(book.getBookType().equals(PAPER_BOOK)) {
             book.setMainImage(paperBook.getMainImage());
             book.setSecondImage(paperBook.getSecondImage());
             book.setThirdImage(paperBook.getThirdImage());

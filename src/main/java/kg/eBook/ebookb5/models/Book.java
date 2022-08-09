@@ -4,8 +4,8 @@ import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.enums.BookStatus;
+import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
-import kg.eBook.ebookb5.enums.TypeOfBook;
 import lombok.*;
 
 import javax.persistence.*;
@@ -63,7 +63,7 @@ public class Book {
 
     private String thirdImage;
 
-    private TypeOfBook typeOfBook;
+    private BookType bookType;
 
     private String fragment;
 
@@ -90,6 +90,8 @@ public class Book {
     @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket;
+
+    private boolean isNew;
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 

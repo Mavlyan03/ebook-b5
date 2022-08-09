@@ -2,7 +2,6 @@ package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
-import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
@@ -19,7 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static kg.eBook.ebookb5.enums.TypeOfBook.*;
+import static kg.eBook.ebookb5.enums.BookType.AUDIO_BOOK;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ public class AudioBookService {
 
         Book book = new Book(audioBook);
 
-        book.setTypeOfBook(AUDIO_BOOK);
+        book.setBookType(AUDIO_BOOK);
 
         book.setGenre(genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                 "Жанр с ID: " + audioBook.getGenreId() + " не был найден"
@@ -65,7 +64,7 @@ public class AudioBookService {
 
         if (book != null) {
             if (book.getLanguage().equals(audioBook.getLanguage()) &&
-                    book.getTypeOfBook().equals(AUDIO_BOOK))
+                    book.getBookType().equals(AUDIO_BOOK))
                 throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
@@ -77,7 +76,7 @@ public class AudioBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с  ID: " + bookId + " не найдена"));
 
-        if (book.getTypeOfBook().equals(AUDIO_BOOK)) {
+        if (book.getBookType().equals(AUDIO_BOOK)) {
             book.setName(audioBook.getName());
             genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с  ID: " + audioBook.getGenreId() + " не найден"

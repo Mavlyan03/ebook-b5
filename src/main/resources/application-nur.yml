@@ -1,0 +1,12 @@
+aws:
+  bucket:
+    access_key_id: AKIAZSFGQWKJAM2CLA5J
+    secret_access_key: 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
+    region: eu-central-1
+    name: ebookb5java5
+    path: https://ebookb5java5.s3.eu-central-1.amazonaws.com/test/
+
+server:
+  port: 4000
+  error:
+    include-message: always

@@ -10,9 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    Optional<Book> findByName(String name);
+
     @Query("select new kg.eBook.ebookb5.dto.responses.BookResponse(" +
             " b.id, b.mainImage, b.name, b.author, b.price, b.bookType)" +
             " from Book b where ((b.genre.id in (:genres) or :genres is null) AND "  +

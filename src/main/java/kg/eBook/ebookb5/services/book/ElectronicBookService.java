@@ -17,9 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kg.eBook.ebookb5.enums.Role.*;
-import static kg.eBook.ebookb5.enums.TypeOfBook.*;
-
+import static kg.eBook.ebookb5.enums.BookType.ELECTRONIC_BOOK;
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -34,7 +32,7 @@ public class ElectronicBookService {
 
         Book book = new Book(eBook);
 
-        book.setTypeOfBook(ELECTRONIC_BOOK);
+        book.setBookType(ELECTRONIC_BOOK);
 
         book.setGenre(genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                 "Жанр с ID: " + eBook.getGenreId() + " не был найден"
@@ -60,7 +58,7 @@ public class ElectronicBookService {
 
         if(book != null) {
             if(book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) &&
-                    book.getTypeOfBook().equals(ELECTRONIC_BOOK))
+                    book.getBookType().equals(ELECTRONIC_BOOK))
                 throw new AlreadyExistException("Эта книга уже есть в базе");
         }
 
@@ -71,7 +69,7 @@ public class ElectronicBookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"));
 
-        if(book.getTypeOfBook().equals(ELECTRONIC_BOOK)) {
+        if(book.getBookType().equals(ELECTRONIC_BOOK)) {
             book.setName(eBook.getName());
             genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с ID: " + eBook.getGenreId() + " не найден"

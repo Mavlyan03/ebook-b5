@@ -1,11 +1,13 @@
 package kg.eBook.ebookb5.apis;
 
+import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +44,12 @@ public class BookApi {
                 page,
                 size
                 );
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<AdminApplicationsResponse> getApplications() {
+        return bookService.getApplications();
     }
 
 

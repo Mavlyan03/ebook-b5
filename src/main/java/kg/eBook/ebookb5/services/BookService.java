@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
@@ -40,6 +41,10 @@ public class BookService {
                 sortBy == null ? "all" : sortBy.getValue(),
                 pageable
         );
+    }
+
+    public List<AdminApplicationsResponse> getApplications() {
+        return bookRepository.getApplications();
     }
 
 

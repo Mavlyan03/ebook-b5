@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.repositories;
 
+import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
@@ -36,6 +37,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                      String sortBy,
                                      Pageable pageable
     );
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
+            " b.id, b.mainImage, b.name, b.publishedDate, b.price) " +
+            "from Book b " +
+            "where b.bookStatus='IN_PROCESSING' " +
+            "order by b.publishedDate desc ")
+    List<AdminApplicationsResponse> getApplications();
 
 }
 

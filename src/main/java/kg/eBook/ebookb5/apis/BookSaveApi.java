@@ -4,6 +4,7 @@ import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
+import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.services.book.AudioBookService;
 import kg.eBook.ebookb5.services.book.ElectronicBookService;
 import kg.eBook.ebookb5.services.book.PaperBookService;
@@ -74,5 +75,6 @@ public class BookSaveApi {
         audioBookService.updateBook(authentication, bookId, audioBook);
         return ResponseEntity.ok("Книга успешно обновлена!");
     }
+
 
 }

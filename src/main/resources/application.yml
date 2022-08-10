@@ -2,7 +2,7 @@ jwt_secret: SECRET
 server:
     error:
         include-message: always
-    port: 5000
+    port: 5001
 spring:
     datasource:
         password: postgres
@@ -12,7 +12,7 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
         defer-datasource-initialization: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
     mail:
         host: smtp.gmail.com
         password: tahxwbasmgwmnrub
@@ -31,11 +31,11 @@ spring:
         hiddenmethod:
             filter:
                 enabled: true
-    sql:
-        init:
-            continue-on-error: false
-            data-locations: classpath:data initialization/data.sql
-            mode: always
+#    sql:
+#        init:
+#            continue-on-error: false
+#            data-locations: classpath:data initialization/data.sql
+#            mode: always
 springdoc:
     swagger-ui:
         path: /swagger
@@ -43,8 +43,8 @@ springdoc:
 # aws s3
 aws:
     bucket:
-        access_key_id: ${AWS_ACCESS_KEY_ID}
-        secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+        access_key_id: AKIA2HDIMUN7ZC6AQEHA
+        secret_access_key: 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
         region: eu-central-1
         name: ebookjava5
         path: https://ebookjava5.s3.eu-central-1.amazonaws.com/

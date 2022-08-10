@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.apis;
 
+import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.services.WishListService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class WishListApi {
 
     @GetMapping("/books/favorite")
     @PreAuthorize("hasAuthority('USER')")
-    public List<?> getAllFavoriteBooks(Authentication authentication) {
+    public List<? extends BookResponseGeneral> getAllFavoriteBooks(Authentication authentication) {
         return wishListService.getBooks(authentication);
     }
 

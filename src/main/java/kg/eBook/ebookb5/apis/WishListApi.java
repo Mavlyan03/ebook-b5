@@ -30,7 +30,7 @@ public class WishListApi {
 
     @GetMapping("/books/favorite")
     @PreAuthorize("hasAuthority('USER')")
-    public List<Book> getAllFavoriteBooks(Authentication authentication) {
+    public List<?> getAllFavoriteBooks(Authentication authentication) {
         return wishListService.getBooks(authentication);
     }
 

@@ -39,7 +39,6 @@ public class BookSaveApi {
     @PreAuthorize("hasAuthority('VENDOR')")
     public BookResponse saveEbook(Authentication authentication, @RequestBody @Valid ElectronicBookSaveRequest eBook) {
         return eBookService.saveElectronicBook(authentication, eBook);
-
     }
 
     @PostMapping("/save/audioBook")

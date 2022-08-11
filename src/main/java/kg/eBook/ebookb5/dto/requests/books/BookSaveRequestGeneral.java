@@ -38,7 +38,7 @@ public class BookSaveRequestGeneral {
     @NotNull(message = "Поле не может быть пустым")
     private Language language;
 
-    @NotNull
+    @NotNull(message = "Поле не может быть пустым")
     private int yearOfIssue;
 
     private int discount;

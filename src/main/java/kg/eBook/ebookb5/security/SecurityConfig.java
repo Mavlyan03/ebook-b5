@@ -18,7 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -39,7 +41,7 @@ public class SecurityConfig {
     SecurityFilterChain authorization(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
-                .authorizeRequests( auth -> auth
+                .authorizeRequests(auth -> auth
                         .antMatchers("/swagger", "/swagger-ui/index.html").permitAll()
                         .antMatchers("/api/public/**").permitAll()
                         .anyRequest()

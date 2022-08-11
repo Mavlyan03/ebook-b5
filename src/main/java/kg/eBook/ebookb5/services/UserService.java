@@ -45,8 +45,8 @@ public class UserService {
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if (personRepository.existsByEmail(userRegisterRequest.getEmail()))
-            throw new AlreadyExistException("The email " + userRegisterRequest.getEmail() + " is already in use!");
+        if(personRepository.existsByEmail(userRegisterRequest.getEmail()))
+            throw new AlreadyExistException("Эта почта " + userRegisterRequest.getEmail() + " уже занята!");
 
         User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(userRegisterRequest.getEmail());

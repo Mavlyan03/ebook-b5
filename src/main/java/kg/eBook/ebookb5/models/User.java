@@ -37,7 +37,7 @@ public class User {
     @CreatedDate
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Book> books = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -55,6 +55,9 @@ public class User {
     @OneToMany(cascade = ALL, mappedBy = "user")
     private List<PurchasedUserBooks> purchasedUserBooks = new ArrayList<>();
 
+    public void setBook(Book book) {
+        this.books.add(book);
+    }
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }

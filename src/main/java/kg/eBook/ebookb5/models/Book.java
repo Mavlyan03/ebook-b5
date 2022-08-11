@@ -54,10 +54,9 @@ public class Book {
 
     private boolean bestseller;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, DETACH})
     private LocalDate dateTheBookWasAddedToFavorites;
 
-    @ManyToOne
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH})
     private User owner;
 
     private String mainImage;
@@ -118,15 +117,6 @@ public class Book {
         this.electronicBook = eBook.getElectronicBook();
     }
 
-    public void removeUserFromBasket(User user) {
-        this.bookBasket.remove(user);
-    }
-
-    public void removeUserFromLikes(User user) {
-        this.likes.remove(user);
-    }
-}
-
     public Book(AudioBookSaveRequest audioBook) {
         this.name = audioBook.getName();
         this.price = audioBook.getPrice();
@@ -159,5 +149,13 @@ public class Book {
         this.quantityOfBook = paperBook.getQuantityOfBook();
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
+    }
+
+    public void removeUserFromBasket(User user) {
+        this.bookBasket.remove(user);
+    }
+
+    public void removeUserFromLikes(User user) {
+        this.likes.remove(user);
     }
 }

@@ -58,6 +58,7 @@ public class User {
     public void setBook(Book book) {
         this.books.add(book);
     }
+
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }

@@ -7,8 +7,6 @@ import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.UserResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
-import kg.eBook.ebookb5.exceptions.NotFoundException;
-import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse.viewUserBooks;

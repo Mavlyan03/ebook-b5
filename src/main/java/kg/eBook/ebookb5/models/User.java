@@ -35,7 +35,7 @@ public class User {
     private String password;
 
     @CreatedDate
-    private LocalDate created;
+    private LocalDate createdAt;
 
     @OneToMany(mappedBy = "owner")
     private List<Book> books = new ArrayList<>();

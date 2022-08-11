@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse.viewUserBooks;
+import static kg.eBook.ebookb5.dto.responses.UserResponse.view;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class UserService {
                 userRegisterRequest.getFirstName(),
                 userRegisterRequest.getEmail()
         );
-        person.setCreated(LocalDate.now());
+        person.setCreatedAt(LocalDate.now());
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
@@ -60,16 +61,6 @@ public class UserService {
 
     public List<UserResponse> findAllUsers() {
         return view(personRepository.findAllUsers());
-    }
-
-    public List<UserResponse> view(List<User> users) {
-
-        List<UserResponse> userResponses = new ArrayList<>();
-
-        for (User user : users) {
-            userResponses.add(new UserResponse(user));
-        }
-        return userResponses;
     }
 
     public UserResponse findById(Long userId) {

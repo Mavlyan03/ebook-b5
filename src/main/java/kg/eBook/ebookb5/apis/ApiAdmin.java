@@ -28,35 +28,35 @@ public class ApiAdmin {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     @Operation(summary = "find by user with id")
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse findByUserId(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/users/{userId}")
     @Operation(summary = "delete by user with id")
     @PreAuthorize("hasAuthority('ADMIN')")
     public SimpleResponse deleteByUserId(@PathVariable Long userId) {
         return userService.deleteByUserId(userId);
     }
 
-    @GetMapping("/bought/{userId}")
+    @GetMapping("/users/{userId}/purchased")
     @Operation(summary = "find all purchased user books with user id")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<PurchasedUserBooksResponse> purchasedUserBooks(@PathVariable Long userId) {
         return userBooksService.purchasedUserBooks(userId);
     }
 
-    @GetMapping("/favorites/{userId}")
+    @GetMapping("/users/{userId}/favorites")
     @Operation(summary = "find all user favorite books with user id")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(@PathVariable Long userId) {
         return userService.findAllUsersFavoriteBooks(userId);
     }
 
-    @GetMapping("/baskets/{userId}")
+    @GetMapping("/users/{userId}/baskets")
     @Operation(summary = "find all user basket books with user id")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(@PathVariable Long userId) {

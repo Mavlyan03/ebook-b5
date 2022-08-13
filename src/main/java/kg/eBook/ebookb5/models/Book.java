@@ -147,4 +147,10 @@ public class Book {
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
     }
+
+    public void delete() {
+        for (User user : bookBasket) {
+
+        }
+    }
 }

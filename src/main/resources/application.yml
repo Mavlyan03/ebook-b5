@@ -1,50 +1,50 @@
-#jwt_secret: SECRET
-#server:
-#    error:
-#        include-message: always
-#    port: 5000
-#spring:
-#    datasource:
-#        password: postgres
-#        url: jdbc:postgresql://ebook.ckmwffwc7ag0.eu-central-1.rds.amazonaws.com:5432/eBook
-#        username: postgres
-#    jpa:
-#        database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-#        defer-datasource-initialization: true
-#        hibernate:
-#            ddl-auto: create
-#    mail:
-#        host: smtp.gmail.com
-#        password: tahxwbasmgwmnrub
-#        port: 25
-#        properties:
-#            mail:
-#                debug: true
-#                smtp:
-#                    auth: true
-#                    starttls:
-#                        enable: true
-#                transport:
-#                    protocol: smtp
-#        username: timur.abdivaitov@gmail.com
-#    mvc:
-#        hiddenmethod:
-#            filter:
-#                enabled: true
-#    sql:
-#        init:
-#            continue-on-error: false
-#            data-locations: classpath:data initialization/data.sql
-#            mode: always
-#springdoc:
-#    swagger-ui:
-#        path: /swagger
-#
-## aws s3
-#aws:
-#    bucket:
-#        access_key_id: ${AWS_ACCESS_KEY_ID}
-#        secret_access_key: ${AWS_SECRET_ACCESS_KEY}
-#        region: eu-central-1
-#        name: ebookjava5
-#        path: https://ebookjava5.s3.eu-central-1.amazonaws.com/
+jwt_secret: SECRET
+server:
+    error:
+        include-message: always
+    port: 5000
+spring:
+    datasource:
+        password: postgres
+        url: jdbc:postgresql://ebook.ckmwffwc7ag0.eu-central-1.rds.amazonaws.com:5432/eBook
+        username: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+        defer-datasource-initialization: true
+        hibernate:
+            ddl-auto: create
+    mail:
+        host: smtp.gmail.com
+        password: tahxwbasmgwmnrub
+        port: 25
+        properties:
+            mail:
+                debug: true
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+                transport:
+                    protocol: smtp
+        username: timur.abdivaitov@gmail.com
+    mvc:
+        hiddenmethod:
+            filter:
+                enabled: true
+    sql:
+        init:
+            continue-on-error: false
+            data-locations: classpath:data initialization/data.sql
+            mode: always
+springdoc:
+    swagger-ui:
+        path: /swagger
+
+# aws s3
+aws:
+    bucket:
+        access_key_id: ${AWS_ACCESS_KEY_ID}
+        secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+        region: eu-central-1
+        name: ebookjava5
+        path: https://ebookjava5.s3.eu-central-1.amazonaws.com/

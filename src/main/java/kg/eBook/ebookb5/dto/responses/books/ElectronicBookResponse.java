@@ -4,12 +4,11 @@ import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
 import lombok.Getter;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PaperBookResponse extends BookInnerPageResponse {
+public class ElectronicBookResponse extends BookInnerPageResponse{
 
     private BookType bookType;
     private Long bookId;
@@ -28,17 +27,17 @@ public class PaperBookResponse extends BookInnerPageResponse {
     private String secondImage;
     private String thirdImage;
     private String fragment;
+    private String electronicBook;
     private boolean isNew;
     private int likes;
     private int basket;
     private boolean isEnabled;
-
     private Long vendorId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
 
-    public PaperBookResponse(Book eBook) {
+    public ElectronicBookResponse(Book eBook) {
         this.bookType = eBook.getBookType();
         this.bookId = eBook.getId();
         this.bookName = eBook.getName();
@@ -56,6 +55,7 @@ public class PaperBookResponse extends BookInnerPageResponse {
         this.secondImage = eBook.getSecondImage();
         this.thirdImage = eBook.getThirdImage();
         this.fragment = eBook.getFragment();
+        this.electronicBook = eBook.getElectronicBook();
         this.isNew = eBook.isNew();
         this.likes = eBook.getLikes().size();
         this.basket = eBook.getBookBasket().size();

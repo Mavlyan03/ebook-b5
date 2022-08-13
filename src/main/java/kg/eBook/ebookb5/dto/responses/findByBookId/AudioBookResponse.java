@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-public class AudiobookResponse extends BookInnerPageResponse {
+public class AudioBookResponse extends BookInnerPageResponse {
 
     private BookType bookType;
     private Long bookId;
@@ -40,7 +40,7 @@ public class AudiobookResponse extends BookInnerPageResponse {
     private String lastName;
     private String phoneNumber;
 
-    public AudiobookResponse(Book audioBook) {
+    public AudioBookResponse(Book audioBook) {
         this.bookType = audioBook.getBookType();
         this.bookId = audioBook.getId();
         this.bookName = audioBook.getName();

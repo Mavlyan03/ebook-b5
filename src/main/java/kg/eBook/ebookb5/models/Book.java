@@ -65,6 +65,7 @@ public class Book {
 
     private String thirdImage;
 
+    @Enumerated(EnumType.STRING)
     private BookType bookType;
 
     private String fragment;

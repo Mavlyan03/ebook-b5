@@ -1,10 +1,7 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
-import kg.eBook.ebookb5.dto.responses.JwtResponse;
-import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
-import kg.eBook.ebookb5.dto.responses.SimpleResponse;
-import kg.eBook.ebookb5.dto.responses.UserResponse;
+import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.models.User;

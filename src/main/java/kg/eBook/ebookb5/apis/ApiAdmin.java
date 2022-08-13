@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kg.eBook.ebookb5.dto.responses.OperationsHistoryResponse;
 import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.UserResponse;
@@ -23,43 +24,34 @@ public class ApiAdmin {
 
     @GetMapping("/users")
     @Operation(summary = "find all users")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> findAllUsers() {
         return userService.findAllUsers();
     }
 
     @GetMapping("/users/{userId}")
     @Operation(summary = "find by user with id")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse findByUserId(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
     @DeleteMapping("/users/{userId}")
     @Operation(summary = "delete by user with id")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public SimpleResponse deleteByUserId(@PathVariable Long userId) {
         return userService.deleteByUserId(userId);
     }
 
-    @GetMapping("/users/{userId}/purchased")
+    @GetMapping("/users/{userId}/operationsHistory")
     @Operation(summary = "find all purchased user books with user id")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<PurchasedUserBooksResponse> purchasedUserBooks(@PathVariable Long userId) {
-        return userBooksService.purchasedUserBooks(userId);
-    }
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public OperationsHistoryResponse operationsHistory(@PathVariable Long userId) {
+        List<PurchasedUserBooksResponse> allUsersFavoriteBooks = userService.findAllUsersFavoriteBooks(userId);
+        List<PurchasedUserBooksResponse> allUserBooksInBasket = userService.findAllUserBooksInBasket(userId);
+        List<PurchasedUserBooksResponse> purchasedUserBooksResponses = userBooksService.purchasedUserBooks(userId);
 
-    @GetMapping("/users/{userId}/favorites")
-    @Operation(summary = "find all user favorite books with user id")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(@PathVariable Long userId) {
-        return userService.findAllUsersFavoriteBooks(userId);
-    }
-
-    @GetMapping("/users/{userId}/baskets")
-    @Operation(summary = "find all user basket books with user id")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(@PathVariable Long userId) {
-        return userService.findAllUserBooksInBasket(userId);
+        return  new OperationsHistoryResponse(purchasedUserBooksResponses,
+                allUsersFavoriteBooks, allUserBooksInBasket);
     }
 }

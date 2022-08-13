@@ -21,7 +21,6 @@ public class BookSaveRequestGeneral {
     private String thirdImage;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Size(max = 100)
     private String name;
 
     @NotNull(message = "Поле не может быть пустым")
@@ -31,7 +30,6 @@ public class BookSaveRequestGeneral {
     private int price;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Size(max = 100)
     private String author;
 
     @NotEmpty(message = "Поле не может быть пустым")
@@ -40,7 +38,7 @@ public class BookSaveRequestGeneral {
     @NotNull(message = "Поле не может быть пустым")
     private Language language;
 
-    @NotNull
+    @NotNull(message = "Поле не может быть пустым")
     private int yearOfIssue;
 
     private int discount;
@@ -48,7 +46,6 @@ public class BookSaveRequestGeneral {
     private boolean bestseller;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Size(max = 10000)
     private String fragment;
 
 }

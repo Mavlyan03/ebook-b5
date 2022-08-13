@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -15,12 +14,10 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class ElectronicBookSaveRequest extends BookSaveRequestGeneral{
 
-    @NotEmpty(message = "Поле не может быть пустым")
-    @Max(value = 3000)
+    @NotNull(message = "Поле не может быть пустым")
     private int pageSize;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Size(max = 1000)
     private String publishingHouse;
 
     @NotEmpty(message = "Поле не может быть пустым")

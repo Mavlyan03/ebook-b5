@@ -4,6 +4,7 @@ import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 @Getter

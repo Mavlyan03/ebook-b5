@@ -1,5 +1,6 @@
-package kg.eBook.ebookb5.dto.responses.books;
+package kg.eBook.ebookb5.dto.responses.findByBookId;
 
+import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -8,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ElectronicBookResponse extends BookInnerPageResponse{
+public class ElectronicBookResponse extends BookInnerPageResponse {
 
     private BookType bookType;
     private Long bookId;

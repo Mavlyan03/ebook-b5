@@ -1,7 +1,10 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.books.*;
+import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
@@ -53,7 +56,7 @@ public class BookService {
         book.setEnabled(true);
         switch (book.getBookType()) {
             case AUDIO_BOOK:
-                return new AudiobookResponse(book);
+                return new AudioBookResponse(book);
             case ELECTRONIC_BOOK:
                 return new ElectronicBookResponse(book);
             case PAPER_BOOK:

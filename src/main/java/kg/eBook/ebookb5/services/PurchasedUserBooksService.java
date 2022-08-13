@@ -19,7 +19,7 @@ public class PurchasedUserBooksService {
         return viewUserPurchase(userBooksRepository.findAllByUserId(userId));
     }
 
-    public static List<PurchasedUserBooksResponse> viewUserPurchase(List<PurchasedUserBooks> userBooks) {
+    private List<PurchasedUserBooksResponse> viewUserPurchase(List<PurchasedUserBooks> userBooks) {
         List<PurchasedUserBooksResponse> booksResponse = new ArrayList<>();
         for (PurchasedUserBooks userBook : userBooks) {
             booksResponse.add(new PurchasedUserBooksResponse(userBook));

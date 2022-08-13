@@ -24,28 +24,28 @@ public class ApiAdmin {
 
     @GetMapping("/users")
     @Operation(summary = "find all users")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> findAllUsers() {
         return userService.findAllUsers();
     }
 
     @GetMapping("/users/{userId}")
     @Operation(summary = "find by user with id")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse findByUserId(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
     @DeleteMapping("/users/{userId}")
     @Operation(summary = "delete by user with id")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SimpleResponse deleteByUserId(@PathVariable Long userId) {
         return userService.deleteByUserId(userId);
     }
 
     @GetMapping("/users/{userId}/operationsHistory")
     @Operation(summary = "find all purchased user books with user id")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public OperationsHistoryResponse operationsHistory(@PathVariable Long userId) {
         List<PurchasedUserBooksResponse> allUsersFavoriteBooks = userService.findAllUsersFavoriteBooks(userId);
         List<PurchasedUserBooksResponse> allUserBooksInBasket = userService.findAllUserBooksInBasket(userId);

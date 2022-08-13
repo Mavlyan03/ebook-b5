@@ -1,10 +1,11 @@
 package kg.eBook.ebookb5.services;
 
+
 import kg.eBook.ebookb5.dto.responses.books.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
 import kg.eBook.ebookb5.dto.responses.books.PaperBookResponse;
-import kg.eBook.ebookb5.enums.TypeOfBook;
+import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
@@ -50,15 +51,15 @@ public class WishListService {
         List<AudioBookResponse> audioBookResponseList = new ArrayList<>();
 
         for(Book i: userFavorite) {
-            if (i.getTypeOfBook().equals(TypeOfBook.PAPER_BOOK)) {
+            if (i.getBookType().equals(BookType.PAPER_BOOK)) {
                 paperBookResponseList.add(paperBookToResponse(i));
                 return paperBookResponseList;
             }
-            else if (i.getTypeOfBook().equals(TypeOfBook.AUDIO_BOOK)) {
+            else if (i.getBookType().equals(BookType.AUDIO_BOOK)) {
                 audioBookResponseList.add(audioBookToResponse(i));
                 return audioBookResponseList;
             }
-            else if (i.getTypeOfBook().equals(TypeOfBook.ELECTRONIC_BOOK)) {
+            else if (i.getBookType().equals(BookType.ELECTRONIC_BOOK)) {
                 ebookResponseList.add(ebookToResponse(i));
                 return ebookResponseList;
             }

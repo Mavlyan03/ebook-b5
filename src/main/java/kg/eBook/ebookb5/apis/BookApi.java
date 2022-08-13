@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.books.BookInnerPageResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;

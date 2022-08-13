@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.dto.responses.books;
+package kg.eBook.ebookb5.dto.responses.findByBookId;
 
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;

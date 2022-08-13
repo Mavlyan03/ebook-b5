@@ -1,9 +1,10 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.responses.books.AudioBookResponse;
+
+import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
-import kg.eBook.ebookb5.dto.responses.books.PaperBookResponse;
+import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
@@ -45,9 +46,9 @@ public class WishListService {
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         List<Book> userFavorite = user.getFavorite();
-        List<PaperBookResponse> paperBookResponseList = new ArrayList<>();
+        List<PBookResponse> paperBookResponseList = new ArrayList<>();
         List<EbookResponse> ebookResponseList = new ArrayList<>();
-        List<AudioBookResponse> audioBookResponseList = new ArrayList<>();
+        List<ABookResponse> audioBookResponseList = new ArrayList<>();
 
         for(Book i: userFavorite) {
             if (i.getBookType().equals(BookType.PAPER_BOOK)) {
@@ -66,12 +67,12 @@ public class WishListService {
         return null;
     }
 
-    private PaperBookResponse paperBookToResponse(Book book) {
-        return modelMapper.map(book, PaperBookResponse.class);
+    private PBookResponse paperBookToResponse(Book book) {
+        return modelMapper.map(book, PBookResponse.class);
     }
 
-    private AudioBookResponse audioBookToResponse(Book book) {
-        return modelMapper.map(book, AudioBookResponse.class);
+    private ABookResponse audioBookToResponse(Book book) {
+        return modelMapper.map(book, ABookResponse.class);
     }
 
     private EbookResponse ebookToResponse(Book book) {

@@ -14,6 +14,7 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
+import kg.eBook.ebookb5.services.book.PaperBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -34,6 +36,8 @@ public class VendorService {
     private final JWTUtil jwtUtil;
 
     private final BookRepository bookRepository;
+
+    private final PaperBookService paperBookService;
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
 
@@ -96,23 +100,29 @@ public class VendorService {
         return new VendorResponse(personRepository.findByEmail(authentication.getName()).get());
     }
 
-    public SimpleResponse deleteByVendorId(Long vendorId) {
-        User vendor = personRepository.findById(vendorId).get();
-        List<User> users = new ArrayList<>();
+    public SimpleResponse test(Long id) {
+        User vendor = personRepository.findById(id).get();
         for (Book book : vendor.getBooks()) {
-            for (User user : book.getBookBasket()) {
-                book.removeUserFromBasket(user);
-                users.add(user);
-            }
-            for (User user : book.getLikes()) {
-                book.removeUserFromLikes(user);
-                users.add(user);
+            for (User u : book.getLikes()) {
+                book.removeUserFromLikes(u);
+                u.getFavorite().remove(book);
+                personRepository.save(u);
             }
         }
         bookRepository.saveAll(vendor.getBooks());
-        personRepository.saveAll(users);
-        bookRepository.deleteAll(vendor.getBooks());
-        personRepository.delete(vendor);
+        return new SimpleResponse("test");
+    }
+    public SimpleResponse deleteByVendorId(Authentication authentication) {
+        User vendor = personRepository.findByEmail(authentication.getName()).get();
+        for (Book book : vendor.getBooks()) {
+            for (int i = 0; i < book.getLikes().size(); i++) {
+                User user = book.getLikes().get(i);
+                book.removeUserFromLikes(user);
+                i--;
+            }
+        }
+        bookRepository.saveAll(vendor.getBooks());
+//        personRepository.delete(vendor);
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }
 

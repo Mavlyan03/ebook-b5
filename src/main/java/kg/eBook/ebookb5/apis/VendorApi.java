@@ -27,8 +27,14 @@ public class VendorApi {
         return vendorService.update(authentication, vendorProfileRequest);
     }
 
-    @DeleteMapping("/{vendorId}")
-    public SimpleResponse delete(@PathVariable Long vendorId) {
-        return vendorService.deleteByVendorId(vendorId);
+    @DeleteMapping("/vendor")
+    public SimpleResponse delete(Authentication authentication) {
+        return vendorService.deleteByVendorId(authentication);
+    }
+
+
+    @GetMapping("/test/{id}")
+    public SimpleResponse test(@PathVariable Long id) {
+       return vendorService.test(id);
     }
 }

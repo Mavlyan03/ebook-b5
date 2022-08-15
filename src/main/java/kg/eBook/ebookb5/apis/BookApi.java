@@ -5,8 +5,12 @@ import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
+import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,11 +50,36 @@ public class BookApi {
                 );
     }
 
-    @GetMapping
+    @GetMapping("/applications")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<AdminApplicationsResponse> getApplications() {
-        return bookService.getApplications();
+    public List<AdminApplicationsResponse> getApplications(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "8") int size
+    ) {
+        return bookService.getApplications(
+                page,
+                size
+        );
     }
+
+
+    @GetMapping("/applications/accept")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void acceptBooks(Long id) {
+        bookService.acceptBooks(id);
+    }
+
+    @GetMapping("/applications/reject")
+    public void rejectBooks(
+            Long id,
+            String cause) {
+
+        bookService.rejectBooks(id,
+                "Причина отклонения Вашей заявки",
+                cause);
+    }
+
+
 
 
 }

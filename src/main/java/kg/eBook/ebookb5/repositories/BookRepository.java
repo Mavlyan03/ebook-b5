@@ -7,6 +7,7 @@ import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +44,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "from Book b " +
             "where b.bookStatus='IN_PROCESSING' " +
             "order by b.publishedDate desc ")
-    List<AdminApplicationsResponse> getApplications();
+    List<AdminApplicationsResponse> getApplications(Pageable pageable);
+
+
+    @Modifying
+    @Query("update Book b set b.bookStatus='ACCEPTED' " +
+            " where b.bookStatus='IN_PROCESSING' ")
+     void acceptBooks(Long id);
+
+
+    @Modifying
+    @Query("update Book b set b.bookStatus='REJECTED' " +
+            "where b.bookStatus='IN_PROCESSING' ")
+    void rejectBooks(Long id, String cause);
 
 }
 

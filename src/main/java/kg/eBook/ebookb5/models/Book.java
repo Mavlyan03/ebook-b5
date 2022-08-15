@@ -7,12 +7,14 @@ import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import lombok.*;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import static javax.persistence.CascadeType.*;
 
@@ -54,7 +56,7 @@ public class Book {
 
     private boolean bestseller;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH}, fetch = FetchType.EAGER)
     private User owner;
 
     private String mainImage;
@@ -146,4 +148,9 @@ public class Book {
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
     }
+
+//    public String getEmail(Book book) {
+//        return book.getOwner().getEmail();
+//    }
+
 }

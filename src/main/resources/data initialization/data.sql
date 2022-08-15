@@ -25,4 +25,8 @@ values (1, 'Художественная литература'),
        (25,'Русская литература');
 
 insert into users(first_name, last_name, email, phone_number, password, role)
-values ('Admin', 'Adminov', 'admin@gmail.com', '+996777777777', '$2a$12$xEFzerKnyLVgXyBQ/ecOjuVs5rDd2KgixXHHvPSIqTN7TDnRH0Oba', 'ADMIN');
+values ('Admin', 'Adminov', 'admin@gmail.com', '+996777777777', '$2a$12$xEFzerKnyLVgXyBQ/ecOjuVs5rDd2KgixXHHvPSIqTN7TDnRH0Oba', 'ADMIN'),
+        ('Aichurok', 'Turgunbaeva', 'tasnim0800@gmail.com', '996777454545', 'sdfgfdsxgfd', 'VENDOR' );
+
+insert into books (id, name, author, bestseller, book_status, book_type, price, publishing_house, main_image, is_new, language, owner_id, genre_id, discount, is_enabled, page_size, quantity_of_book, year_of_issue)
+values           (1, 'Merry', 'Merry Moulding', true, 1, 1, '00', 'Quaxo', 'Duis.mov', false, 1, 2, 2,  1, false, 1, 1, 1986);

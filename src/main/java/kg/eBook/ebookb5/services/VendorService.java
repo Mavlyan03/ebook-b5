@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -95,11 +98,20 @@ public class VendorService {
 
     public SimpleResponse deleteByVendorId(Long vendorId) {
         User vendor = personRepository.findById(vendorId).get();
+        List<User> users = new ArrayList<>();
         for (Book book : vendor.getBooks()) {
-            book.deleteBookBasket();
-            book.deleteBookFavorite();
-            bookRepository.save(book);
+            for (User user : book.getBookBasket()) {
+                book.removeUserFromBasket(user);
+                users.add(user);
+            }
+            for (User user : book.getLikes()) {
+                book.removeUserFromLikes(user);
+                users.add(user);
+            }
         }
+        bookRepository.saveAll(vendor.getBooks());
+        personRepository.saveAll(users);
+        bookRepository.deleteAll(vendor.getBooks());
         personRepository.delete(vendor);
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }

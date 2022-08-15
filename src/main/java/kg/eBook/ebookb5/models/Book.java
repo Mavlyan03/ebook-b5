@@ -148,9 +148,15 @@ public class Book {
         this.bestseller = paperBook.isBestseller();
     }
 
-    public void delete() {
+    public void deleteBookBasket() {
         for (User user : bookBasket) {
+            bookBasket.remove(user);
+        }
+    }
 
+    public void deleteBookFavorite() {
+        for (User user : likes) {
+            likes.remove(user);
         }
     }
 }

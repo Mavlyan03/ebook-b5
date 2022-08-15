@@ -11,6 +11,7 @@ import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class VendorService {
     private final PasswordEncoder passwordEncoder;
 
     private final JWTUtil jwtUtil;
+
+    private final BookRepository bookRepository;
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
 
@@ -92,7 +95,28 @@ public class VendorService {
 
     public SimpleResponse deleteByVendorId(Long vendorId) {
         User vendor = personRepository.findById(vendorId).get();
+        for (Book book : vendor.getBooks()) {
+            book.deleteBookBasket();
+            book.deleteBookFavorite();
+            bookRepository.save(book);
+        }
         personRepository.delete(vendor);
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }
+
+//    public SimpleResponse deleteByUserId(Long userId) {
+//        User user = personRepository.findById(userId).get();
+//
+//        // detach table users_basket_books
+//        user.getUserBasket().forEach(x -> x.removeUserFromBasket(user));
+//        bookRepository.saveAll(user.getUserBasket());
+//
+//        // detach table users_favorite_books
+//        user.getFavorite().forEach(x -> x.removeUserFromLikes(user));
+//        bookRepository.saveAll(user.getFavorite());
+//
+//        personRepository.delete(user);
+//        return new SimpleResponse("Пользователь успешно удален!");
+//    }
+
 }

@@ -24,6 +24,6 @@ public class Genre {
 
     private String name;
 
-    @OneToMany(mappedBy = "genre")
+    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
     private List<Book> books;
 }

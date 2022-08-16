@@ -1,12 +1,15 @@
 package kg.eBook.ebookb5.apis;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.services.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +52,11 @@ public class BookApi {
         return bookService.globalSearchBooks(search);
     }
 
+    @GetMapping("/book/{bookId}")
+    @PreAuthorize("hasAnyAuthority('VENDOR', 'USER', 'ADMIN')")
+    @Operation(summary = "find by book with book id", description = "find inside book page with id")
+    public BookInnerPageResponse findById(@PathVariable Long bookId) {
+        return bookService.findById(bookId);
+    }
 
 }

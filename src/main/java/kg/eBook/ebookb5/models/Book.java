@@ -63,6 +63,7 @@ public class Book {
 
     private String thirdImage;
 
+    @Enumerated(EnumType.STRING)
     private BookType bookType;
 
     private String fragment;
@@ -145,5 +146,11 @@ public class Book {
         this.quantityOfBook = paperBook.getQuantityOfBook();
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
+    }
+
+    public void delete() {
+        for (User user : bookBasket) {
+
+        }
     }
 }

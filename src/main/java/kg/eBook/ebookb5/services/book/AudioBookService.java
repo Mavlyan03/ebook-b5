@@ -98,6 +98,6 @@ public class AudioBookService {
             user.setBook(book);
             book.setOwner(user);
         } else
-            throw new IllegalStateException("Вы не можете редактировать этк книгу!");
+            throw new IllegalStateException("Вы не можете редактировать эту книгу!");
     }
 }

@@ -4,6 +4,7 @@ import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
@@ -58,11 +59,15 @@ public class UserService {
     }
 
     public UserResponse findById(Long userId) {
-        return new UserResponse(personRepository.findById(userId).get());
+        return new UserResponse(personRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("Пользователь не найдено")
+        ));
     }
 
     public SimpleResponse deleteByUserId(Long userId) {
-        User user = personRepository.findById(userId).get();
+        User user = personRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("Пользователь не найдено")
+        );
 
         // detach table users_basket_books
         user.getUserBasket().forEach(x -> x.removeUserFromBasket(user));

@@ -14,19 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("api/vendors")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@PreAuthorize("hasAuthority('VENDOR')")
 public class VendorApi {
 
     private final VendorService vendorService;
 
-    @GetMapping("/vendor")
-    @PreAuthorize("hasAuthority('VENDOR')")
-    @Operation(summary = "find by vendor")
-    public VendorResponse findByVendor(Authentication authentication) {
-        return vendorService.findByVendor(authentication);
-    }
-
     @PutMapping("/vendor")
-    @PreAuthorize("hasAuthority('VENDOR')")
     @Operation(summary = "update by vendor")
     public VendorResponse update(Authentication authentication,
                                  @RequestBody VendorProfileRequest vendorProfileRequest) {
@@ -34,7 +27,6 @@ public class VendorApi {
     }
 
     @DeleteMapping("/{vendorId}")
-    @PreAuthorize("hasAuthority('VENDOR')")
     @Operation(summary = "delete by vendor with vendor id")
     public SimpleResponse delete(@PathVariable Long vendorId) {
         return vendorService.deleteByVendorId(vendorId);

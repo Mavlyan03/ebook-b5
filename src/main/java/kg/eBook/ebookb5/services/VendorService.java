@@ -60,7 +60,8 @@ public class VendorService {
                                  VendorProfileRequest vendorProfileRequest) {
         User vendor = personRepository.findByEmail(authentication.getName()).get();
         String password = passwordEncoder.encode(vendorProfileRequest.getPassword());
-        if (password.equals(vendor.getPassword())) {
+        String newPassword = passwordEncoder.encode(vendorProfileRequest.getNewPassword());
+        if (!password.equals(vendor.getPassword())) {
             throw new WrongPasswordException("Не правильный паспорт");
         }
         if (!vendor.getFirstName().equals(vendorProfileRequest.getFirstName()) &&
@@ -79,16 +80,15 @@ public class VendorService {
                 vendorProfileRequest.getPhoneNumber() != null) {
             vendor.setPhoneNumber(vendorProfileRequest.getPhoneNumber());
         }
-        if (vendorProfileRequest.getNewPassword() != null &&
-                !vendorProfileRequest.getPassword().equals(vendorProfileRequest.getNewPassword())) {
-            vendor.setPassword(passwordEncoder.encode(vendorProfileRequest.getNewPassword()));
+        if (!password.equals(newPassword) && newPassword != null) {
+            vendor.setPassword(newPassword);
         }
         personRepository.save(vendor);
         return new VendorResponse(vendor);
     }
 
-    public VendorResponse findByVendor(Authentication authentication) {
-        return new VendorResponse(personRepository.findByEmail(authentication.getName())
+    public VendorResponse findByVendor(Long vendorId) {
+        return new VendorResponse(personRepository.findById(vendorId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено")));
     }
 

@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -76,8 +77,8 @@ public class Book {
 
     private String electronicBook;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    private List<User> likes;
+    @ManyToMany(cascade = {MERGE, DETACH, REFRESH, PERSIST})
+    private List<User> likes = new ArrayList<>();
 
     public void setUserToBook(User user) {
         this.likes.add(user);
@@ -87,10 +88,10 @@ public class Book {
 
     private boolean isEnabled;
 
-    @ManyToMany
+    @ManyToMany(cascade = {MERGE, DETACH, REFRESH, PERSIST})
     @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> bookBasket;
+    private List<User> bookBasket = new ArrayList<>();
 
     private boolean isNew;
 
@@ -146,13 +147,5 @@ public class Book {
         this.quantityOfBook = paperBook.getQuantityOfBook();
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
-    }
-
-    public void removeUserFromBasket(User user) {
-        this.bookBasket.remove(user);
-    }
-
-    public void removeUserFromLikes(User user) {
-        this.likes.remove(user);
     }
 }

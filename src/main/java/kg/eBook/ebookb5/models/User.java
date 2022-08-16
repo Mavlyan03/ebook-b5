@@ -38,7 +38,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "vendor")
+    @OneToMany(mappedBy = "vendor", cascade = ALL)
     private List<Promocode> promoCodes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "bookBasket")
@@ -50,6 +50,7 @@ public class User {
     public void setBook(Book book) {
         this.books.add(book);
     }
+
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }
@@ -65,6 +66,5 @@ public class User {
         this.firstName = firstName;
         this.email = email;
     }
-
 }
 

@@ -1,10 +1,12 @@
 package kg.eBook.ebookb5.apis;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.requests.VendorProfileRequest;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,24 +19,24 @@ public class VendorApi {
     private final VendorService vendorService;
 
     @GetMapping("/vendor")
+    @PreAuthorize("hasAuthority('VENDOR')")
+    @Operation(summary = "find by vendor")
     public VendorResponse findByVendor(Authentication authentication) {
         return vendorService.findByVendor(authentication);
     }
 
     @PutMapping("/vendor")
+    @PreAuthorize("hasAuthority('VENDOR')")
+    @Operation(summary = "update by vendor")
     public VendorResponse update(Authentication authentication,
                                  @RequestBody VendorProfileRequest vendorProfileRequest) {
         return vendorService.update(authentication, vendorProfileRequest);
     }
 
-    @DeleteMapping("/vendor")
-    public SimpleResponse delete(Authentication authentication) {
-        return vendorService.deleteByVendorId(authentication);
-    }
-
-
-    @GetMapping("/test/{id}")
-    public SimpleResponse test(@PathVariable Long id) {
-       return vendorService.test(id);
+    @DeleteMapping("/{vendorId}")
+    @PreAuthorize("hasAuthority('VENDOR')")
+    @Operation(summary = "delete by vendor with vendor id")
+    public SimpleResponse delete(@PathVariable Long vendorId) {
+        return vendorService.deleteByVendorId(vendorId);
     }
 }

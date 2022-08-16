@@ -9,7 +9,6 @@ import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
-import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
@@ -21,10 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -34,10 +29,6 @@ public class VendorService {
     private final PasswordEncoder passwordEncoder;
 
     private final JWTUtil jwtUtil;
-
-    private final BookRepository bookRepository;
-
-    private final PaperBookService paperBookService;
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
 
@@ -97,48 +88,15 @@ public class VendorService {
     }
 
     public VendorResponse findByVendor(Authentication authentication) {
-        return new VendorResponse(personRepository.findByEmail(authentication.getName()).get());
+        return new VendorResponse(personRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найдено")));
     }
 
-    public SimpleResponse test(Long id) {
-        User vendor = personRepository.findById(id).get();
-        for (Book book : vendor.getBooks()) {
-            for (User u : book.getLikes()) {
-                book.removeUserFromLikes(u);
-                u.getFavorite().remove(book);
-                personRepository.save(u);
-            }
-        }
-        bookRepository.saveAll(vendor.getBooks());
-        return new SimpleResponse("test");
-    }
-    public SimpleResponse deleteByVendorId(Authentication authentication) {
-        User vendor = personRepository.findByEmail(authentication.getName()).get();
-        for (Book book : vendor.getBooks()) {
-            for (int i = 0; i < book.getLikes().size(); i++) {
-                User user = book.getLikes().get(i);
-                book.removeUserFromLikes(user);
-                i--;
-            }
-        }
-        bookRepository.saveAll(vendor.getBooks());
-//        personRepository.delete(vendor);
+    public SimpleResponse deleteByVendorId(Long vendorId) {
+        User vendor = personRepository.findById(vendorId).orElseThrow(
+                () -> new NotFoundException("Пользователь не найдено"));
+
+        personRepository.delete(vendor);
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }
-
-//    public SimpleResponse deleteByUserId(Long userId) {
-//        User user = personRepository.findById(userId).get();
-//
-//        // detach table users_basket_books
-//        user.getUserBasket().forEach(x -> x.removeUserFromBasket(user));
-//        bookRepository.saveAll(user.getUserBasket());
-//
-//        // detach table users_favorite_books
-//        user.getFavorite().forEach(x -> x.removeUserFromLikes(user));
-//        bookRepository.saveAll(user.getFavorite());
-//
-//        personRepository.delete(user);
-//        return new SimpleResponse("Пользователь успешно удален!");
-//    }
-
 }

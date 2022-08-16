@@ -50,6 +50,8 @@ public class BookService {
 
     public BookInnerPageResponse findById(Long id) {
         Book book = bookRepository.findById(id).get();
+        book.setEnabled(true);
+        bookRepository.save(book);
         if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
             book.setNew(true);
         }

@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.apis;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
@@ -15,9 +16,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @CrossOrigin
 public class BookApi {
-
     private final BookService bookService;
-
 
     @GetMapping
     public List<BookResponse> getAllBooks(
@@ -30,7 +29,7 @@ public class BookApi {
             @RequestParam(required = false) SortBy sortBy,
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "12") int size
-            ) {
+    ) {
         return bookService.getAllBooks(
                 genres,
                 bookType,
@@ -41,7 +40,13 @@ public class BookApi {
                 sortBy,
                 page,
                 size
-                );
+        );
+    }
+
+    @GetMapping("/search/")
+    public List<SearchResponse> globalSearchBooks(
+            @RequestParam(required = false, defaultValue = "all") String search) {
+        return bookService.globalSearchBooks(search);
     }
 
 

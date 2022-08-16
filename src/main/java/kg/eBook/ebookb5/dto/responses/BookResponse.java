@@ -19,21 +19,14 @@ public class BookResponse {
 
     private String bookType;
 
-    public BookResponse(Long id,
-                        String mainImage,
-                        String name,
-                        String author,
-                        int price,
-                        BookType bookType) {
-        this.id=id;
+    public BookResponse(Long id, String mainImage, String name, String author, int price, BookType bookType) {
+        this.id = id;
         this.mainImage = mainImage;
         this.name = name;
         this.author = author;
         this.price = price;
         this.bookType = bookType.name();
     }
-
     public BookResponse() {
-
     }
 }

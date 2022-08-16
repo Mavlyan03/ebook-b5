@@ -33,5 +33,6 @@ build/
 .vscode/
 src/main/resources/application-timur.properties
 src/main/resources/application-aychu.properties
-src/main/resources/application-altyn.properties
-src/main/resources/application-nur.properties
+src/main/resources/application-altyn.propertie
+C:\Users\Nuri\Desktop\ebook-b5\src\main\resources\application-nur.yml
+C:\Users\Nuri\Desktop\ebook-b5\src\main\resources\application.yml

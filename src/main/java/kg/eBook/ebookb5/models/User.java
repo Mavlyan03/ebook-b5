@@ -56,6 +56,9 @@ public class User {
     @OneToMany(cascade = ALL, mappedBy = "user")
     private List<PurchasedUserBooks> purchasedUserBooks = new ArrayList<>();
 
+    @OneToMany(cascade = ALL, mappedBy = "vendor")
+    private List<Notification> notifications = new ArrayList<>();
+
     public void setBook(Book book) {
         this.books.add(book);
     }

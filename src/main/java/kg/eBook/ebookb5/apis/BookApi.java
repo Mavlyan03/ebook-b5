@@ -2,6 +2,7 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
@@ -18,9 +19,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @CrossOrigin
 public class BookApi {
-
     private final BookService bookService;
-
 
     @GetMapping
     public List<BookResponse> getAllBooks(
@@ -45,6 +44,12 @@ public class BookApi {
                 page,
                 size
         );
+    }
+
+    @GetMapping("/search")
+    public List<SearchResponse> globalSearchBooks(
+            @RequestParam(required = false, defaultValue = "all") String search) {
+        return bookService.globalSearchBooks(search);
     }
 
     @GetMapping("/book/{bookId}")

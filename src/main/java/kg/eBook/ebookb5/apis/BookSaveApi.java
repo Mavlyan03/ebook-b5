@@ -31,19 +31,19 @@ public class BookSaveApi {
 
     @PostMapping("/save/paperBook")
     @PreAuthorize("hasAuthority('VENDOR')")
-    public BookResponse savePaperBook(Authentication authentication, @RequestBody @Valid PaperBookSaveRequest paperBook) {
+    public BookResponse savePaperBook(Authentication authentication, @RequestBody PaperBookSaveRequest paperBook) {
         return paperBookService.savePaperBook(authentication, paperBook);
     }
 
     @PostMapping("/save/eBook")
     @PreAuthorize("hasAuthority('VENDOR')")
-    public BookResponse saveEbook(Authentication authentication, @RequestBody @Valid ElectronicBookSaveRequest eBook) {
+    public BookResponse saveEbook(Authentication authentication, @RequestBody ElectronicBookSaveRequest eBook) {
         return eBookService.saveElectronicBook(authentication, eBook);
     }
 
     @PostMapping("/save/audioBook")
     @PreAuthorize("hasAuthority('VENDOR')")
-    public BookResponse saveAudioBook(Authentication authentication, @RequestBody @Valid AudioBookSaveRequest audioBook) {
+    public BookResponse saveAudioBook(Authentication authentication, @RequestBody AudioBookSaveRequest audioBook) {
         return audioBookService.saveAudioBook(authentication, audioBook);
     }
 

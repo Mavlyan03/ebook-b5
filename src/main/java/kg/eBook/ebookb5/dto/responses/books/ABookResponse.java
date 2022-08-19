@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.dto.requests;
+package kg.eBook.ebookb5.dto.responses.books;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class ABookResponse extends BookResponseGeneral{
 
-    private String email;
+    private String duration;
 
-    private String password;
+    private String audioBook;
+
 }

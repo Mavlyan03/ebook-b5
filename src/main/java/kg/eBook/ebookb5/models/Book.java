@@ -54,6 +54,8 @@ public class Book {
 
     private boolean bestseller;
 
+    private LocalDate dateTheBookWasAddedToFavorites;
+
     @ManyToOne(cascade = {PERSIST, MERGE, DETACH})
     private User owner;
 
@@ -63,6 +65,7 @@ public class Book {
 
     private String thirdImage;
 
+    @Enumerated(EnumType.STRING)
     private BookType bookType;
 
     private String fragment;
@@ -76,6 +79,8 @@ public class Book {
     private String electronicBook;
 
     @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "users_favorite_books", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;
 
     public void setUserToBook(User user) {
@@ -86,7 +91,7 @@ public class Book {
 
     private boolean isEnabled;
 
-    @ManyToMany
+    @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket;
@@ -145,5 +150,13 @@ public class Book {
         this.quantityOfBook = paperBook.getQuantityOfBook();
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
+    }
+
+    public void removeUserFromBasket(User user) {
+        this.bookBasket.remove(user);
+    }
+
+    public void removeUserFromLikes(User user) {
+        this.likes.remove(user);
     }
 }

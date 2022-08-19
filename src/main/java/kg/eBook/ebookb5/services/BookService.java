@@ -5,10 +5,10 @@ import kg.eBook.ebookb5.dto.responses.books.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
 import kg.eBook.ebookb5.dto.responses.books.PaperBookResponse;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
-import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,17 +29,17 @@ public class BookService {
     private final ModelMapper modelMapper;
 
     public List<BookResponse> getAllBooks(
-                                          List<Long> genres,
-                                          BookType bookType,
-                                          Integer priceFrom,
-                                          Integer priceTo,
-                                          List<Language> languages,
-                                          String search,
-                                          SortBy sortBy,
-                                          int page,
-                                          int size
-                                          ) {
-    Pageable pageable = PageRequest.of(page-1, size);
+            List<Long> genres,
+            BookType bookType,
+            Integer priceFrom,
+            Integer priceTo,
+            List<Language> languages,
+            String search,
+            SortBy sortBy,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         return bookRepository.customFindAll(
                 genres,
                 bookType,

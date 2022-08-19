@@ -2,12 +2,15 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
+import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,7 @@ public class VendorService {
         vendor.setRole(Role.VENDOR);
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(vendorRegisterRequest.getEmail()))
+        if (personRepository.existsByEmail(vendorRegisterRequest.getEmail()))
             throw new AlreadyExistException("Почта: " + vendorRegisterRequest.getEmail() + " уже занята!");
 
         User savedVendor = personRepository.save(vendor);
@@ -47,5 +50,4 @@ public class VendorService {
                 savedVendor.getRole(),
                 savedVendor.getFirstName());
     }
-
 }

@@ -20,20 +20,21 @@ public class PurchasedUserBooks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String bookName;
 
     private int price;
 
-    private String author;
+    private String bookAuthor;
 
     private LocalDate purchaseDate;
 
     private int quantityOfBook;
 
+    private Long bookId;
     @ManyToOne
     private User user;
 
-    private String mainImage;
+    private String bookMainImage;
 
     private int promocode;
 }

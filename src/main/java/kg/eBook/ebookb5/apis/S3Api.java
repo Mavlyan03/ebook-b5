@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(maxAge = 5000)
 @RequestMapping("/api/file")
 public class S3Api {
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Modifying
 //    @Query("delete from User u where u.id = :id ")
 //    void deleteVendor(@Param("id") Long id);
+
+    @Query("select u from User u where u.role = 'USER'")
+    List<User> findAllUsers();
 }

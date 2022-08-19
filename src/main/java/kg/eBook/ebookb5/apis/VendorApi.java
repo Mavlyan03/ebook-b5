@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("api/vendors")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@PreAuthorize("hasAuthority('VENDOR')")
 public class VendorApi {
 
     private final VendorService vendorService;

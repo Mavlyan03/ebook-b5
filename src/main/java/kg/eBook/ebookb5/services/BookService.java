@@ -111,8 +111,10 @@ public class BookService {
         Book book = bookRepository.findById(id).get();
         book.setEnabled(true);
         bookRepository.save(book);
-        if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
-            book.setNew(true);
+        if (book.getPublishedDate() != null) {
+            if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
+                book.setNew(true);
+            }
         }
         book.setEnabled(true);
         switch (book.getBookType()) {

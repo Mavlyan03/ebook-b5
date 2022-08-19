@@ -12,8 +12,5 @@ import java.util.Optional;
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     @Query("select count(b) from Book b where b.genre.id = :id")
-    Long quantityOfBook(Long id);
-
-    @Query("select g from Genre g")
-    List<Genre> findAll();
+    Optional<Long> quantityOfBook(Long id);
 }

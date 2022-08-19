@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.GenreResponse;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,8 @@ public class GenreService {
         List<GenreResponse> genreResponses = new ArrayList<>();
         List<Genre> genres = genreRepository.findAll();
         for (Genre genre : genres) {
-            genreResponses.add(new GenreResponse(genre, 1L));
+            genreResponses.add(new GenreResponse(genre, genreRepository.quantityOfBook(genre.getId()).orElse(null)));
         }
         return genreResponses;
-    }
-
-    public GenreResponse findById(Long id) {
-        return new GenreResponse(genreRepository.findById(id).get(), 1L);
     }
 }

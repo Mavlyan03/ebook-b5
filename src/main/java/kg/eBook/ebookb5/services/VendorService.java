@@ -62,7 +62,7 @@ public class VendorService {
         String password = passwordEncoder.encode(vendorProfileRequest.getPassword());
         String newPassword = passwordEncoder.encode(vendorProfileRequest.getNewPassword());
         if (!password.equals(vendor.getPassword())) {
-            throw new WrongPasswordException("Не правильный паспорт");
+            throw new WrongPasswordException("Не правильный пароль");
         }
         if (!vendor.getFirstName().equals(vendorProfileRequest.getFirstName()) &&
                 vendorProfileRequest.getFirstName() != null) {

@@ -1,10 +1,6 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
-import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
-import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
-import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
@@ -62,10 +58,12 @@ public class BookService {
                 pageable
         );
     }
+
     public List<SearchResponse> globalSearchBooks(String search) {
         List<SearchResponse> all = new ArrayList<>();
 
         String finalSearch = search.toLowerCase();
+
         bookRepository.findAll().forEach(book -> {
             System.out.println(book);
             if (book.getName().toLowerCase().startsWith(finalSearch)) {
@@ -84,10 +82,11 @@ public class BookService {
                 all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
+
         return all;
     }
 
-    public List<? extends BookResponseGeneral> finbBookById(Long bookId) {
+    public List<? extends BookResponseGeneral> findBookById(Long bookId) {
         Book bookById = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID: " + bookId + " не найдена!"
         ));
@@ -123,7 +122,7 @@ public class BookService {
                 return null;
         }
     }
-        
+
     private PBookResponse bookToPaperBookResponse(Book book) {
         return modelMapper.map(book, PBookResponse.class);
     }

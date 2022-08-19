@@ -46,7 +46,7 @@ public class BookApi {
         );
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search")
     public List<SearchResponse> globalSearchBooks(
             @RequestParam(required = false, defaultValue = "all") String search) {
         return bookService.globalSearchBooks(search);

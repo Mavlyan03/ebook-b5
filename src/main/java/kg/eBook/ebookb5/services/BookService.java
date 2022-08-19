@@ -1,6 +1,8 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
+import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
@@ -58,23 +60,46 @@ public class BookService {
                 pageable
         );
     }
+
     public List<SearchResponse> globalSearchBooks(String search) {
         List<SearchResponse> all = new ArrayList<>();
 
         String finalSearch = search.toLowerCase();
 
-    public List<? extends BookResponseGeneral> finbBookById(Long bookId) {
+        bookRepository.findAll().forEach(book -> {
+            System.out.println(book);
+            if (book.getName().toLowerCase().startsWith(finalSearch)) {
+                all.add(new SearchResponse(book.getId(), book.getName(), BOOK));
+            }
+            if (book.getAuthor().toLowerCase().startsWith(finalSearch)) {
+                all.add(new SearchResponse(book.getId(), book.getAuthor(), AUTHOR));
+            }
+            if ((!book.getBookType().equals(BookType.AUDIO_BOOK)) && book.getPublishingHouse().toLowerCase().startsWith(finalSearch)) {
+                all.add(new SearchResponse(book.getId(), book.getPublishingHouse(), BOOK));
+            }
+        });
+
+        genreRepository.findAll().forEach(genre -> {
+            if (genre.getName().toLowerCase().startsWith(finalSearch)) {
+                all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
+            }
+        });
+
+        return all;
+    }
+
+    public List<? extends BookResponseGeneral> findBookById(Long bookId) {
         Book bookById = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID: " + bookId + " не найдена!"
         ));
 
-        if(bookById.getBookType().equals(BookType.PAPER_BOOK))
+        if (bookById.getBookType().equals(BookType.PAPER_BOOK))
             return Collections.singletonList(bookToPaperBookResponse(bookById));
 
-        if(bookById.getBookType().equals(BookType.ELECTRONIC_BOOK))
+        if (bookById.getBookType().equals(BookType.ELECTRONIC_BOOK))
             return Collections.singletonList(bookToEbookResponse(bookById));
 
-        if(bookById.getBookType().equals(BookType.AUDIO_BOOK))
+        if (bookById.getBookType().equals(BookType.AUDIO_BOOK))
             return Collections.singletonList(bookToAudioBookResponse(bookById));
 
         return null;
@@ -98,37 +123,18 @@ public class BookService {
             default:
                 return null;
         }
-        
-    private PaperBookResponse bookToPaperBookResponse(Book book) {
-        return modelMapper.map(book, PaperBookResponse.class);
+    }
+
+    private kg.eBook.ebookb5.dto.responses.books.PaperBookResponse bookToPaperBookResponse(Book book) {
+        return modelMapper.map(book, kg.eBook.ebookb5.dto.responses.books.PaperBookResponse.class);
     }
 
     private EbookResponse bookToEbookResponse(Book book) {
         return modelMapper.map(book, EbookResponse.class);
     }
 
-    private AudioBookResponse bookToAudioBookResponse(Book book) {
-        return modelMapper.map(book, AudioBookResponse.class);
-    }
-        bookRepository.findAll().forEach(book -> {
-            System.out.println(book);
-            if (book.getName().toLowerCase().startsWith(finalSearch)) {
-                all.add(new SearchResponse(book.getId(), book.getName(), BOOK));
-            }
-            if (book.getAuthor().toLowerCase().startsWith(finalSearch)) {
-                all.add(new SearchResponse(book.getId(), book.getAuthor(), AUTHOR));
-            }
-            if ((!book.getBookType().equals(BookType.AUDIO_BOOK)) && book.getPublishingHouse().toLowerCase().startsWith(finalSearch)) {
-                all.add(new SearchResponse(book.getId(), book.getPublishingHouse(), BOOK));
-            }
-        });
-
-        genreRepository.findAll().forEach(genre -> {
-            if (genre.getName().toLowerCase().startsWith(finalSearch)) {
-                all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
-            }
-        });
-        return all;
+    private kg.eBook.ebookb5.dto.responses.books.AudioBookResponse bookToAudioBookResponse(Book book) {
+        return modelMapper.map(book, kg.eBook.ebookb5.dto.responses.books.AudioBookResponse.class);
     }
 }
 

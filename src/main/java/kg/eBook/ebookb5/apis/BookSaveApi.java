@@ -81,6 +81,6 @@ public class BookSaveApi {
     @GetMapping("/find/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
     public List<? extends BookResponseGeneral> findBookById(@PathVariable Long bookId) {
-        return bookService.finbBookById(bookId);
+        return bookService.findBookById(bookId);
     }
 }

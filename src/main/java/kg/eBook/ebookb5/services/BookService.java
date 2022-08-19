@@ -1,8 +1,6 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
-import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
@@ -93,15 +91,15 @@ public class BookService {
                 "Книга с ID: " + bookId + " не найдена!"
         ));
 
-        if (bookById.getBookType().equals(BookType.PAPER_BOOK))
+        if(bookById.getBookType().equals(BookType.PAPER_BOOK)) {
             return Collections.singletonList(bookToPaperBookResponse(bookById));
-
-        if (bookById.getBookType().equals(BookType.ELECTRONIC_BOOK))
+        }
+        if(bookById.getBookType().equals(BookType.ELECTRONIC_BOOK)) {
             return Collections.singletonList(bookToEbookResponse(bookById));
-
-        if (bookById.getBookType().equals(BookType.AUDIO_BOOK))
+        }
+        if(bookById.getBookType().equals(BookType.AUDIO_BOOK)) {
             return Collections.singletonList(bookToAudioBookResponse(bookById));
-
+        }
         return null;
     }
 
@@ -125,17 +123,18 @@ public class BookService {
         }
     }
 
-    private kg.eBook.ebookb5.dto.responses.books.PaperBookResponse bookToPaperBookResponse(Book book) {
-        return modelMapper.map(book, kg.eBook.ebookb5.dto.responses.books.PaperBookResponse.class);
+    private PBookResponse bookToPaperBookResponse(Book book) {
+        return modelMapper.map(book, PBookResponse.class);
     }
 
     private EbookResponse bookToEbookResponse(Book book) {
         return modelMapper.map(book, EbookResponse.class);
     }
 
-    private kg.eBook.ebookb5.dto.responses.books.AudioBookResponse bookToAudioBookResponse(Book book) {
-        return modelMapper.map(book, kg.eBook.ebookb5.dto.responses.books.AudioBookResponse.class);
+    private ABookResponse bookToAudioBookResponse(Book book) {
+        return modelMapper.map(book, ABookResponse.class);
     }
+
 }
 
 

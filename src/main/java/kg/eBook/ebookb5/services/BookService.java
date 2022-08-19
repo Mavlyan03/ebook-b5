@@ -80,6 +80,25 @@ public class BookService {
         return null;
     }
 
+    public BookInnerPageResponse findById(Long id) {
+        Book book = bookRepository.findById(id).get();
+        book.setEnabled(true);
+        bookRepository.save(book);
+        if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
+            book.setNew(true);
+        }
+        book.setEnabled(true);
+        switch (book.getBookType()) {
+            case AUDIO_BOOK:
+                return new AudioBookResponse(book);
+            case ELECTRONIC_BOOK:
+                return new ElectronicBookResponse(book);
+            case PAPER_BOOK:
+                return new PaperBookResponse(book);
+            default:
+                return null;
+        }
+        
     private PaperBookResponse bookToPaperBookResponse(Book book) {
         return modelMapper.map(book, PaperBookResponse.class);
     }

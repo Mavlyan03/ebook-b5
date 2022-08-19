@@ -6,6 +6,7 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
@@ -13,11 +14,13 @@ import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -28,6 +31,7 @@ import static kg.eBook.ebookb5.enums.SearchType.*;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
     private final GenreRepository genreRepository;
 
@@ -59,22 +63,33 @@ public class BookService {
 
         String finalSearch = search.toLowerCase();
 
-    public BookInnerPageResponse findById(Long id) {
-        Book book = bookRepository.findById(id).get();
-        if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
-            book.setNew(true);
-        }
-        book.setEnabled(true);
-        switch (book.getBookType()) {
-            case AUDIO_BOOK:
-                return new AudioBookResponse(book);
-            case ELECTRONIC_BOOK:
-                return new ElectronicBookResponse(book);
-            case PAPER_BOOK:
-                return new PaperBookResponse(book);
-            default:
-                return null;
-        }
+    public List<? extends BookResponseGeneral> finbBookById(Long bookId) {
+        Book bookById = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
+                "Книга с ID: " + bookId + " не найдена!"
+        ));
+
+        if(bookById.getBookType().equals(BookType.PAPER_BOOK))
+            return Collections.singletonList(bookToPaperBookResponse(bookById));
+
+        if(bookById.getBookType().equals(BookType.ELECTRONIC_BOOK))
+            return Collections.singletonList(bookToEbookResponse(bookById));
+
+        if(bookById.getBookType().equals(BookType.AUDIO_BOOK))
+            return Collections.singletonList(bookToAudioBookResponse(bookById));
+
+        return null;
+    }
+
+    private PaperBookResponse bookToPaperBookResponse(Book book) {
+        return modelMapper.map(book, PaperBookResponse.class);
+    }
+
+    private EbookResponse bookToEbookResponse(Book book) {
+        return modelMapper.map(book, EbookResponse.class);
+    }
+
+    private AudioBookResponse bookToAudioBookResponse(Book book) {
+        return modelMapper.map(book, AudioBookResponse.class);
     }
         bookRepository.findAll().forEach(book -> {
             System.out.println(book);

@@ -19,8 +19,12 @@ public class GenreService {
         List<GenreResponse> genreResponses = new ArrayList<>();
         List<Genre> genres = genreRepository.findAll();
         for (Genre genre : genres) {
-            genreResponses.add(new GenreResponse(genre, genreRepository.quantityOfBook(genre.getName()).orElse(null)));
+            genreResponses.add(new GenreResponse(genre, 1L));
         }
         return genreResponses;
+    }
+
+    public GenreResponse findById(Long id) {
+        return new GenreResponse(genreRepository.findById(id).get(), 1L);
     }
 }

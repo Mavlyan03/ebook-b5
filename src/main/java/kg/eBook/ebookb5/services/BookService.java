@@ -1,6 +1,10 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
+import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
+import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
+import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
@@ -107,8 +111,10 @@ public class BookService {
         Book book = bookRepository.findById(id).get();
         book.setEnabled(true);
         bookRepository.save(book);
-        if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
-            book.setNew(true);
+        if (book.getPublishedDate() != null) {
+            if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
+                book.setNew(true);
+            }
         }
         book.setEnabled(true);
         switch (book.getBookType()) {

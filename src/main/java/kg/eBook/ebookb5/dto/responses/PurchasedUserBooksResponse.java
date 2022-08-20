@@ -15,8 +15,7 @@ import java.util.List;
 @Setter
 public class PurchasedUserBooksResponse {
 
-    private Long id;
-
+    private Long bookId;
     private String name;
 
     private int price;
@@ -34,18 +33,18 @@ public class PurchasedUserBooksResponse {
     private LocalDate dateTheBookWasAddedToFavorites;
 
     public PurchasedUserBooksResponse(PurchasedUserBooks userBooks) {
-       this.id = userBooks.getId();
-       this.name = userBooks.getName();
+       this.bookId = userBooks.getBookId();
+       this.name = userBooks.getBookName();
        this.price = userBooks.getPrice();
-       this.author = userBooks.getAuthor();
+       this.author = userBooks.getBookAuthor();
        this.purchaseDate = userBooks.getPurchaseDate();
        this.quantityOfBook = userBooks.getQuantityOfBook();
-       this.mainImage = userBooks.getMainImage();
+       this.mainImage = userBooks.getBookMainImage();
        this.promocode = userBooks.getPromocode();
     }
 
     public PurchasedUserBooksResponse(Book userBooks) {
-        this.id = userBooks.getId();
+        this.bookId = userBooks.getId();
         this.name = userBooks.getName();
         this.price = userBooks.getPrice();
         this.author = userBooks.getAuthor();

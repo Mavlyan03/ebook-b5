@@ -22,6 +22,8 @@ public class PurchasedUserBooks {
 
     private String name;
 
+    private Long bookId;
+
     private int price;
 
     private String author;

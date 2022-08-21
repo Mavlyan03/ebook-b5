@@ -2,23 +2,33 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.VendorProfileRequest;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
+import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
+import kg.eBook.ebookb5.enums.AboutBooks;
+import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
+import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
-import kg.eBook.ebookb5.repositories.BookRepository;
+import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
-import kg.eBook.ebookb5.services.book.PaperBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static kg.eBook.ebookb5.dto.responses.ABookVendorResponse.viewBooks;
+import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +37,8 @@ public class VendorService {
 
     private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final PurchasedUserBooksRepository purchasedUserBooksRepository;
 
     private final JWTUtil jwtUtil;
 
@@ -38,7 +50,7 @@ public class VendorService {
                 vendorRegisterRequest.getPhoneNumber(),
                 vendorRegisterRequest.getEmail()
         );
-
+        vendor.setCreatedAt(LocalDate.now());
         vendor.setRole(Role.VENDOR);
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
@@ -98,5 +110,91 @@ public class VendorService {
 
         personRepository.delete(vendor);
         return new SimpleResponse("Вы успешно удалили аккаунт");
+    }
+
+    public List<VendorResponse> findAllVendors() {
+        return viewVendors(personRepository.findAllVendors());
+    }
+
+    public List<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks) {
+        User vendor = personRepository.findById(vendorId).orElseThrow(
+                () -> new NotFoundException("Пользователь не найдено"));
+        switch (aboutBooks) {
+            case ALL:
+                return viewBooks(vendor.getBooks());
+            case REJECTED:
+                return viewBooks(booksRejected(vendor.getBooks()));
+            case IN_THE_PROCESS:
+                return viewBooks(booksInTheProcess(vendor.getBooks()));
+            case WITH_DISCOUNTS:
+                return viewBooks(booksWithDiscounts(vendor.getBooks()));
+            case IN_THE_BASKET:
+                return viewBooks(booksInTheBasket(vendor.getBooks()));
+            case FAVORITES:
+                return viewBooks(booksFavorites(vendor.getBooks()));
+            case SOLD_OUT:
+                return viewBooks(booksSoldOut(vendor.getBooks()));
+            default:
+                return null;
+        }
+    }
+
+    private List<Book> booksRejected(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getBookStatus().equals(BookStatus.REJECTED)) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
+    }
+
+    private List<Book> booksInTheProcess(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getBookStatus().equals(BookStatus.IN_PROCESSING)) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
+    }
+
+    private List<Book> booksWithDiscounts(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getDiscount() > 0) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
+    }
+
+    private List<Book> booksInTheBasket(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getBookBasket() != null) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
+    }
+
+    private List<Book> booksFavorites(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getLikes() != null) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
+    }
+    private List<Book> booksSoldOut(List<Book> books) {
+        List<Book> bookList = new ArrayList<>();
+        for (Book book : books) {
+            if (purchasedUserBooksRepository.existsPurchasedUserBooksByBookId(book.getId())) {
+                bookList.add(book);
+            }
+        }
+        return bookList;
     }
 }

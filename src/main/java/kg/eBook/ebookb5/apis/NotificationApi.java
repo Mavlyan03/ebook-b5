@@ -20,20 +20,6 @@ public class NotificationApi {
 
     private final NotificationService notificationService;
 
-    @PostMapping("/books/{bookId}/accepted")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @Operation(summary = "accepted a book", description = "accepted a book with by id")
-    public SimpleResponse acceptedBook(@PathVariable Long bookId) {
-        return notificationService.acceptedBook(bookId);
-    }
-
-    @PostMapping("/books/{bookId}/rejected")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @Operation(summary = "rejected a book", description = "rejected a book with by id")
-    public SimpleResponse rejectedBook(@PathVariable Long bookId, @RequestParam String description) {
-        return notificationService.rejectedBook(bookId, description);
-    }
-
     @GetMapping
     @PreAuthorize("hasAuthority('VENDOR')")
     @Operation(summary = "find all notifications with by authentication")

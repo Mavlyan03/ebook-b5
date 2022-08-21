@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.repositories;
 
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -39,6 +40,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                      String sortBy,
                                      Pageable pageable
     );
+
+//    @Query("select kg.eBook.ebookb5.dto.responses.SearchResponse(" +
+//            "id, search, searchType) where ")
+//    List<SearchResponse> globalSearchBooks(String search);
+
 
 }
 

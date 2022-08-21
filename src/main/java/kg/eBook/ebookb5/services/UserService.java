@@ -1,15 +1,18 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
+import kg.eBook.ebookb5.dto.requests.UserRequest;
 import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
+import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,5 +92,26 @@ public class UserService {
     public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(Long userId) {
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getUserBasket());
+    }
+
+    public SimpleResponse updateByUser(Authentication authentication, UserRequest userRequest) {
+        User user = personRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
+        String password = passwordEncoder.encode(userRequest.getPassword());
+        String newPassword = passwordEncoder.encode(userRequest.getNewPassword());
+        if (!user.getPassword().equals(password)) {
+            throw new WrongPasswordException("Пароль введен неправильно");
+        }
+        if (!user.getFirstName().equals(userRequest.getName()) && userRequest.getName() != null) {
+            user.setFirstName(userRequest.getName());
+        }
+        if (!user.getEmail().equals(userRequest.getEmail()) && userRequest.getEmail() != null) {
+            user.setEmail(userRequest.getEmail());
+        }
+        if (!password.equals(newPassword) && newPassword != null) {
+            user.setPassword(newPassword);
+        }
+        personRepository.save(user);
+        return new SimpleResponse("Пользователь успешно сохранен");
     }
 }

@@ -119,6 +119,7 @@ public class Book {
         this.thirdImage = eBook.getThirdImage();
         this.fragment = eBook.getFragment();
         this.electronicBook = eBook.getElectronicBook();
+        this.bookStatus = BookStatus.IN_PROCESSING;
     }
 
     public Book(AudioBookSaveRequest audioBook) {
@@ -136,6 +137,7 @@ public class Book {
         this.fragment = audioBook.getFragment();
         this.duration = LocalTime.parse(audioBook.getDuration(), timeFormatter);
         this.audioBook = audioBook.getAudioBook();
+        this.bookStatus = BookStatus.IN_PROCESSING;
     }
 
     public Book(PaperBookSaveRequest paperBook) {
@@ -153,7 +155,9 @@ public class Book {
         this.quantityOfBook = paperBook.getQuantityOfBook();
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
+        this.bookStatus = BookStatus.IN_PROCESSING;
     }
+
     public void removeUserFromBasket(User user) {
         this.bookBasket.remove(user);
     }

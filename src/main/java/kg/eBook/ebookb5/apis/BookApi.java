@@ -52,7 +52,7 @@ public class BookApi {
         return bookService.globalSearchBooks(search);
     }
 
-    @GetMapping("/book/{bookId}")
+    @GetMapping("/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'USER', 'ADMIN')")
     @Operation(summary = "find by book with book id", description = "find inside book page with id")
     public BookInnerPageResponse findById(@PathVariable Long bookId) {

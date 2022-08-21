@@ -13,7 +13,9 @@ import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Notification;
 import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.NotificationRepository;
 import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
@@ -37,9 +39,8 @@ public class VendorService {
 
     private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final PurchasedUserBooksRepository purchasedUserBooksRepository;
-
+    private final NotificationRepository notificationRepository;
     private final JWTUtil jwtUtil;
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
@@ -143,6 +144,9 @@ public class VendorService {
         List<Book> bookList = new ArrayList<>();
         for (Book book : books) {
             if (book.getBookStatus().equals(BookStatus.REJECTED)) {
+                Notification notification = notificationRepository.findByBookId(book.getId()).orElseThrow(
+                        () -> new NotFoundException("Уведомление не найдено"));
+                book.setPublishedDate(notification.getCreatedAt());
                 bookList.add(book);
             }
         }
@@ -172,7 +176,7 @@ public class VendorService {
     private List<Book> booksInTheBasket(List<Book> books) {
         List<Book> bookList = new ArrayList<>();
         for (Book book : books) {
-            if (book.getBookBasket() != null) {
+            if (book.getBookBasket().size() > 0) {
                 bookList.add(book);
             }
         }
@@ -182,12 +186,13 @@ public class VendorService {
     private List<Book> booksFavorites(List<Book> books) {
         List<Book> bookList = new ArrayList<>();
         for (Book book : books) {
-            if (book.getLikes() != null) {
+            if (book.getLikes().size() > 0) {
                 bookList.add(book);
             }
         }
         return bookList;
     }
+
     private List<Book> booksSoldOut(List<Book> books) {
         List<Book> bookList = new ArrayList<>();
         for (Book book : books) {

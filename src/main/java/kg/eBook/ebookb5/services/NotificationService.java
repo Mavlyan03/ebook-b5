@@ -41,6 +41,7 @@ public class NotificationService {
         notification.setBookStatus(BookStatus.ACCEPTED);
         notification.setVendor(book.getOwner());
         notification.setCreatedAt(LocalDate.now());
+        notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
 
@@ -61,6 +62,7 @@ public class NotificationService {
         notification.setVendor(book.getOwner());
         notification.setCreatedAt(LocalDate.now());
         notification.setDescription(description);
+        notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
 

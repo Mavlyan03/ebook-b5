@@ -25,6 +25,8 @@ public class Notification {
 
     private String description;
 
+    private Long bookId;
+
     private boolean read;
 
     @CreatedDate

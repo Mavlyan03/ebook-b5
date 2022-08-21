@@ -12,7 +12,7 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
         defer-datasource-initialization: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
     mail:
         host: smtp.gmail.com
         password: tahxwbasmgwmnrub

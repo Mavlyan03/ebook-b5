@@ -92,8 +92,6 @@ public class Book {
 
     private boolean isEnabled;
 
-    @OneToOne
-    private PurchasedUserBooks purchasedUserBooks;
     @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

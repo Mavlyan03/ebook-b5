@@ -24,5 +24,10 @@ values (1, 'Художественная литература'),
        (24,'Восточная литература'),
        (25,'Русская литература');
 
-insert into users(first_name, last_name, email, phone_number, password, role)
-values ('Admin', 'Adminov', 'admin@gmail.com', '+996777777777', '$2a$12$xEFzerKnyLVgXyBQ/ecOjuVs5rDd2KgixXHHvPSIqTN7TDnRH0Oba', 'ADMIN');
+insert into users(id, created_at, first_name, last_name, email, phone_number, password, role)
+values (1, '2022-08-22', 'Admin', 'Adminov', 'admin@gmail.com', '+996777777777', '$2a$12$xEFzerKnyLVgXyBQ/ecOjuVs5rDd2KgixXHHvPSIqTN7TDnRH0Oba', 'ADMIN'),
+       (2, '2022-08-22', 'Vendor', 'Vendorov', 'vendor@gmail.com', '+996777888999', '$2a$12$L00bQs1P2eCIQTvcqnjJcej1cWAAx1WoBUELicn8PwD.9nHgcRHwK', 'VENDOR'),
+       (3, '2022-08-22', 'User', 'Userov', 'user@gmail.com', '+996555666777', '$2a$12$dki5VjuWI6BAkkVFfujNZuMOvkSSvnthppJBR.PE2b7dyIaXD6hJ.', 'USER');
+
+-- insert into books(id, audio_book, audio_book_fragment, author, bestseller, book_status, book_type, date_the_book_was_added_to_favorites, description, discount, duration, electronic_book, fragment, is_enabled, is_new, language, main_image, name, page_size, price, published_date, publishing_house, quantity_of_book, second_image, third_image, year_of_issue, genre_id, owner_id);
+-- VALUES (1, 'audio book', 'audio book fragment')

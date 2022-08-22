@@ -18,10 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-//    @Modifying
-//    @Query("delete from User u where u.id = :id ")
-//    void deleteVendor(@Param("id") Long id);
-
     @Query("select u from User u where u.role = 'USER'")
     List<User> findAllUsers();
+
+    @Query("select u from User u where u.role = 'VENDOR'")
+    List<User> findAllVendors();
 }

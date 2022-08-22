@@ -13,4 +13,9 @@ public interface PurchasedUserBooksRepository extends JpaRepository<PurchasedUse
 
     @Query("select p from PurchasedUserBooks p where p.user.id = :id")
     List<PurchasedUserBooks> findAllByUserId(@Param("id") Long userId);
+
+//    @Query("select p from PurchasedUserBooks p where exists (select p from PurchasedUserBooks p where p.bookId = : id)")
+//    Boolean existsPurchasedBooks(@Param("id") Long id);
+
+    Boolean existsPurchasedUserBooksByBookId(Long bookId);
 }

@@ -4,11 +4,15 @@ import kg.eBook.ebookb5.dto.requests.LoginRequest;
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.exceptions.WrongEmailException;
 import kg.eBook.ebookb5.services.LoginService;
 import kg.eBook.ebookb5.services.UserService;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,12 +25,18 @@ public class AuthApi {
     private final LoginService loginService;
 
     @PostMapping("/vendor/register")
-    public JwtResponse registrationVendor(@RequestBody VendorRegisterRequest vendorRegisterRequest) {
+    public JwtResponse registrationVendor(@RequestBody @Valid VendorRegisterRequest vendorRegisterRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new WrongEmailException("Неправильный адрес электронной почты");
+        }
         return vendorService.registerVendor(vendorRegisterRequest);
     }
 
     @PostMapping("/user/register")
-    public JwtResponse registrationPerson(@RequestBody UserRegisterRequest personRequest) {
+    public JwtResponse registrationPerson(@RequestBody @Valid UserRegisterRequest personRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new WrongEmailException("Неправильный адрес электронной почты");
+        }
         return personService.registerUser(personRequest);
     }
 

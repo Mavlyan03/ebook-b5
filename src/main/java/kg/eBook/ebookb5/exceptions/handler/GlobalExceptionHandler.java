@@ -18,9 +18,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ThisPromocodeIsInvalid.class)
+    @ExceptionHandler(InvalidPromocodeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handlerThisPromocodeIsInvalid(ThisPromocodeIsInvalid e) {
+    public ExceptionResponse handlerThisPromocodeIsInvalid(InvalidPromocodeException e) {
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
                 e.getMessage()

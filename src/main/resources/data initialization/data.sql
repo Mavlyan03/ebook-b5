@@ -29,6 +29,21 @@ values (1, '2022-08-22', 'Admin', 'Adminov', 'admin@gmail.com', '+996777777777',
        (2, '2022-08-22', 'Vendor', 'Vendorov', 'vendor@gmail.com', '+996777888999', '$2a$12$L00bQs1P2eCIQTvcqnjJcej1cWAAx1WoBUELicn8PwD.9nHgcRHwK', 'VENDOR'),
        (3, '2022-08-22', 'User', 'Userov', 'user@gmail.com', '+996555666777', '$2a$12$dki5VjuWI6BAkkVFfujNZuMOvkSSvnthppJBR.PE2b7dyIaXD6hJ.', 'USER');
 
-insert into books(id, audio_book, audio_book_fragment, author, bestseller, book_status, book_type, date_the_book_was_added_to_favorites, description, discount, duration, electronic_book, fragment, is_enabled, is_new, language, main_image, name, page_size, price, published_date, publishing_house, quantity_of_book, second_image, third_image, year_of_issue, genre_id, owner_id);
+insert into books(id, audio_book, audio_book_fragment, author, bestseller, book_status, book_type, date_the_book_was_added_to_favorites, description, discount, duration, electronic_book, fragment, is_enabled, is_new, language, main_image, name, page_size, price, published_date, publishing_house, quantity_of_book, second_image, third_image, year_of_issue, genre_id, owner_id)
 VALUES (1, 'audio book', 'audio book fragment', 'Чынгыз Айтматов', true, 'IN_PROCESSING', 'AUDIO_BOOK', '2022-08-22', 'Ысыккөл кээде тынч да, кээде толкун,', 0, '01:02:34', null, null, false, false, 'KYRGYZ', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 'Ыссык-Кол', 284, 500, null, 'Аркус', 1, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611704625357-2.png', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/1661170736047images.jpg', 1995, 1, 2),
-       (2, null, null, 'Чынгыз Айтматов', true, 'ACCEPTED', 'ELECTRONIC_BOOK', '2022-08-22', 'Толкуса толкунуна тең ортокмун.', 15, null, )
+       (2, null, null, 'Чынгыз Айтматов', true, 'ACCEPTED', 'ELECTRONIC_BOOK', '2022-08-22', 'Толкуса толкунуна тен ортокмун.', 15, null, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/1661177906416-pdf-531-.jpg', 'Турмушта канча жолдош күтсөм дагы,', false, false, 'RUSSIAN', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 'Баткен', 234, 450,'2022-08-22', 'Аркус', 2, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611704625357-2.png', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/1661170736047images.jpg', 2010, 2, 2),
+       (3, null, null, 'Чынгыз Айтматов', false, 'REJECTED', 'PAPER_BOOK', '2022-08-23', 'Бир сырдуу сендей жолдош күткөн жокмун.', 0, null, null, 'Адамга эн кыйын кун сайын адам болуу', true, false, 'ENGLISH', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 'Талас', 123, 495, null, 'Аркус', 3, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611704625357-2.png', 'https://ebookjava5.s3.eu-central-1.amazonaws.com/1661170736047images.jpg', 2020, 3, 2);
+
+insert into users_favorite_books(book_id, user_id)
+VALUES (1, 3),
+       (2, 3);
+
+insert into users_basket_books(book_id, user_id)
+VALUES (1, 3),
+       (3, 3);
+
+insert into promocodes(id, name, date_of_start, date_of_finish, discount , vendor_id)
+values (1,'Промо', '2022-08-23', '2022-09-23', 15, 2);
+
+
+

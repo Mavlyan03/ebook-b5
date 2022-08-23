@@ -1,10 +1,11 @@
 package kg.eBook.ebookb5.dto.requests;
 
-import kg.eBook.ebookb5.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.Email;
 
 @Getter
 @Setter
@@ -13,6 +14,9 @@ import lombok.Setter;
 public class UserRegisterRequest {
 
     private String firstName;
+
+
+    @Email
     private String email;
     private String password;
 }

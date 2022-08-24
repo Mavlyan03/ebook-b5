@@ -58,13 +58,4 @@ public class ApiAdmin {
     public VendorResponse findByVendor(@PathVariable Long vendorId) {
         return vendorService.findByVendor(vendorId);
     }
-
-    @GetMapping("/vendors/{vendorId}/books")
-    @Operation(summary = "find all books with vendor id", description = "can be obtained using vendor id " +
-            "all books, in favorites, in the basket, sold out with discounts in processing and rejected")
-    public List<ABookVendorResponse> findABookVendor(@PathVariable Long vendorId,
-                                          @RequestParam AboutBooks aboutBooks) {
-        return vendorService.findABookVendor(vendorId, aboutBooks);
-    }
-
 }

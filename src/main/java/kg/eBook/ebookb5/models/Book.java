@@ -42,7 +42,7 @@ public class Book {
     private String publishingHouse;
 
     private String description;
-
+    @Enumerated(EnumType.STRING)
     private Language language;
 
     private LocalDate publishedDate;
@@ -88,12 +88,11 @@ public class Book {
         this.likes.add(user);
     }
 
+    @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
 
     private boolean isEnabled;
 
-    @OneToOne
-    private PurchasedUserBooks purchasedUserBooks;
     @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     @JoinTable(name = "users_basket_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

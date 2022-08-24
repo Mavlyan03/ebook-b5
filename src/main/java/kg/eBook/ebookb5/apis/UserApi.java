@@ -34,6 +34,7 @@ public class UserApi {
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "delete by user with user id")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public SimpleResponse deleteByUser(@PathVariable Long userId)  {
         return userService.deleteByUserId(userId);
     }

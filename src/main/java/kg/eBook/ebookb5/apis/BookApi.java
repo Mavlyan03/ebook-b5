@@ -67,39 +67,5 @@ public class BookApi {
     public BookInnerPageResponse findById(@PathVariable Long bookId) {
         return bookService.findById(bookId);
     }
-    @GetMapping("/applications")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<AdminApplicationsResponse> getApplications(
-            @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "8") int size
-    ) {
-        return bookService.getApplications(
-                page,
-                size
-        );
-    }
-
-
-    @GetMapping("/applications/accept")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void acceptBooks(Long id) {
-        bookService.acceptBooks(id);
-    }
-
-    @GetMapping("/applications/reject")
-    public void rejectBooks(
-            Long id,
-            String cause) {
-
-        bookService.rejectBooks(
-                id,
-                "Причина Вашего отклонения",
-                cause);
-    }
-
-
-
-
-
 
 }

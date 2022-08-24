@@ -149,33 +149,8 @@ public class BookService {
         return modelMapper.map(book, EbookResponse.class);
     }
 
-
-    public void acceptBooks(Long id) {
-        bookRepository.acceptBooks(id);
-    }
     private ABookResponse bookToAudioBookResponse(Book book) {
         return modelMapper.map(book, ABookResponse.class);
     }
 
-
-    public void rejectBooks(
-                            Long id, String subject,
-                            String cause) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        Book book = new Book();
-        String ownerEmail = bookRepository.getEmail(id);
-        message.setFrom("timur.abdivaitov@gmail.com");
-        message.setTo(ownerEmail);
-        message.setText(cause);
-        message.setSubject(subject);
-
-        mailSender.send(message);
-        System.out.println("Mail sent successfully");
-
-        bookRepository.rejectBooks(
-                book.getId(),
-                cause
-
-        );
-    }
 }

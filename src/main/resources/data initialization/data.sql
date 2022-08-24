@@ -54,13 +54,3 @@ values (1, 'Чынгыз Айтматов', 3, 'https://ebookjava5.s3.eu-central
 insert into notifications(id, book_id, book_status, created_at, description, read, vendor_id)
 values (1, 2, 'ACCEPTED', '2022-08-24', null, false, 2),
        (2, 3, 'REJECTED', '2022-08-24', 'Книга не соответствует', false, 2);
-
-
-
-insert into users(first_name, last_name, email, phone_number, password, role)
-values ('Admin', 'Adminov', 'admin@gmail.com', '+996777777777', '$2a$12$xEFzerKnyLVgXyBQ/ecOjuVs5rDd2KgixXHHvPSIqTN7TDnRH0Oba', 'ADMIN'),
-        ('Aichurok', 'Turgunbaeva', 'tasnim0800@gmail.com', '996777454545', 'sdfgfdsxgfd', 'VENDOR' );
-
-insert into books (id, name, author, bestseller, book_status, book_type, price, publishing_house, main_image, is_new, language, owner_id, genre_id, discount, is_enabled, page_size, quantity_of_book, year_of_issue)
-values           (1, 'Merry', 'Merry Moulding', true, 1, 1, 1500, 'Quaxo', 'Duis.mov', false, 1, 2, 2,  1, false, 1, 1, 1986),
-                  (2, 'dgds', 'vfsfds', false , 2, 2, 1200, 'gfsgd', 'gfdsfds', true , 0, 2 ,1, 2, true , 2, 2, 1682);

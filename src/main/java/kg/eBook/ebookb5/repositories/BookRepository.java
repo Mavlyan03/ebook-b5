@@ -21,7 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select new kg.eBook.ebookb5.dto.responses.BookResponse(" +
             " b.id, b.mainImage, b.name, b.author, b.price, b.bookType)" +
-            " from Book b where b.bookStatus=1 AND ((b.genre.id in (:genres) or :genres is null) AND "  +
+            " from Book b where b.bookStatus='ACCEPTED' AND ((b.genre.id in (:genres) or :genres is null) AND "  +
             " (:bookType is null or b.bookType = :bookType) AND "+
             " ((b.price between :priceFrom and :priceTo) OR (:priceFrom is null or :priceTo is null)) and "+
             " (:languages is null or b.language in (:languages)) and "+
@@ -47,26 +47,26 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
             " b.id, b.mainImage, b.name, b.publishedDate, b.price) " +
             "from Book b " +
-            "where b.bookStatus=0 " +
+            "where b.bookStatus='IN_PROCESSING' " +
             "order by b.isEnabled asc ")
     List<AdminApplicationsResponse> getApplications(Pageable pageable);
 
 
-    @Modifying
-    @Query("update Book b set b.bookStatus=1 " +
-            " where b.bookStatus=0 ")
-     void acceptBooks(Long id);
-
-
-    @Modifying
-    @Query("update Book b set b.bookStatus=2 " +
-            "where b.bookStatus=0 ")
-    void rejectBooks(Long id, String cause);
-
-
-    @Query("select b.owner.email from Book b join User u on u.id=b.owner.id " +
-            "where b.id=:id")
-    String getEmail(Long id);
+//    @Modifying
+//    @Query("update Book b set b.bookStatus='ACCEPTED' " +
+//            " where b.id=:id ")
+//     void acceptBooks(Long id);
+//
+//
+//    @Modifying
+//    @Query("update Book b set b.bookStatus='REJECTED' " +
+//            "where b.id=:id ")
+//    void rejectBooks(Long id, String cause);
+//
+//
+//    @Query("select b.owner.email from Book b join User u on u.id=b.owner.id " +
+//            "where b.id=:id")
+//    String getEmail(Long id);
 
 }
 

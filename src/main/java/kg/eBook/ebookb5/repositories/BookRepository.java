@@ -43,7 +43,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " b.id, b.mainImage, b.name, b.publishedDate, b.price) " +
             "from Book b " +
             "where b.bookStatus='IN_PROCESSING' " +
-            "order by b.publishedDate desc ")
+            "order by b.isEnabled desc ")
     List<AdminApplicationsResponse> getApplications(Pageable pageable);
 
 
@@ -57,6 +57,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.bookStatus='REJECTED' " +
             "where b.bookStatus='IN_PROCESSING' ")
     void rejectBooks(Long id, String cause);
+
+
+    @Query("select b.owner.email from Book b join User u on u.id=b.owner.id " +
+            "where b.id=:id")
+    String getEmail(Long id);
 
 }
 

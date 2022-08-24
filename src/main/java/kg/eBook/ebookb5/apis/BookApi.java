@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.apis;
 
+import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,10 +77,13 @@ public class BookApi {
             Long id,
             String cause) {
 
-        bookService.rejectBooks(id,
-                "Причина отклонения Вашей заявки",
+        bookService.rejectBooks(
+                id,
+                "Причина Вашего отклонения",
                 cause);
     }
+
+
 
 
 

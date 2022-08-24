@@ -6,7 +6,9 @@ import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
 import kg.eBook.ebookb5.exceptions.InvalidPromocodeException;
+import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.*;
+import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PromocodeService {
+
+    private final BookRepository bookRepository;
 
     private final PromocodeRepository promocodeRepository;
     private final UserRepository userRepository;
@@ -45,6 +49,11 @@ public class PromocodeService {
     }
 
     public List<BookBasketResponse> findAllBooksWithPromocode(String promocodeName, Authentication authentication) {
+
+        if (promocodeName == null) {
+            User client = userRepository.findByEmail(authentication.getName()).get();
+            return viewMapper(client.getUserBasket(), null, null);
+        }
 
         Promocode promocode = promocodeRepository.findByName(promocodeName).orElseThrow(
                 () -> new InvalidPromocodeException("Данный промокод не действителен"));
@@ -102,6 +111,31 @@ public class PromocodeService {
             }
         }
         return basketResponses;
+    }
+
+    public int increaseBooksToBuy(Long bookId, Integer quantity) {
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
+                "Книга с ID "  + bookId + " не найдена"
+        ));
+
+        if(book.getQuantityOfBook() < quantity) {
+            throw new IllegalStateException("В наличии имеется книг: " + book.getQuantityOfBook());
+        }
+        return quantity;
+    }
+
+
+    public int decreaseBookToBuy(Long bookId, Integer quantity) {
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
+                "Книга с ID "  + bookId + " не найдена"
+        ));
+
+        if(1 > quantity) {
+            throw new IllegalStateException("Вы не можете выбрать меньше одной книги");
+        }
+        return quantity;
     }
 
 }

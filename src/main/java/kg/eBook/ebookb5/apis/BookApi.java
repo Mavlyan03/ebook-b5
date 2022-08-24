@@ -68,7 +68,7 @@ public class BookApi {
         return bookService.findById(bookId);
     }
     @GetMapping("/applications")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AdminApplicationsResponse> getApplications(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "8") int size

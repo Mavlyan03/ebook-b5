@@ -2,12 +2,10 @@ package kg.eBook.ebookb5.repositories;
 
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
 import org.springframework.data.domain.Pageable;
-import kg.eBook.ebookb5.models.PurchasedUserBooks;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import java.util.List;
-
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
@@ -25,7 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select new kg.eBook.ebookb5.dto.responses.BookResponse(" +
             " b.id, b.mainImage, b.name, b.author, b.price, b.bookType)" +
-            " from Book b where ((b.genre.id in (:genres) or :genres is null) AND "  +
+            " from Book b where b.bookStatus=1 AND ((b.genre.id in (:genres) or :genres is null) AND "  +
             " (:bookType is null or b.bookType = :bookType) AND "+
             " ((b.price between :priceFrom and :priceTo) OR (:priceFrom is null or :priceTo is null)) and "+
             " (:languages is null or b.language in (:languages)) and "+
@@ -51,20 +47,20 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
             " b.id, b.mainImage, b.name, b.publishedDate, b.price) " +
             "from Book b " +
-            "where b.bookStatus='IN_PROCESSING' " +
-            "order by b.isEnabled desc ")
+            "where b.bookStatus=0 " +
+            "order by b.isEnabled asc ")
     List<AdminApplicationsResponse> getApplications(Pageable pageable);
 
 
     @Modifying
-    @Query("update Book b set b.bookStatus='ACCEPTED' " +
-            " where b.bookStatus='IN_PROCESSING' ")
+    @Query("update Book b set b.bookStatus=1 " +
+            " where b.bookStatus=0 ")
      void acceptBooks(Long id);
 
 
     @Modifying
-    @Query("update Book b set b.bookStatus='REJECTED' " +
-            "where b.bookStatus='IN_PROCESSING' ")
+    @Query("update Book b set b.bookStatus=2 " +
+            "where b.bookStatus=0 ")
     void rejectBooks(Long id, String cause);
 
 

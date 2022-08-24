@@ -5,7 +5,7 @@ import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
-import kg.eBook.ebookb5.exceptions.ThisPromocodeIsInvalid;
+import kg.eBook.ebookb5.exceptions.InvalidPromocodeException;
 import kg.eBook.ebookb5.models.*;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
@@ -47,7 +47,7 @@ public class PromocodeService {
     public List<BookBasketResponse> findAllBooksWithPromocode(String promocodeName, Authentication authentication) {
 
         Promocode promocode = promocodeRepository.findByName(promocodeName).orElseThrow(
-                () -> new ThisPromocodeIsInvalid("Данный промокод не действителен"));
+                () -> new InvalidPromocodeException("Данный промокод не действителен"));
 
         if (LocalDate.now().isAfter(promocode.getDateOfFinish())) {
             throw new InvalidDateException("Срок действия промокода истек");
@@ -58,7 +58,7 @@ public class PromocodeService {
         String discountPromocode = "";
         List<Long> bookId = new ArrayList<>();
         if (!thisPromocodeAppliesToBooks(client, promocode.getVendor())) {
-            throw new ThisPromocodeIsInvalid("Данный промокод не действителен");
+            throw new InvalidPromocodeException("Данный промокод не действителен");
         } else {
             for (Book book : client.getUserBasket()) {
                 for (Book vendorBook : promocode.getVendor().getBooks()) {
@@ -103,4 +103,5 @@ public class PromocodeService {
         }
         return basketResponses;
     }
+
 }

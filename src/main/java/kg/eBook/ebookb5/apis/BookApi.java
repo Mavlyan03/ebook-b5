@@ -1,8 +1,11 @@
 package kg.eBook.ebookb5.apis;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
@@ -15,6 +18,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +28,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @CrossOrigin
 public class BookApi {
-
     private final BookService bookService;
-
 
     @GetMapping
     public List<BookResponse> getAllBooks(
@@ -39,7 +41,7 @@ public class BookApi {
             @RequestParam(required = false) SortBy sortBy,
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "12") int size
-            ) {
+    ) {
         return bookService.getAllBooks(
                 genres,
                 bookType,
@@ -50,9 +52,21 @@ public class BookApi {
                 sortBy,
                 page,
                 size
-                );
+        );
     }
 
+    @GetMapping("/search")
+    public List<SearchResponse> globalSearchBooks(
+            @RequestParam(required = false, defaultValue = "all") String search) {
+        return bookService.globalSearchBooks(search);
+    }
+
+    @GetMapping("/{bookId}")
+    @PreAuthorize("hasAnyAuthority('VENDOR', 'USER', 'ADMIN')")
+    @Operation(summary = "find by book with book id", description = "find inside book page with id")
+    public BookInnerPageResponse findById(@PathVariable Long bookId) {
+        return bookService.findById(bookId);
+    }
     @GetMapping("/applications")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<AdminApplicationsResponse> getApplications(

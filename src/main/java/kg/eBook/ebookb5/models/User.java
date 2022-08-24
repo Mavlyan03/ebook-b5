@@ -4,12 +4,15 @@ import kg.eBook.ebookb5.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "users")
@@ -32,24 +35,34 @@ public class User {
 
     private String password;
 
+    @CreatedDate
+    private LocalDate createdAt;
+
     @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Book> books = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "vendor")
+    @OneToMany(mappedBy = "vendor", cascade = ALL)
     private List<Promocode> promoCodes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "bookBasket")
+    @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "bookBasket")
     private List<Book> userBasket = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "likes", cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "likes", cascade = MERGE)
     private List<Book> favorite = new ArrayList<>();
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<PurchasedUserBooks> purchasedUserBooks = new ArrayList<>();
+
+    @OneToMany(cascade = ALL, mappedBy = "vendor")
+    private List<Notification> notifications = new ArrayList<>();
 
     public void setBook(Book book) {
         this.books.add(book);
     }
+
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }
@@ -65,6 +78,5 @@ public class User {
         this.firstName = firstName;
         this.email = email;
     }
-
 }
 

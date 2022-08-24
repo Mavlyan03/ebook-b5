@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
+import kg.eBook.ebookb5.dto.responses.GenreResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
@@ -98,6 +99,10 @@ public class AudioBookService {
             user.setBook(book);
             book.setOwner(user);
         } else
-            throw new IllegalStateException("Вы не можете редактировать этк книгу!");
+            throw new IllegalStateException("Вы не можете редактировать эту книгу!");
+    }
+
+    public GenreResponse findById(Long id) {
+        return new GenreResponse(genreRepository.findById(id).orElseThrow(()-> new NotFoundException("jok")), 1L);
     }
 }

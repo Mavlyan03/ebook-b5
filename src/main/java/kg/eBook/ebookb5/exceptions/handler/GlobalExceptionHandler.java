@@ -11,16 +11,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidDateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handlerNotFoundException(InvalidDateException e) {
+    public ExceptionResponse handlerInvalidDateException(InvalidDateException e) {
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
                 e.getMessage()
         );
     }
 
-    @ExceptionHandler(ThisPromocodeIsInvalid.class)
+    @ExceptionHandler(InvalidPromocodeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handlerNotFoundException(ThisPromocodeIsInvalid e) {
+    public ExceptionResponse handlerThisPromocodeIsInvalid(InvalidPromocodeException e) {
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
                 e.getMessage()
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse handlerBookFoundException(NotFoundException e) {
+    public ExceptionResponse handlerNotFoundException(NotFoundException e) {
 
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
@@ -39,7 +39,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistException.class)
     @ResponseStatus(HttpStatus.FOUND)
-    public ExceptionResponse handlerNotFoundException(AlreadyExistException e) {
+    public ExceptionResponse handlerAlreadyExistException(AlreadyExistException e) {
+        return new ExceptionResponse(
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(WrongEmailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handlerWrongEmailException(WrongEmailException e) {
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
                 e.getMessage()

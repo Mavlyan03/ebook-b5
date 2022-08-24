@@ -31,7 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
-src/main/resources/application-timur.properties
-src/main/resources/application-aychu.yml
+src/main/resources/application-timur.yml
+src/main/resources/application-aychu.properties
 src/main/resources/application-altyn.properties
-src/main/resources/application-nur.properties
+src/main/resources/application-nur.yml
+src/main/resources/application.yml

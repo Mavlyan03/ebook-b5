@@ -34,4 +34,11 @@ public class NotificationResponse {
         }
         return notificationResponses;
     }
+
+    public NotificationResponse(Long id, BookStatus bookStatus, LocalDate dateOfStatus, boolean read) {
+        this.id = id;
+        this.bookStatus = bookStatus;
+        this.dateOfStatus = dateOfStatus;
+        this.read = read;
+    }
 }

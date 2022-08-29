@@ -54,6 +54,3 @@ values (1, 'Чынгыз Айтматов', 3, 'https://ebookjava5.s3.eu-central
 insert into notifications(id, book_id, book_status, created_at, description, read, vendor_id)
 values (1, 2, 'ACCEPTED', '2022-08-24', null, false, 2),
        (2, 3, 'REJECTED', '2022-08-24', 'Книга не соответствует', false, 2);
-
-
-

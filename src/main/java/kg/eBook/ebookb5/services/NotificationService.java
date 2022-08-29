@@ -66,13 +66,14 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        return new SimpleResponse(book.getName() + " был откланен!");
+        return new SimpleResponse(book.getName() + " был отклонён!");
     }
 
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
         User vendor = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
-        return view(vendor.getNotifications());
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        List<NotificationResponse> findAllNotitcation = notificationRepository.findAllNotifications(vendor.getId());
+        return findAllNotitcation;
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
@@ -88,7 +89,7 @@ public class NotificationService {
 
     public List<NotificationResponse> markAsRead(Authentication authentication) {
         User vendor = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         for (Notification notification : vendor.getNotifications()) {
             notification.setRead(true);
         }

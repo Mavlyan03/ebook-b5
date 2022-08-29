@@ -1,12 +1,18 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.dto.requests.MailNewBookRequest;
+import kg.eBook.ebookb5.dto.requests.RequestMailingList;
 import kg.eBook.ebookb5.models.MailingList;
 import kg.eBook.ebookb5.repositories.MailingListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -16,32 +22,45 @@ public class MailingService {
     private final JavaMailSender javaMailSender;
     private final MailingListRepository mailingListRepository;
 
-    public void send(String to, String message) {
+    public void sendSignUpMessage(RequestMailingList requestMailingList) {
+
+        MailingList mailingList = new MailingList(requestMailingList.getEmail());
+        mailingListRepository.save(mailingList);
+
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("timur.abdivaitov@gmail.com");
         simpleMailMessage.setSubject("PEAKSOFT");
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setText(message);
+        simpleMailMessage.setTo(mailingList.getEmail());
+        simpleMailMessage.setText("Поздравляем, Вы подписаны на рассылку!");
         this.javaMailSender.send(simpleMailMessage);
     }
 
-    public List<MailingList> collectAndSendEmails(MailingList email) {
-        mailingListRepository.save(email);
-        return mailingListRepository.findAll();
+
+    public void sendNewBookMessage(MailNewBookRequest mailNewBookRequest) {
+
+        List<MailingList> emailLists = mailingListRepository.findAll();
+        for(MailingList i: emailLists) {
+            sendHTMLMessage(i.getEmail(), mailNewBookRequest.createHtmlMessage());
+        }
+
     }
 
+    @Async
+    public void sendHTMLMessage(String email, String htmlMessage) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    mimeMessage,
+                    true,
+                    "UTF-8");
 
-//    public void sendHtmlMessage(String to, String htmlMessage) throws MessagingException {
-//        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
-//                mimeMessage,
-//                true,
-//                "UTF-8"
-//        );
-//        mimeMessageHelper.setTo(to);
-//        mimeMessageHelper.setSubject("Email");
-//        mimeMessageHelper.setText(htmlMessage, true);
-//        javaMailSender.send(mimeMessage);
-//    }
+            helper.setFrom("timur.abdivaitov@gmail.com");
+            helper.setTo(email);
+            helper.setText(htmlMessage,true);
+            javaMailSender.send(mimeMessage);
 
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

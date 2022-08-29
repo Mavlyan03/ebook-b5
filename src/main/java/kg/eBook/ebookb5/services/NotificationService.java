@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.dto.requests.MailNewBookRequest;
 import kg.eBook.ebookb5.dto.responses.NotificationFindByIdResponse;
 import kg.eBook.ebookb5.dto.responses.NotificationResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
@@ -27,6 +28,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final MailingService mailingService;
 
     public SimpleResponse acceptedBook(Long bookId) {
 
@@ -44,6 +46,16 @@ public class NotificationService {
         notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
+
+        MailNewBookRequest mailNewBookRequest = new MailNewBookRequest(
+                book.getMainImage(),
+                book.getName(),
+                book.getPrice()
+        );
+
+        if(book.getBookStatus().equals(BookStatus.ACCEPTED)) {
+            mailingService.sendNewBookMessage(mailNewBookRequest);
+        }
 
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }

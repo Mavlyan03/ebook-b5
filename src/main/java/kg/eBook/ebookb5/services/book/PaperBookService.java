@@ -30,6 +30,7 @@ public class PaperBookService {
     private final UserRepository userRepository;
     private final GenreRepository genreRepository;
 
+
     public BookResponse savePaperBook(Authentication authentication, PaperBookSaveRequest paperBook) {
 
         isBookExists(paperBook);

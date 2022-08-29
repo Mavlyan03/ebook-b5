@@ -15,6 +15,7 @@ import kg.eBook.ebookb5.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class BookApi {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookResponse> getAllBooks(
+    public Page<BookResponse> getAllBooks(
             @RequestParam(required = false) List<Long> genres,
             @RequestParam(required = false) BookType bookType,
             @RequestParam(required = false) Integer priceFrom,

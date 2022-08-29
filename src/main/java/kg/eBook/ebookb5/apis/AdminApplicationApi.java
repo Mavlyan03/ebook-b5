@@ -1,15 +1,13 @@
 package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
-import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
+import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.services.BookService;
 import kg.eBook.ebookb5.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,11 +34,11 @@ public class AdminApplicationApi {
 
     @GetMapping("/applications")
     @Operation(summary = "Get applications", description = "User with role 'Admin' can get book applications")
-    public List<AdminApplicationsResponse> getApplications(
+    public ApplicationResponse getApplications(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "8") int size
     ) {
-        return bookService.getApplications(
+        return bookService.applications(
                 page,
                 size
         );

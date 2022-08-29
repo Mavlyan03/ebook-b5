@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
+import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
@@ -18,13 +19,11 @@ import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
-import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,15 +38,12 @@ import static kg.eBook.ebookb5.enums.SearchType.*;
 public class BookService {
 
     private final BookRepository bookRepository;
+
     private final ModelMapper modelMapper;
 
     private final GenreRepository genreRepository;
 
-    private final UserRepository userRepository;
-
-    private final JavaMailSender mailSender;
-
-    public List<BookResponse> getAllBooks(
+    public Page<BookResponse> getAllBooks(
             List<Long> genres,
             BookType bookType,
             Integer priceFrom,
@@ -71,10 +67,20 @@ public class BookService {
         );
     }
 
-    public List<AdminApplicationsResponse> getApplications(int page, int size) {
+    public Page<AdminApplicationsResponse> getApplications(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         return bookRepository.getApplications(pageable);
     }
+
+    public ApplicationResponse applications(int page, int size) {
+
+        ApplicationResponse applicationResponse = new ApplicationResponse(
+                bookRepository.countOfUnseen(),
+                getApplications(page, size)
+        );
+        return applicationResponse;
+    }
+
     public List<SearchResponse> globalSearchBooks(String search) {
         List<SearchResponse> all = new ArrayList<>();
 

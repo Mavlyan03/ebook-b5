@@ -20,6 +20,7 @@ public class AdminApplicationsResponse {
     private int price;
 
     public AdminApplicationsResponse() {
+
     }
 
     public AdminApplicationsResponse(Long id,
@@ -33,4 +34,6 @@ public class AdminApplicationsResponse {
         this.publishedDate = publishedDate;
         this.price = price;
     }
+
+
 }

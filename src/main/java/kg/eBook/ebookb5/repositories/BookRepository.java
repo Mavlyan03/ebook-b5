@@ -5,9 +5,9 @@ import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -21,19 +21,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select new kg.eBook.ebookb5.dto.responses.BookResponse(" +
             " b.id, b.mainImage, b.name, b.author, b.price, b.bookType)" +
-            " from Book b where b.bookStatus='ACCEPTED' AND ((b.genre.id in (:genres) or :genres is null) AND "  +
-            " (:bookType is null or b.bookType = :bookType) AND "+
-            " ((b.price between :priceFrom and :priceTo) OR (:priceFrom is null or :priceTo is null)) and "+
-            " (:languages is null or b.language in (:languages)) and "+
-            "  (upper(b.genre.name) like upper(concat('%', :search, '%')) "+
+            " from Book b where b.bookStatus='ACCEPTED' AND ((b.genre.id in (:genres) or :genres is null) AND " +
+            " (:bookType is null or b.bookType = :bookType) AND " +
+            " ((b.price between :priceFrom and :priceTo) OR (:priceFrom is null or :priceTo is null)) and " +
+            " (:languages is null or b.language in (:languages)) and " +
+            "  (upper(b.genre.name) like upper(concat('%', :search, '%')) " +
             " or :search = 'all' or :search is null)) " +
             " order by case when :sortBy = 'Новинки' then b.isNew else case when :sortBy = 'Бестселлеры' " +
             " then b.bestseller else true end end desc ")
-    List<BookResponse> customFindAll(List<Long> genres,
+    Page<BookResponse> customFindAll(List<Long> genres,
                                      BookType bookType,
                                      Integer priceFrom,
                                      Integer priceTo,
-                                     List<Language>languages,
+                                     List<Language> languages,
                                      String search,
                                      String sortBy,
                                      Pageable pageable
@@ -45,28 +45,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
-            " b.id, b.mainImage, b.name, b.publishedDate, b.price) " +
+            " b.id, b.mainImage, b.name, b.publishedDate, b.price)  " +
             "from Book b " +
             "where b.bookStatus='IN_PROCESSING' " +
             "order by b.isEnabled asc ")
-    List<AdminApplicationsResponse> getApplications(Pageable pageable);
+    Page<AdminApplicationsResponse> getApplications(Pageable pageable);
 
-
-//    @Modifying
-//    @Query("update Book b set b.bookStatus='ACCEPTED' " +
-//            " where b.id=:id ")
-//     void acceptBooks(Long id);
-//
-//
-//    @Modifying
-//    @Query("update Book b set b.bookStatus='REJECTED' " +
-//            "where b.id=:id ")
-//    void rejectBooks(Long id, String cause);
-//
-//
-//    @Query("select b.owner.email from Book b join User u on u.id=b.owner.id " +
-//            "where b.id=:id")
-//    String getEmail(Long id);
+    @Query("select count(b) from Book b where b.bookStatus ='IN_PROCESSING' and b.isEnabled = false ")
+    int countOfUnseen();
 
 }
 

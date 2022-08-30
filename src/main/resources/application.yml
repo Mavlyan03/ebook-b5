@@ -12,7 +12,7 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
         defer-datasource-initialization: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
     mail:
         host: smtp.gmail.com
         password: tahxwbasmgwmnrub
@@ -31,11 +31,11 @@ spring:
         hiddenmethod:
             filter:
                 enabled: true
-    sql:
-        init:
-            continue-on-error: false
-            data-locations: classpath:data initialization/data.sql
-            mode: always
+#    sql:
+#        init:
+#            continue-on-error: false
+#            data-locations: classpath:data initialization/data.sql
+#            mode: always
 springdoc:
     swagger-ui:
         path: /swagger

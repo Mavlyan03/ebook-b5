@@ -19,7 +19,7 @@ public class Promocode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promo_gen")
-    @SequenceGenerator(name = "promo_gen", sequenceName = "promo_seq", allocationSize = 1)
+    @SequenceGenerator(name = "promo_gen", sequenceName = "promo_seq", initialValue = 2, allocationSize = 1)
     private Long id;
 
     private String name;

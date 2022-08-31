@@ -9,6 +9,7 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.*;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
@@ -29,6 +30,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse.viewBestsellerMain;
+import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBookResponse.viewFavoriteAudioBooksMain;
+import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse.viewFavoriteMain;
+import static kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse.viewLastPublicationsMain;
 import static kg.eBook.ebookb5.enums.SearchType.*;
 
 @RequiredArgsConstructor
@@ -168,4 +173,18 @@ public class BookService {
     }
 
 
+    public MainPageResponse mainPageResponse() {
+        List<Book> favoriteBooks = bookRepository.findAllFavoriteBooks();
+        List<Book> bestsellerBooks = bookRepository.findAllBestsellerBooks();
+        List<Book> lastPublicationsBooks = bookRepository.findAllLastPublicationsBooks();
+        List<Book> favoriteAudioBooks = bookRepository.findAllFavoriteAudioBooks();
+        List<Book> bestsellerElectronicBooks = bookRepository.findAllBestsellerElectronicBooks();
+
+        return new MainPageResponse(viewFavoriteMain(favoriteBooks),
+                viewBestsellerMain(bestsellerBooks),
+                viewLastPublicationsMain(lastPublicationsBooks),
+                viewFavoriteAudioBooksMain(favoriteAudioBooks),
+                viewBestsellerMain(bestsellerElectronicBooks)
+        );
+    }
 }

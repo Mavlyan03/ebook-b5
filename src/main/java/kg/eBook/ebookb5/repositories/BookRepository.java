@@ -62,5 +62,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<AdminBooksResponse> findAllBooks(Long genre,
                                           BookType bookType,
                                           Pageable pageable);
+    @Query()
+    List<Book> findAllFavoriteBooks();
+
+    @Query
+    List<Book> findAllBestsellerBooks();
+
+    @Query
+    List<Book> findAllLastPublicationsBooks();
+
+    @Query
+    List<Book> findAllFavoriteAudioBooks();
+
+    @Query
+    List<Book> findAllBestsellerElectronicBooks();
 }
 

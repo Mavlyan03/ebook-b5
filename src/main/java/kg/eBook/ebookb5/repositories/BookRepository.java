@@ -58,7 +58,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "b.id, b.mainImage, b.name, b.publishedDate, b.price, b.bookType) from Book b where " +
             " ((b.genre.id = :genre or :genre is null) and " +
             "(:bookType is null or b.bookType = :bookType)) " +
-            "order by b.bookStatus asc")
+            "order by b.publishedDate desc")
     Page<AdminBooksResponse> findAllBooks(Long genre,
                                           BookType bookType,
                                           Pageable pageable);

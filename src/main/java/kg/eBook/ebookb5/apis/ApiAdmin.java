@@ -2,7 +2,6 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.*;
-import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.services.BookService;
 import kg.eBook.ebookb5.services.PurchasedUserBooksService;

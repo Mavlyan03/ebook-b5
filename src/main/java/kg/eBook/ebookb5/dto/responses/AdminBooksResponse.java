@@ -1,7 +1,6 @@
 package kg.eBook.ebookb5.dto.responses;
 
 import kg.eBook.ebookb5.enums.BookType;
-import kg.eBook.ebookb5.models.Book;
 import lombok.Getter;
 import lombok.Setter;
 

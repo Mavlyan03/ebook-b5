@@ -17,7 +17,8 @@ import java.time.LocalDate;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_gen")
+    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", initialValue = 26, allocationSize = 1)
     private Long id;
 
     @Enumerated(EnumType.STRING)

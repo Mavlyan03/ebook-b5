@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +21,8 @@ import static javax.persistence.FetchType.EAGER;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_gen")
+    @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", initialValue = 4, allocationSize = 1)
     private Long id;
 
     private String firstName;

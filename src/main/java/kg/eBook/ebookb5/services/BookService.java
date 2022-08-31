@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
@@ -15,10 +16,12 @@ import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -141,6 +144,11 @@ public class BookService {
         return modelMapper.map(book, ABookResponse.class);
     }
 
+    Page<AdminBooksResponse> findAllBooks(Genre genre,
+                                          BookType bookType) {
+       return bookRepository.findAllBooks(genre,
+                                    bookType);
+    }
 }
 
 

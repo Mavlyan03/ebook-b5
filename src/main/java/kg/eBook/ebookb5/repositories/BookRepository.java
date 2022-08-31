@@ -1,10 +1,13 @@
 package kg.eBook.ebookb5.repositories;
 
+import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import kg.eBook.ebookb5.models.PurchasedUserBooks;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,6 +48,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 //            "id, search, searchType) where ")
 //    List<SearchResponse> globalSearchBooks(String search);
 
+    @Query("select new kg.eBook.ebookb5.dto.responses.AdminBooksResponse(" +
+            "b.id, b.mainImage, b.name, b.publishedDate, b.price, b.bookType) from Book b where " +
+            " (b.genre.name in (:genre) or :genre is null) and " +
+            "(:bookType is null or b.bookType = :bookType) " +
+            "order by b.bookStatus desc")
+    Page<AdminBooksResponse> findAllBooks(Genre genre,
+                                          BookType bookType);
 
 }
 

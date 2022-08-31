@@ -27,8 +27,8 @@ import static javax.persistence.CascadeType.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_gen")
+    @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", initialValue = 6, allocationSize = 1)
     private Long id;
 
     private String name;

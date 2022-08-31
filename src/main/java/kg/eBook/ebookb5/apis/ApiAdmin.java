@@ -3,10 +3,13 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.enums.AboutBooks;
+import kg.eBook.ebookb5.enums.BookType;
+import kg.eBook.ebookb5.services.BookService;
 import kg.eBook.ebookb5.services.PurchasedUserBooksService;
 import kg.eBook.ebookb5.services.UserService;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +23,12 @@ import java.util.List;
 public class ApiAdmin {
 
     private final UserService userService;
+
     private final PurchasedUserBooksService userBooksService;
 
     private final VendorService vendorService;
+
+    private final BookService bookService;
 
     @GetMapping("/users")
     @Operation(summary = "find all users")
@@ -57,5 +63,17 @@ public class ApiAdmin {
     @Operation(summary = "find by vendor with id")
     public VendorResponse findByVendor(@PathVariable Long vendorId) {
         return vendorService.findByVendor(vendorId);
+    }
+
+    @GetMapping("/books")
+    @Operation(summary = "Get books", description = "User with role 'ADMIN' can get all books")
+    public Page<AdminBooksResponse> getAllBooks(@RequestParam(required = false) Long genreId,
+                                                @RequestParam(required = false) BookType bookType,
+                                                @RequestParam(required = false, defaultValue = "1") int page,
+                                                @RequestParam(required = false, defaultValue = "8") int size
+    ) {
+        return bookService.findAllBooks(genreId,
+                bookType,
+                page, size);
     }
 }

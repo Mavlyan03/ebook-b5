@@ -1,10 +1,6 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
-import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
-import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
-import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
@@ -45,7 +41,7 @@ public class BookService {
 
     private final GenreRepository genreRepository;
 
-    public List<BookResponse> getAllBooks(
+    public Page<BookResponse> getAllBooks(
             List<Long> genres,
             BookType bookType,
             Integer priceFrom,
@@ -67,6 +63,20 @@ public class BookService {
                 sortBy == null ? "all" : sortBy.getValue(),
                 pageable
         );
+    }
+
+    public Page<AdminApplicationsResponse> getApplications(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return bookRepository.getApplications(pageable);
+    }
+
+    public ApplicationResponse applications(int page, int size) {
+
+        ApplicationResponse applicationResponse = new ApplicationResponse(
+                bookRepository.countOfUnseen(),
+                getApplications(page, size)
+        );
+        return applicationResponse;
     }
 
     public List<SearchResponse> globalSearchBooks(String search) {
@@ -147,13 +157,15 @@ public class BookService {
         return modelMapper.map(book, ABookResponse.class);
     }
 
-    Page<AdminBooksResponse> findAllBooks(Genre genre,
-                                          BookType bookType) {
-       return bookRepository.findAllBooks(genre,
-                                    bookType);
+    public Page<AdminBooksResponse> findAllBooks(Long genreId,
+                                                 BookType bookType,
+                                                 int page,
+                                                 int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return bookRepository.findAllBooks(genreId,
+                                            bookType,
+                                            pageable);
     }
+
+
 }
-
-
-
-

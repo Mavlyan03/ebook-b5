@@ -1,11 +1,15 @@
 package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
+import kg.eBook.ebookb5.enums.BookType;
+import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.services.BookService;
 import kg.eBook.ebookb5.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +47,4 @@ public class AdminApplicationApi {
                 size
         );
     }
-
 }

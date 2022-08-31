@@ -1,9 +1,6 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
-import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
-import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
@@ -17,6 +14,7 @@ import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
@@ -158,5 +156,16 @@ public class BookService {
     private ABookResponse bookToAudioBookResponse(Book book) {
         return modelMapper.map(book, ABookResponse.class);
     }
+
+    public Page<AdminBooksResponse> findAllBooks(Long genreId,
+                                                 BookType bookType,
+                                                 int page,
+                                                 int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return bookRepository.findAllBooks(genreId,
+                                            bookType,
+                                            pageable);
+    }
+
 
 }

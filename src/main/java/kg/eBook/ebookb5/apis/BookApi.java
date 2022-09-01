@@ -65,8 +65,8 @@ public class BookApi {
     @GetMapping("/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'USER', 'ADMIN')")
     @Operation(summary = "find by book with book id", description = "find inside book page with id")
-    public BookInnerPageResponse findById(@PathVariable Long bookId) {
-        return bookService.findById(bookId);
+    public BookInnerPageResponse findById(@PathVariable Long bookId, Authentication authentication) {
+        return bookService.findById(bookId, authentication);
     }
 
 }

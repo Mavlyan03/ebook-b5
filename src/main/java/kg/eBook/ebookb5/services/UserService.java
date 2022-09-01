@@ -34,7 +34,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
     private final BookRepository bookRepository;
-    Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
 
         User person = new User(

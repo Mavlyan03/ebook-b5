@@ -3,6 +3,8 @@ package kg.eBook.ebookb5.services;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,7 @@ public class S3Service {
 
     @Value("${aws.bucket.path}")
     private String bucketPath;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public S3Service(S3Client s3) {
         this.s3 = s3;

@@ -3,6 +3,8 @@ package kg.eBook.ebookb5.services;
 import kg.eBook.ebookb5.models.MailingList;
 import kg.eBook.ebookb5.repositories.MailingListRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ public class MailingService {
 
     private final JavaMailSender javaMailSender;
     private final MailingListRepository mailingListRepository;
+    private final Logger logger = LoggerFactory.getLogger(MailingService.class);
 
     public void send(String to, String message) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

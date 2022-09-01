@@ -12,6 +12,8 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,9 @@ import java.util.List;
 public class PromocodeService {
 
     private final BookRepository bookRepository;
-
     private final PromocodeRepository promocodeRepository;
     private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
 

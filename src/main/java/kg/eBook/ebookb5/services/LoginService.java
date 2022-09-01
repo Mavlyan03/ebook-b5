@@ -8,6 +8,8 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ public class LoginService {
     private final JWTUtil jwtUtil;
     private final UserRepository personRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
     public JwtResponse authenticate(LoginRequest loginRequest) {
 
@@ -30,6 +33,7 @@ public class LoginService {
 
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            logger.error("User with email " + loginRequest.getEmail() +  " entered the wrong password");
             throw new WrongPasswordException(
                     "Неверный пароль"
             );

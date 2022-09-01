@@ -14,11 +14,12 @@ import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +37,9 @@ import static kg.eBook.ebookb5.enums.SearchType.*;
 public class BookService {
 
     private final BookRepository bookRepository;
-
     private final ModelMapper modelMapper;
-
     private final GenreRepository genreRepository;
+    private final Logger logger = LoggerFactory.getLogger(BookService.class);
 
     public Page<BookResponse> getAllBooks(
             List<Long> genres,
@@ -53,6 +53,7 @@ public class BookService {
             int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
+        logger.info("All accepted books are displayed on the main page");
         return bookRepository.customFindAll(
                 genres,
                 bookType,
@@ -76,6 +77,7 @@ public class BookService {
                 bookRepository.countOfUnseen(),
                 getApplications(page, size)
         );
+        logger.info("All books that are being processed are displayed on the application page");
         return applicationResponse;
     }
 
@@ -102,7 +104,7 @@ public class BookService {
                 all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
-
+        logger.info("Was a global search");
         return all;
     }
 
@@ -133,6 +135,7 @@ public class BookService {
             }
         }
         book.setEnabled(true);
+        logger.info(book + " book with = " + id + " displayed on inner page");
         switch (book.getBookType()) {
             case AUDIO_BOOK:
                 return new AudioBookResponse(book);
@@ -162,6 +165,7 @@ public class BookService {
                                                  int page,
                                                  int size) {
         Pageable pageable = PageRequest.of(page-1, size);
+        logger.info("All books are displayed on the admin panel of the book");
         return bookRepository.findAllBooks(genreId,
                                             bookType,
                                             pageable);

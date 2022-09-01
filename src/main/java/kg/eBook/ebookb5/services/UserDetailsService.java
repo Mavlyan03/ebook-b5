@@ -4,6 +4,8 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.UserDetails;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserRepository personRepository;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

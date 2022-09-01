@@ -12,6 +12,8 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.NotificationRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     public SimpleResponse acceptedBook(Long bookId) {
 
@@ -45,6 +48,8 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
+        logger.info(book + "book was successfully accepted!\n" +
+                "and sent a notification to the vendor = " + book.getOwner());
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }
 
@@ -66,14 +71,15 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
+        logger.info("book was rejected and sent a notification to the vendor = " + book.getOwner());
         return new SimpleResponse(book.getName() + " был отклонён!");
     }
 
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        List<NotificationResponse> findAllNotitcation = notificationRepository.findAllNotifications(vendor.getId());
-        return findAllNotitcation;
+        logger.info("vendor = " + vendor + " views all notification");
+        return notificationRepository.findAllNotifications(vendor.getId());
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
@@ -83,7 +89,7 @@ public class NotificationService {
 
         notification.setRead(true);
         notificationRepository.save(notification);
-
+        logger.info("vendor view notification");
         return new NotificationFindByIdResponse(notification);
     }
 

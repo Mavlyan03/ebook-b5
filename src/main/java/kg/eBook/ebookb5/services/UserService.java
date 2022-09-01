@@ -12,6 +12,8 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
     private final BookRepository bookRepository;
-
+    Logger logger = LoggerFactory.getLogger(UserService.class);
     public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
 
         User person = new User(
@@ -48,7 +50,7 @@ public class UserService {
 
         User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(userRegisterRequest.getEmail());
-
+        logger.info("Successful");
         return new JwtResponse(
                 savedPerson.getId(),
                 token,

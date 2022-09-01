@@ -129,10 +129,12 @@ public class BookService {
 
     public BookInnerPageResponse findById(Long id, Authentication authentication) {
         Book book = bookRepository.findById(id).get();
+
         User user = personRepository.findByEmail(authentication.getName()).get();
         if (user.getRole().equals(Role.ADMIN)) {
             book.setEnabled(true);
         }
+
         bookRepository.save(book);
         if (book.getPublishedDate() != null) {
             if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {

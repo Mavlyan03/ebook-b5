@@ -47,6 +47,7 @@ public class VendorService {
     private final Logger logger = LoggerFactory.getLogger(VendorService.class);
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
+
         logger.info("Vendor register ... ");
         User vendor = new User(
                 vendorRegisterRequest.getFirstName(),
@@ -59,12 +60,14 @@ public class VendorService {
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
         if (personRepository.existsByEmail(vendorRegisterRequest.getEmail())) {
+
             logger.error("This email = " + vendorRegisterRequest.getEmail() + " al ready");
             throw new AlreadyExistException("Почта: " + vendorRegisterRequest.getEmail() + " уже занята!");
         }
         User savedVendor = personRepository.save(vendor);
 
         String token = jwtUtil.generateToken(vendorRegisterRequest.getEmail());
+
         logger.info("User successfully created!");
         return new JwtResponse(
                 savedVendor.getId(),
@@ -75,11 +78,15 @@ public class VendorService {
 
     public VendorResponse update(Authentication authentication,
                                  VendorProfileRequest vendorProfileRequest) {
+
         logger.info("Update user ... ");
         User vendor = personRepository.findByEmail(authentication.getName()).get();
+
         String password = passwordEncoder.encode(vendorProfileRequest.getPassword());
         String newPassword = passwordEncoder.encode(vendorProfileRequest.getNewPassword());
+
         if (!password.equals(vendor.getPassword())) {
+
             logger.error("Password entered incorrectly");
             throw new WrongPasswordException("Пароль введен неправильно");
         }
@@ -103,17 +110,20 @@ public class VendorService {
             vendor.setPassword(newPassword);
         }
         personRepository.save(vendor);
-        logger.info("User update successful. ");
+
+        logger.info("User update successful");
         return new VendorResponse(vendor);
     }
 
     public VendorResponse findByVendor(Long vendorId) {
+
         logger.info("Find by vendor with id = " + vendorId);
         return new VendorResponse(personRepository.findById(vendorId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено")));
     }
 
     public SimpleResponse deleteByVendorId(Long vendorId) {
+
         logger.info("Delete vendor ...");
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
@@ -124,14 +134,17 @@ public class VendorService {
     }
 
     public List<VendorResponse> findAllVendors() {
+
         logger.info("Find all vendors favorite books");
         return viewVendors(personRepository.findAllVendors());
     }
 
     public List<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks) {
+
         logger.info("Find books vendor ...");
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
+
         switch (aboutBooks) {
             case ALL:
                 return viewBooks(vendor.getBooks());

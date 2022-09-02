@@ -36,7 +36,6 @@ public class S3Service {
     // upload
     public Map<String, String> upload(MultipartFile file) throws IOException {
 
-        log.info("Uploading file ...");
         logger.info("Uploading file ...");
         String key = System.currentTimeMillis() + file.getOriginalFilename();
 
@@ -47,7 +46,7 @@ public class S3Service {
 
         s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        log.info("Upload complete.");
+        logger.info("Upload complete.");
 
         return Map.of(
                 "link", bucketPath + key
@@ -58,14 +57,12 @@ public class S3Service {
     // delete
     public Map<String, String> delete(String fileLink) {
 
-        log.info("Deleting file...");
         logger.info("Deleting file...");
 
         try {
 
             String key = fileLink.substring(bucketPath.length());
 
-            log.warn("Deleting object: {}", key);
             logger.warn("Deleting object: {}", key);
 
             s3.deleteObject(dor -> dor.bucket(bucketName).key(key).build());

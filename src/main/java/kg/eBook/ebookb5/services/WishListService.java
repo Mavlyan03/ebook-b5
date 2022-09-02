@@ -34,7 +34,8 @@ public class WishListService {
     private final Logger logger = LoggerFactory.getLogger(WishListService.class);
 
     public void addBookToWishList(Long bookId, Authentication authentication) {
-        logger.info("Add book to wish list");
+
+        logger.info("Add book to wish list ...");
         User user1 = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -46,11 +47,14 @@ public class WishListService {
                     i.getLanguage().equals(book.getLanguage()) &&
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
+
+                logger.error("This = " + i + " book has already been added to your favorites");
                 throw new AlreadyExistException("Эта книга уже добавлена в избранное");
         }
 
         user1.setFavoriteBook(book);
         book.setUserToBook(user1);
+        logger.info("The book has been successfully added to the wishlist");
     }
 
     public List<? extends BookResponseGeneral> getBooks(Authentication authentication) {

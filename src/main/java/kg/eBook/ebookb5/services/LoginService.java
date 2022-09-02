@@ -34,6 +34,7 @@ public class LoginService {
 
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+
             logger.error("User with email " + loginRequest.getEmail() +  " entered the wrong password");
             throw new WrongPasswordException(
                     "Неверный пароль"

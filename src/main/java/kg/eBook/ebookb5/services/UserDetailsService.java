@@ -25,7 +25,7 @@ public class UserDetailsService implements org.springframework.security.core.use
             logger.error("Not found user with = " + email);
             throw new UsernameNotFoundException("Пользователь не найден");
         }
-        logger.info("Found user = " + person);
+        logger.info("User by username successfully logged into the web application");
         return new UserDetails(person.get());
     }
 }

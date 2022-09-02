@@ -19,6 +19,7 @@ public class PurchasedUserBooksService {
     private final Logger logger = LoggerFactory.getLogger(PurchasedUserBooksService.class);
 
     public List<PurchasedUserBooksResponse> purchasedUserBooks(Long userId) {
+
         logger.info("Purchased user books");
         return viewUserPurchase(userBooksRepository.findAllByUserId(userId));
     }

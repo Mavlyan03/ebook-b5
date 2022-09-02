@@ -27,42 +27,53 @@ public class MailingService {
 
     public void sendSignUpMessage(RequestMailingList requestMailingList) {
 
+        logger.info("Send sign up message ...");
         MailingList mailingList = new MailingList(requestMailingList.getEmail());
         mailingListRepository.save(mailingList);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom("timur.abdivaitov@gmail.com");
+        simpleMailMessage.setFrom("ebook.peaksoft@gmail.com");
         simpleMailMessage.setSubject("PEAKSOFT");
         simpleMailMessage.setTo(mailingList.getEmail());
         simpleMailMessage.setText("Поздравляем, Вы подписаны на рассылку!");
         this.javaMailSender.send(simpleMailMessage);
+
+        logger.info("User subscribed to the newsletter!");
     }
 
 
     public void sendNewBookMessage(MailNewBookRequest mailNewBookRequest) {
 
+        logger.info("Send new book message ...");
         List<MailingList> emailLists = mailingListRepository.findAll();
         for(MailingList i: emailLists) {
             sendHTMLMessage(i.getEmail(), mailNewBookRequest.createHtmlMessage());
         }
 
+        logger.info("Sent message about new book");
     }
 
     @Async
     public void sendHTMLMessage(String email, String htmlMessage) {
+
+        logger.info("Send HTML message ...");
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
+            logger.warn("Sending HTML message may be an error");
             MimeMessageHelper helper = new MimeMessageHelper(
                     mimeMessage,
                     true,
                     "UTF-8");
 
-            helper.setFrom("timur.abdivaitov@gmail.com");
+            helper.setFrom("ebook.peaksoft@gmail.com");
             helper.setTo(email);
             helper.setText(htmlMessage,true);
             javaMailSender.send(mimeMessage);
 
+            logger.info("HTML message sent");
         } catch (MessagingException e) {
+
+            logger.trace("Html message in the progress" + e);
             e.printStackTrace();
         }
     }

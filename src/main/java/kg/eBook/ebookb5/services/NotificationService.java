@@ -35,6 +35,7 @@ public class NotificationService {
 
     public SimpleResponse acceptedBook(Long bookId) {
 
+        logger.info("Accepted book ...");
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
 
         Notification notification = new Notification();
@@ -61,12 +62,13 @@ public class NotificationService {
         }
 
         logger.info(book + "book was successfully accepted!\n" +
-                "and sent a notification to the vendor = " + book.getOwner());
+                "and sent a notification to the vendor");
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }
 
     public SimpleResponse rejectedBook(Long bookId, String description) {
 
+        logger.info("Rejected book ...");
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
 
         Notification notification = new Notification();
@@ -83,7 +85,7 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        logger.info("book was rejected and sent a notification to the vendor = " + book.getOwner());
+        logger.info("book was rejected and sent a notification to the vendor");
         return new SimpleResponse(book.getName() + " был отклонён!");
     }
 
@@ -91,12 +93,13 @@ public class NotificationService {
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        logger.info("vendor = " + vendor + " views all notification");
+        logger.info("vendor views all notification");
         return notificationRepository.findAllNotifications(vendor.getId());
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
 
+        logger.info("Find by notification ...");
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NotFoundException("Уведомление не найдено"));
 
@@ -108,6 +111,8 @@ public class NotificationService {
     }
 
     public List<NotificationResponse> markAsRead(Authentication authentication) {
+
+        logger.info("Mark as read ...");
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         for (Notification notification : vendor.getNotifications()) {
@@ -115,7 +120,7 @@ public class NotificationService {
         }
         notificationRepository.saveAll(vendor.getNotifications());
 
-        logger.info("vendor = " + vendor + " marked all notifications as viewed");
+        logger.info("vendor marked all notifications as viewed");
         return view(vendor.getNotifications());
     }
 }

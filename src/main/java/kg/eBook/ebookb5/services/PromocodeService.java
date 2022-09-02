@@ -32,11 +32,14 @@ public class PromocodeService {
 
     public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
 
+        logger.info("Create promo code ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
         if (promoCodeRequest.getDateOfStart().isAfter(promoCodeRequest.getDateOfFinish())) {
-            logger.error("The date the user = " + user + " wrote is before the start date");
+
+            logger.error("The date the user wrote is before the start date");
             throw new InvalidDateException("Дата, которую вы написали, более ранняя, чем дата начала");
         } else if (promoCodeRequest.getDateOfStart().plusDays(1L).isAfter(promoCodeRequest.getDateOfFinish())) {
+
             logger.error("The difference between the start and end of the promo code must be more than 1 day");
             throw new InvalidDateException(
                     "Разница между началом и окончанием действия промокода должна быть более 1 дня");
@@ -50,6 +53,7 @@ public class PromocodeService {
         Promocode promocode = new Promocode(promoCodeRequest);
         promocode.setVendor(user);
         promocodeRepository.save(promocode);
+
         logger.info("Promo code successfully created!");
         return new SimpleResponse("Промокод успешно создан!");
     }
@@ -58,9 +62,12 @@ public class PromocodeService {
 
         if (promocodeName == null) {
             User client = userRepository.findByEmail(authentication.getName()).get();
+
+            logger.info("Find all basked books");
             return viewMapper(client.getUserBasket(), null, null);
         }
 
+        logger.info("Check promo code ...");
         Promocode promocode = promocodeRepository.findByName(promocodeName).orElseThrow(
                 () -> new InvalidPromocodeException("Данный промокод не действителен"));
 
@@ -92,7 +99,7 @@ public class PromocodeService {
                 }
             }
         }
-        logger.info("user = " + client + " shopping cart");
+        logger.info("Promo code successfully checked");
         return viewMapper(client.getUserBasket(), discountPromocode, bookId);
     }
 
@@ -124,6 +131,7 @@ public class PromocodeService {
 
     public int increaseBooksToBuy(Long bookId, Integer quantity) {
 
+        logger.info("Increase books to buy ...");
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID "  + bookId + " не найдена"
         ));
@@ -132,12 +140,14 @@ public class PromocodeService {
             logger.error("There are " + book.getQuantityOfBook() + " books available");
             throw new IllegalStateException("В наличии имеется книг: " + book.getQuantityOfBook());
         }
-        logger.info("There was a book count");
+        logger.info("Successfully increased the number of books to buy");
         return quantity;
     }
 
 
     public int decreaseBookToBuy(Long bookId, Integer quantity, Authentication authentication) {
+
+        logger.info("Decrease book to buy ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID "  + bookId + " не найдена"
@@ -147,6 +157,7 @@ public class PromocodeService {
             logger.error("User = " + user + " could not select less than one book");
             throw new IllegalStateException("Вы не можете выбрать меньше одной книги");
         }
+        logger.info("Book to buy successfully scaled down");
         return quantity;
     }
 

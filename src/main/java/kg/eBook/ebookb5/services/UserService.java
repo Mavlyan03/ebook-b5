@@ -35,6 +35,7 @@ public class UserService {
     private final JWTUtil jwtUtil;
     private final BookRepository bookRepository;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
 
         logger.info("User register ... ");
@@ -52,6 +53,7 @@ public class UserService {
         }
         User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(userRegisterRequest.getEmail());
+
         logger.info("User successfully created!");
         return new JwtResponse(
                 savedPerson.getId(),
@@ -62,11 +64,13 @@ public class UserService {
     }
 
     public List<UserResponse> findAllUsers() {
+
         logger.info("Find all users");
         return view(personRepository.findAllUsers());
     }
 
     public UserResponse findById(Long userId) {
+
         logger.info("Find by user with id = " + userId);
         return new UserResponse(personRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено")
@@ -74,6 +78,7 @@ public class UserService {
     }
 
     public SimpleResponse deleteByUserId(Long userId) {
+
         logger.info("Delete user ... ");
         User user = personRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено")
@@ -88,28 +93,34 @@ public class UserService {
         bookRepository.saveAll(user.getFavorite());
 
         personRepository.delete(user);
+
         logger.info("User successfully deleted");
         return new SimpleResponse("Пользователь успешно удален!");
     }
 
     public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(Long userId) {
+
         logger.info("Find all users favorite books");
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getFavorite());
     }
 
     public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(Long userId) {
+
         logger.info("Find all users basked books");
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getUserBasket());
     }
 
     public SimpleResponse updateByUser(Authentication authentication, UserRequest userRequest) {
+
         logger.info("Update user ... ");
         User user = personRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
+
         String password = passwordEncoder.encode(userRequest.getPassword());
         String newPassword = passwordEncoder.encode(userRequest.getNewPassword());
+
         if (!user.getPassword().equals(password)) {
             logger.error("Password entered incorrectly");
             throw new WrongPasswordException("Пароль введен неправильно");
@@ -124,6 +135,7 @@ public class UserService {
             user.setPassword(newPassword);
         }
         personRepository.save(user);
+
         logger.info("User update successful. ");
         return new SimpleResponse("Пользователь успешно сохранен");
     }

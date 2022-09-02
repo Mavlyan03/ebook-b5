@@ -10,7 +10,10 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
+import kg.eBook.ebookb5.services.WishListService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +31,14 @@ public class AudioBookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-
     private final GenreRepository genreRepository;
+    private final Logger logger = LoggerFactory.getLogger(AudioBookService.class);
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public BookResponse saveAudioBook(Authentication authentication, AudioBookSaveRequest audioBook) {
 
+        logger.info("Save audio book ...");
         checkIfBookExists(audioBook);
 
         Book book = new Book(audioBook);
@@ -51,6 +55,7 @@ public class AudioBookService {
 
         Book savedBook = bookRepository.save(book);
 
+        logger.info("Audio book successfully saved");
         return new BookResponse(
                 savedBook.getId(),
                 savedBook.getName(),
@@ -61,18 +66,20 @@ public class AudioBookService {
 
     private void checkIfBookExists(AudioBookSaveRequest audioBook) {
 
+        logger.info("Check if book exists");
         Book book = bookRepository.findByName(audioBook.getName()).orElse(null);
 
         if (book != null) {
             if (book.getLanguage().equals(audioBook.getLanguage()) &&
                     book.getBookType().equals(AUDIO_BOOK))
+                logger.error("This book is already in the database");
                 throw new AlreadyExistException("Эта книга уже есть в базе");
         }
-
     }
 
     public void updateBook(Authentication authentication, Long bookId, AudioBookSaveRequest audioBook) {
 
+        logger.info("Update audio book ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с  ID: " + bookId + " не найдена"));
@@ -98,11 +105,9 @@ public class AudioBookService {
 
             user.setBook(book);
             book.setOwner(user);
+            logger.info("Book successfully updated");
         } else
+            logger.error("Vendor cannot edit this book!");
             throw new IllegalStateException("Вы не можете редактировать эту книгу!");
-    }
-
-    public GenreResponse findById(Long id) {
-        return new GenreResponse(genreRepository.findById(id).orElseThrow(()-> new NotFoundException("jok")), 1L);
     }
 }

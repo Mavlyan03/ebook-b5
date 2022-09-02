@@ -26,6 +26,7 @@ public class LoginService {
 
     public JwtResponse authenticate(LoginRequest loginRequest) {
 
+        logger.info("Authenticate user ...");
         User user = personRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(
                         "Пользователь с почтой " + loginRequest.getEmail() + " не найден"
@@ -41,6 +42,7 @@ public class LoginService {
 
         String token = jwtUtil.generateToken(user.getEmail());
 
+        logger.info("User successfully authenticated");
         return new JwtResponse(
                 user.getId(),
                 token,

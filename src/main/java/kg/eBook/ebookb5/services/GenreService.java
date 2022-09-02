@@ -20,6 +20,8 @@ public class GenreService {
     private final Logger logger = LoggerFactory.getLogger(GenreService.class);
 
     public List<GenreResponse> findAll() {
+
+        logger.info("Find all genres ...");
         List<GenreResponse> genreResponses = new ArrayList<>();
         List<Genre> genres = genreRepository.findAll();
         for (Genre genre : genres) {

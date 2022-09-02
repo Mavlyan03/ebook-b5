@@ -27,7 +27,7 @@ public class S3Service {
 
     @Value("${aws.bucket.path}")
     private String bucketPath;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(S3Service.class);
 
     public S3Service(S3Client s3) {
         this.s3 = s3;
@@ -37,6 +37,7 @@ public class S3Service {
     public Map<String, String> upload(MultipartFile file) throws IOException {
 
         log.info("Uploading file ...");
+        logger.info("Uploading file ...");
         String key = System.currentTimeMillis() + file.getOriginalFilename();
 
         PutObjectRequest por = PutObjectRequest.builder()
@@ -58,12 +59,14 @@ public class S3Service {
     public Map<String, String> delete(String fileLink) {
 
         log.info("Deleting file...");
+        logger.info("Deleting file...");
 
         try {
 
             String key = fileLink.substring(bucketPath.length());
 
             log.warn("Deleting object: {}", key);
+            logger.warn("Deleting object: {}", key);
 
             s3.deleteObject(dor -> dor.bucket(bucketName).key(key).build());
 

@@ -73,6 +73,7 @@ public class BookService {
 
     public ApplicationResponse applications(int page, int size) {
 
+        logger.info("Get all applications ...");
         ApplicationResponse applicationResponse = new ApplicationResponse(
                 bookRepository.countOfUnseen(),
                 getApplications(page, size)
@@ -82,6 +83,8 @@ public class BookService {
     }
 
     public List<SearchResponse> globalSearchBooks(String search) {
+
+        logger.info("Global search ...");
         List<SearchResponse> all = new ArrayList<>();
 
         String finalSearch = search.toLowerCase();
@@ -104,11 +107,12 @@ public class BookService {
                 all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
-        logger.info("Was a global search");
+        logger.info("The global search was successful");
         return all;
     }
 
     public List<? extends BookResponseGeneral> findBookById(Long bookId) {
+
         Book bookById = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID: " + bookId + " не найдена!"
         ));
@@ -126,6 +130,8 @@ public class BookService {
     }
 
     public BookInnerPageResponse findById(Long id) {
+
+        logger.info("Find by book with id ... ");
         Book book = bookRepository.findById(id).get();
         book.setEnabled(true);
         bookRepository.save(book);
@@ -135,15 +141,18 @@ public class BookService {
             }
         }
         book.setEnabled(true);
-        logger.info(book + " book with = " + id + " displayed on inner page");
         switch (book.getBookType()) {
             case AUDIO_BOOK:
+                logger.info(book + " audio book with = " + id + " displayed on inner page");
                 return new AudioBookResponse(book);
             case ELECTRONIC_BOOK:
+                logger.info(book + " electronic book with = " + id + " displayed on inner page");
                 return new ElectronicBookResponse(book);
             case PAPER_BOOK:
+                logger.info(book + " paper book with = " + id + " displayed on inner page");
                 return new PaperBookResponse(book);
             default:
+                logger.info("Not found book with = " + id);
                 return null;
         }
     }

@@ -89,7 +89,7 @@ public class NotificationService {
 
         notification.setRead(true);
         notificationRepository.save(notification);
-        logger.info("vendor view notification");
+        logger.info("vendor view notification = " + notification);
         return new NotificationFindByIdResponse(notification);
     }
 
@@ -100,6 +100,7 @@ public class NotificationService {
             notification.setRead(true);
         }
         notificationRepository.saveAll(vendor.getNotifications());
+        logger.info("vendor = " + vendor + " marked all notifications as viewed");
         return view(vendor.getNotifications());
     }
 }

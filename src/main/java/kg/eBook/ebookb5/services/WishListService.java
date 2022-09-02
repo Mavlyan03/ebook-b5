@@ -30,10 +30,10 @@ public class WishListService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(WishListService.class);
 
     public void addBookToWishList(Long bookId, Authentication authentication) {
-
+        logger.info("Add book to wish list");
         User user1 = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -46,6 +46,7 @@ public class WishListService {
 
     public List<? extends BookResponseGeneral> getBooks(Authentication authentication) {
 
+        logger.info("Get book wish list");
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         List<Book> userFavorite = user.getFavorite();

@@ -16,9 +16,10 @@ import java.util.List;
 public class PurchasedUserBooksService {
 
     private final PurchasedUserBooksRepository userBooksRepository;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(PurchasedUserBooksService.class);
 
     public List<PurchasedUserBooksResponse> purchasedUserBooks(Long userId) {
+        logger.info("Purchased user books");
         return viewUserPurchase(userBooksRepository.findAllByUserId(userId));
     }
 

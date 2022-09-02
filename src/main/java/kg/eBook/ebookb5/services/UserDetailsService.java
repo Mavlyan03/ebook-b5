@@ -16,13 +16,16 @@ import java.util.Optional;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserRepository personRepository;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(UserDetailsService.class);
 
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> person = personRepository.findByEmail(email);
-        if(person.isEmpty())
+        if(person.isEmpty()) {
+            logger.error("Not found user with = " + email);
             throw new UsernameNotFoundException("Пользователь не найден");
+        }
+        logger.info("Found user = " + person);
         return new UserDetails(person.get());
     }
 }

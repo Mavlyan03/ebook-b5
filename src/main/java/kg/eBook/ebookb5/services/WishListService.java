@@ -6,6 +6,7 @@ import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
 import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
 import kg.eBook.ebookb5.enums.BookType;
+import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.User;
@@ -34,8 +35,16 @@ public class WishListService {
         User user1 = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundException("Книга с ID: " + bookId + "не найдена"
+                () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"
         ));
+
+        for(Book i: user1.getFavorite()) {
+            if(i.getBookType().equals(book.getBookType()) &&
+                    i.getLanguage().equals(book.getLanguage()) &&
+                    i.getGenre().equals(book.getGenre()) &&
+                    i.getName().equals(book.getName()))
+                throw new AlreadyExistException("Эта книга уже добавлена в избранное");
+        }
 
         user1.setFavoriteBook(book);
         book.setUserToBook(user1);

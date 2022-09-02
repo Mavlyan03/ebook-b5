@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.services;
 
+import kg.eBook.ebookb5.dto.requests.MailNewBookRequest;
 import kg.eBook.ebookb5.dto.responses.NotificationFindByIdResponse;
 import kg.eBook.ebookb5.dto.responses.NotificationResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
@@ -29,6 +30,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final MailingService mailingService;
     private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     public SimpleResponse acceptedBook(Long bookId) {
@@ -47,6 +49,16 @@ public class NotificationService {
         notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
+
+        MailNewBookRequest mailNewBookRequest = new MailNewBookRequest(
+                book.getMainImage(),
+                book.getName(),
+                book.getPrice()
+        );
+
+        if(book.getBookStatus().equals(BookStatus.ACCEPTED)) {
+            mailingService.sendNewBookMessage(mailNewBookRequest);
+        }
 
         logger.info(book + "book was successfully accepted!\n" +
                 "and sent a notification to the vendor = " + book.getOwner());
@@ -78,6 +90,7 @@ public class NotificationService {
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
         logger.info("vendor = " + vendor + " views all notification");
         return notificationRepository.findAllNotifications(vendor.getId());
     }
@@ -89,6 +102,7 @@ public class NotificationService {
 
         notification.setRead(true);
         notificationRepository.save(notification);
+
         logger.info("vendor view notification = " + notification);
         return new NotificationFindByIdResponse(notification);
     }
@@ -100,6 +114,7 @@ public class NotificationService {
             notification.setRead(true);
         }
         notificationRepository.saveAll(vendor.getNotifications());
+
         logger.info("vendor = " + vendor + " marked all notifications as viewed");
         return view(vendor.getNotifications());
     }

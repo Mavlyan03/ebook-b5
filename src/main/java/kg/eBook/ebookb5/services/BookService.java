@@ -11,11 +11,15 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
+import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
+import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
+import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -23,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -40,6 +45,7 @@ public class BookService {
     private final ModelMapper modelMapper;
     private final GenreRepository genreRepository;
     private final Logger logger = LoggerFactory.getLogger(BookService.class);
+    private final UserRepository personRepository;
 
     public Page<BookResponse> getAllBooks(
             List<Long> genres,
@@ -53,6 +59,7 @@ public class BookService {
             int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
+
         logger.info("All accepted books are displayed on the main page");
         return bookRepository.customFindAll(
                 genres,
@@ -129,18 +136,22 @@ public class BookService {
         return null;
     }
 
-    public BookInnerPageResponse findById(Long id) {
+    public BookInnerPageResponse findById(Long id, Authentication authentication) {
 
         logger.info("Find by book with id ... ");
         Book book = bookRepository.findById(id).get();
-        book.setEnabled(true);
+
+        User user = personRepository.findByEmail(authentication.getName()).get();
+        if (user.getRole().equals(Role.ADMIN)) {
+            book.setEnabled(true);
+        }
+
         bookRepository.save(book);
         if (book.getPublishedDate() != null) {
             if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
                 book.setNew(true);
             }
         }
-        book.setEnabled(true);
         switch (book.getBookType()) {
             case AUDIO_BOOK:
                 logger.info(book + " audio book with = " + id + " displayed on inner page");
@@ -174,6 +185,7 @@ public class BookService {
                                                  int page,
                                                  int size) {
         Pageable pageable = PageRequest.of(page-1, size);
+
         logger.info("All books are displayed on the admin panel of the book");
         return bookRepository.findAllBooks(genreId,
                                             bookType,

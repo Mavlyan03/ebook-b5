@@ -33,6 +33,7 @@ public class PaperBookService {
     private final GenreRepository genreRepository;
     private final Logger logger = LoggerFactory.getLogger(ElectronicBookService.class);
 
+
     public BookResponse savePaperBook(Authentication authentication, PaperBookSaveRequest paperBook) {
 
         logger.info("Save paper book ...");

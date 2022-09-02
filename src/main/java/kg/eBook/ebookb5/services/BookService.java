@@ -154,13 +154,13 @@ public class BookService {
         }
         switch (book.getBookType()) {
             case AUDIO_BOOK:
-                logger.info(book + " audio book with = " + id + " displayed on inner page");
+                logger.info(book + " audio book with {} displayed on inner page", id);
                 return new AudioBookResponse(book);
             case ELECTRONIC_BOOK:
-                logger.info(book + " electronic book with = " + id + " displayed on inner page");
+                logger.info(book + " electronic book with {} displayed on inner page", id);
                 return new ElectronicBookResponse(book);
             case PAPER_BOOK:
-                logger.info(book + " paper book with = " + id + " displayed on inner page");
+                logger.info(book + " paper book with {} displayed on inner page", id);
                 return new PaperBookResponse(book);
             default:
                 logger.info("Not found book with = " + id);

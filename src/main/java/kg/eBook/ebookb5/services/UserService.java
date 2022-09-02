@@ -48,7 +48,7 @@ public class UserService {
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
         if(personRepository.existsByEmail(userRegisterRequest.getEmail())) {
-            logger.error("This email = " + userRegisterRequest.getEmail() + " al ready");
+            logger.error("This email {} al ready" , userRegisterRequest.getEmail());
             throw new AlreadyExistException("Эта почта " + userRegisterRequest.getEmail() + " уже занята!");
         }
         User savedPerson = personRepository.save(person);
@@ -136,7 +136,7 @@ public class UserService {
         }
         personRepository.save(user);
 
-        logger.info("User update successful. ");
+        logger.info("User update successful");
         return new SimpleResponse("Пользователь успешно сохранен");
     }
 }

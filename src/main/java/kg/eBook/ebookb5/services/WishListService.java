@@ -48,7 +48,7 @@ public class WishListService {
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
 
-                logger.error("This = " + i + " book has already been added to your favorites");
+                logger.error("This {} book has already been added to your favorites", i);
                 throw new AlreadyExistException("Эта книга уже добавлена в избранное");
         }
 

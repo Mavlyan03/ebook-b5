@@ -9,11 +9,11 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
-            <maxFileSize>5KB</maxFileSize>
+            <maxFileSize>1MB</maxFileSize>
 
-            <totalSizeCap>20KB</totalSizeCap>
+            <totalSizeCap>2MB</totalSizeCap>
 
-            <maxHistory>60</maxHistory>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
 
         <encoder>
@@ -33,9 +33,9 @@
         <appender-ref ref="FILE-ROLLING"/>
     </root>
 
-    <root name="info">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+<!--    <root name="info">-->
+<!--        <appender-ref ref="CONSOLE"/>-->
+<!--    </root>-->
 
     <!--    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">-->
 <!--        <smtpHost>smtp.gmail.com</smtpHost>-->

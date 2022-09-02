@@ -72,7 +72,7 @@ public class PromocodeService {
                 () -> new InvalidPromocodeException("Данный промокод не действителен"));
 
         if (LocalDate.now().isAfter(promocode.getDateOfFinish())) {
-            logger.error("Promo code = " + promocode + " has expired");
+            logger.error("Promo code {} has expired", promocode);
             throw new InvalidDateException("Срок действия промокода истек");
         }
 
@@ -81,7 +81,7 @@ public class PromocodeService {
         String discountPromocode = "";
         List<Long> bookId = new ArrayList<>();
         if (!thisPromocodeAppliesToBooks(client, promocode.getVendor())) {
-            logger.error("This " + promocode + " promo code is invalid");
+            logger.error("This {} promo code is invalid", promocode);
             throw new InvalidPromocodeException("Данный промокод не действителен");
         } else {
             for (Book book : client.getUserBasket()) {
@@ -137,7 +137,7 @@ public class PromocodeService {
         ));
 
         if(book.getQuantityOfBook() < quantity) {
-            logger.error("There are " + book.getQuantityOfBook() + " books available");
+            logger.error("There are {} books available", book.getQuantityOfBook());
             throw new IllegalStateException("В наличии имеется книг: " + book.getQuantityOfBook());
         }
         logger.info("Successfully increased the number of books to buy");
@@ -154,7 +154,7 @@ public class PromocodeService {
         ));
 
         if(1 > quantity) {
-            logger.error("User = " + user + " could not select less than one book");
+            logger.error("User {} could not select less than one book", user);
             throw new IllegalStateException("Вы не можете выбрать меньше одной книги");
         }
         logger.info("Book to buy successfully scaled down");

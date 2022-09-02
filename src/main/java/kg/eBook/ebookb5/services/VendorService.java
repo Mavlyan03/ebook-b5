@@ -61,7 +61,7 @@ public class VendorService {
 
         if (personRepository.existsByEmail(vendorRegisterRequest.getEmail())) {
 
-            logger.error("This email = " + vendorRegisterRequest.getEmail() + " al ready");
+            logger.error("This email = {} al ready", vendorRegisterRequest.getEmail());
             throw new AlreadyExistException("Почта: " + vendorRegisterRequest.getEmail() + " уже занята!");
         }
         User savedVendor = personRepository.save(vendor);

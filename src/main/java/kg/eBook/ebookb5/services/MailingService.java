@@ -73,7 +73,7 @@ public class MailingService {
             logger.info("HTML message sent");
         } catch (MessagingException e) {
 
-            logger.trace("Html message in the progress" + e);
+            logger.trace("Html message in the progress " + e);
             e.printStackTrace();
         }
     }

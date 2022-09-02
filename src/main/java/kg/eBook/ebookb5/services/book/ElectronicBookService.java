@@ -48,6 +48,7 @@ public class ElectronicBookService {
         user.setBook(book);
 
         Book savedBook = bookRepository.save(book);
+
         logger.info("Electronic book successfully saved");
         return new BookResponse(
                 savedBook.getId(),
@@ -63,10 +64,10 @@ public class ElectronicBookService {
         Book book = bookRepository.findByName(electronicBookSaveRequest.getName()).orElse(null);
 
         if(book != null) {
-            if(book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) &&
-                    book.getBookType().equals(ELECTRONIC_BOOK))
+            if(book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) && book.getBookType().equals(ELECTRONIC_BOOK)) {
                 logger.error("This book is already in the database");
                 throw new AlreadyExistException("Эта книга уже есть в базе");
+            }
         }
 
     }
@@ -100,6 +101,7 @@ public class ElectronicBookService {
 
             user.setBook(book);
             book.setOwner(user);
+
             logger.info("Electronic book successfuly updated");
             return ResponseEntity.ok(HttpStatus.OK);
         } else

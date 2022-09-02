@@ -70,10 +70,10 @@ public class AudioBookService {
         Book book = bookRepository.findByName(audioBook.getName()).orElse(null);
 
         if (book != null) {
-            if (book.getLanguage().equals(audioBook.getLanguage()) &&
-                    book.getBookType().equals(AUDIO_BOOK))
+            if (book.getLanguage().equals(audioBook.getLanguage()) && book.getBookType().equals(AUDIO_BOOK)) {
                 logger.error("This book is already in the database");
                 throw new AlreadyExistException("Эта книга уже есть в базе");
+            }
         }
     }
 
@@ -105,6 +105,7 @@ public class AudioBookService {
 
             user.setBook(book);
             book.setOwner(user);
+
             logger.info("Book successfully updated");
         } else
             logger.error("Vendor cannot edit this book!");

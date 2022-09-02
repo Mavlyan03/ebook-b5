@@ -54,7 +54,7 @@ public class PaperBookService {
 
         Book savedBook = bookRepository.save(book);
 
-        logger.info("Peper book successfully saved");
+        logger.info("Paper book successfully saved");
         return new BookResponse(
                 savedBook.getId(),
                 savedBook.getName(),
@@ -69,10 +69,10 @@ public class PaperBookService {
         Book book = bookRepository.findByName(paperBookSaveRequest.getName()).orElse(null);
 
         if(book != null) {
-            if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) &&
-                    book.getBookType().equals(PAPER_BOOK))
+            if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) && book.getBookType().equals(PAPER_BOOK)) {
                 logger.error("This book is already in the database");
                 throw new AlreadyExistException("Эта книга уже есть в базе");
+            }
         }
 
     }
@@ -84,6 +84,7 @@ public class PaperBookService {
 
         if(user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR)) {
             bookRepository.deleteById(bookId);
+
             logger.info("Book successfully deleted");
         }
         else {

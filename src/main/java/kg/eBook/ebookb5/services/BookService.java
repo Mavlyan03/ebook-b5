@@ -1,9 +1,6 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
-import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
-import kg.eBook.ebookb5.dto.responses.BookResponse;
-import kg.eBook.ebookb5.dto.responses.SearchResponse;
+import kg.eBook.ebookb5.dto.responses.*;
 import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
@@ -14,16 +11,21 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
+import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
+import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
+import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,7 +44,7 @@ public class BookService {
     private final ModelMapper modelMapper;
 
     private final GenreRepository genreRepository;
-
+    private final UserRepository personRepository;
     public Page<BookResponse> getAllBooks(
             List<Long> genres,
             BookType bookType,
@@ -125,16 +127,20 @@ public class BookService {
         return null;
     }
 
-    public BookInnerPageResponse findById(Long id) {
+    public BookInnerPageResponse findById(Long id, Authentication authentication) {
         Book book = bookRepository.findById(id).get();
-        book.setEnabled(true);
+
+        User user = personRepository.findByEmail(authentication.getName()).get();
+        if (user.getRole().equals(Role.ADMIN)) {
+            book.setEnabled(true);
+        }
+
         bookRepository.save(book);
         if (book.getPublishedDate() != null) {
             if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
                 book.setNew(true);
             }
         }
-        book.setEnabled(true);
         switch (book.getBookType()) {
             case AUDIO_BOOK:
                 return new AudioBookResponse(book);
@@ -158,5 +164,16 @@ public class BookService {
     private ABookResponse bookToAudioBookResponse(Book book) {
         return modelMapper.map(book, ABookResponse.class);
     }
+
+    public Page<AdminBooksResponse> findAllBooks(Long genreId,
+                                                 BookType bookType,
+                                                 int page,
+                                                 int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return bookRepository.findAllBooks(genreId,
+                                            bookType,
+                                            pageable);
+    }
+
 
 }

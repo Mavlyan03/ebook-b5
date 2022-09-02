@@ -7,16 +7,12 @@ import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import lombok.*;
-import org.springframework.data.jpa.repository.Query;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import static javax.persistence.CascadeType.*;
 
 @Entity
@@ -27,8 +23,8 @@ import static javax.persistence.CascadeType.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_gen")
+    @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", initialValue = 6, allocationSize = 1)
     private Long id;
 
     private String name;
@@ -121,6 +117,7 @@ public class Book {
         this.fragment = eBook.getFragment();
         this.electronicBook = eBook.getElectronicBook();
         this.bookStatus = BookStatus.IN_PROCESSING;
+        this.publishedDate = LocalDate.now();
     }
 
     public Book(AudioBookSaveRequest audioBook) {
@@ -139,6 +136,7 @@ public class Book {
         this.duration = LocalTime.parse(audioBook.getDuration(), timeFormatter);
         this.audioBook = audioBook.getAudioBook();
         this.bookStatus = BookStatus.IN_PROCESSING;
+        this.publishedDate = LocalDate.now();
     }
 
     public Book(PaperBookSaveRequest paperBook) {
@@ -157,6 +155,7 @@ public class Book {
         this.discount = paperBook.getDiscount();
         this.bestseller = paperBook.isBestseller();
         this.bookStatus = BookStatus.IN_PROCESSING;
+        this.publishedDate = LocalDate.now();
     }
 
     public void removeUserFromBasket(User user) {

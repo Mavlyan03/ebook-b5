@@ -12,10 +12,10 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
         defer-datasource-initialization: true
         hibernate:
-            ddl-auto: update
+            ddl-auto: create
     mail:
         host: smtp.gmail.com
-        password: tahxwbasmgwmnrub
+        password: cktwqeupkaixidfo
         port: 25
         properties:
             mail:
@@ -26,16 +26,23 @@ spring:
                         enable: true
                 transport:
                     protocol: smtp
-        username: timur.abdivaitov@gmail.com
+        username: ebook.peaksoft@gmail.com
     mvc:
         hiddenmethod:
             filter:
                 enabled: true
-#    sql:
-#        init:
-#            continue-on-error: false
-#            data-locations: classpath:data initialization/data.sql
-#            mode: always
+
+#         data init
+    sql:
+        init:
+            continue-on-error: false
+            data-locations: classpath:data initialization/data.sql
+            mode: always
+
+#         flyway
+#    flyway:
+#        baseline-on-migrate: true
+
 springdoc:
     swagger-ui:
         path: /swagger

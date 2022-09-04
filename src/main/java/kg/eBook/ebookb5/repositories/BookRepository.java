@@ -41,10 +41,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                      Pageable pageable
     );
 
-//    @Query("select kg.eBook.ebookb5.dto.responses.SearchResponse(" +
-//            "id, search, searchType) where ")
-//    List<SearchResponse> globalSearchBooks(String search);
-
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
             " b.id, b.mainImage, b.name, b.publishedDate, b.price)  " +
             "from Book b " +

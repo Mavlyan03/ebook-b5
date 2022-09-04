@@ -29,10 +29,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import static kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse.viewBestsellerMain;
 import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse.viewFavoriteAudioBooksMain;
@@ -216,12 +219,12 @@ public class BookService {
             Book book = bookRepository.findById(electronicBook).get();
             allFavoriteElectronicBooks.add(book);
         }
+
         return new MainPageResponse(viewFavoriteMain(allFavoriteBooks),
                 viewBestsellerMain(allBestsellerBooks),
                 viewLastPublicationsMain(allLastPublicationsBooks),
                 viewFavoriteAudioBooksMain(allFavoriteAudioBooks),
                 viewBestsellerMain(allFavoriteElectronicBooks)
         );
-
     }
 }

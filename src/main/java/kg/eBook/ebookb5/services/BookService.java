@@ -15,7 +15,6 @@ import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse.viewBestsellerMain;
-import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBookResponse.viewFavoriteAudioBooksMain;
+import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse.viewFavoriteAudioBooksMain;
 import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse.viewFavoriteMain;
 import static kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse.viewLastPublicationsMain;
 import static kg.eBook.ebookb5.enums.SearchType.*;
@@ -174,17 +173,46 @@ public class BookService {
 
 
     public MainPageResponse mainPageResponse() {
-        List<Book> favoriteBooks = bookRepository.findAllFavoriteBooks();
-        List<Book> bestsellerBooks = bookRepository.findAllBestsellerBooks();
-        List<Book> lastPublicationsBooks = bookRepository.findAllLastPublicationsBooks();
-        List<Book> favoriteAudioBooks = bookRepository.findAllFavoriteAudioBooks();
-        List<Book> bestsellerElectronicBooks = bookRepository.findAllBestsellerElectronicBooks();
 
-        return new MainPageResponse(viewFavoriteMain(favoriteBooks),
-                viewBestsellerMain(bestsellerBooks),
-                viewLastPublicationsMain(lastPublicationsBooks),
-                viewFavoriteAudioBooksMain(favoriteAudioBooks),
-                viewBestsellerMain(bestsellerElectronicBooks)
+        List<Long> favoriteBooks = bookRepository.findAllFavoriteBooks();
+        List<Book> allFavoriteBooks = new ArrayList<>();
+        for (Long favoriteBook : favoriteBooks) {
+            Book book = bookRepository.findById(favoriteBook).get();
+            allFavoriteBooks.add(book);
+        }
+        List<Long> bestsellerBooks = bookRepository.findAllBestsellerBooks();
+        List<Book> allBestsellerBooks = new ArrayList<>();
+        for (Long bestsellerBook : bestsellerBooks) {
+            Book book = bookRepository.findById(bestsellerBook).get();
+            allBestsellerBooks.add(book);
+        }
+
+        List<Long> lastPublicationsBooks = bookRepository.findAllLastPublicationsBooks();
+        List<Book> allLastPublicationsBooks = new ArrayList<>();
+        for (Long lastPublicationsBook : lastPublicationsBooks) {
+            Book book = bookRepository.findById(lastPublicationsBook).get();
+            allLastPublicationsBooks.add(book);
+        }
+
+        List<Long> favoriteAudioBooks = bookRepository.findAllFavoriteAudioBooks();
+        List<Book> allFavoriteAudioBooks = new ArrayList<>();
+        for (Long audioBook : favoriteAudioBooks) {
+            Book book = bookRepository.findById(audioBook).get();
+            allFavoriteAudioBooks.add(book);
+        }
+
+        List<Long> favoriteElectronicBooks = bookRepository.findAllFavoriteElectronicBooks();
+        List<Book> allFavoriteElectronicBooks = new ArrayList<>();
+        for (Long electronicBook : favoriteElectronicBooks) {
+            Book book = bookRepository.findById(electronicBook).get();
+            allFavoriteElectronicBooks.add(book);
+        }
+        return new MainPageResponse(viewFavoriteMain(allFavoriteBooks),
+                viewBestsellerMain(allBestsellerBooks),
+                viewLastPublicationsMain(allLastPublicationsBooks),
+                viewFavoriteAudioBooksMain(allFavoriteAudioBooks),
+                viewBestsellerMain(allFavoriteElectronicBooks)
         );
+
     }
 }

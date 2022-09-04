@@ -6,6 +6,7 @@ import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Genre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -62,19 +63,37 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<AdminBooksResponse> findAllBooks(Long genre,
                                           BookType bookType,
                                           Pageable pageable);
-    @Query()
-    List<Book> findAllFavoriteBooks();
 
-    @Query
-    List<Book> findAllBestsellerBooks();
 
-    @Query
-    List<Book> findAllLastPublicationsBooks();
+    @Query(value = "select book_id, count(*) as amount_of_books from users_favorite_books " +
+            "group by book_id order by count(*) desc limit 3 ", nativeQuery = true)
+    List<Long> findAllFavoriteBooks();
 
-    @Query
-    List<Book> findAllFavoriteAudioBooks();
 
-    @Query
-    List<Book> findAllBestsellerElectronicBooks();
+    @Query(value = "select b.id, b.main_image, b.description, b.price from books b " +
+            "left outer join users_favorite_books ufb on b.id = ufb.book_id " +
+            "where bestseller is true group by b.id order by count(*) desc limit 5", nativeQuery = true)
+    List<Long> findAllBestsellerBooks();
+
+
+    @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) as amount " +
+            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
+            "where b.published_date in (select max(b2.published_date) from books b2) " +
+            "group by b.id order by amount desc;", nativeQuery = true)
+    List<Long> findAllLastPublicationsBooks();
+
+
+    @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) amount_of_favorite " +
+            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
+            "where b.book_type = 'AUDIO_BOOK' " +
+            "group by b.id order by amount_of_favorite desc limit 3", nativeQuery = true)
+    List<Long> findAllFavoriteAudioBooks();
+
+
+ @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) amount_of_favorite " +
+            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
+            "where b.book_type = 'ELECTRONIC_BOOK' " +
+            "group by b.id order by amount_of_favorite desc limit 5", nativeQuery = true)
+    List<Long> findAllFavoriteElectronicBooks();
 }
 

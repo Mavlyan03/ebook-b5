@@ -13,11 +13,11 @@ import java.util.List;
 
 public class LastPublicationsBooksResponse extends BestsellerBooksResponse {
 
-    private Genre genre;
+    private String genre;
 
     public LastPublicationsBooksResponse(Book books, Genre genre) {
         super(books);
-        this.genre = genre;
+        this.genre = genre.getName();
     }
 
     public static List<LastPublicationsBooksResponse> viewLastPublicationsMain(List<Book> bookList) {

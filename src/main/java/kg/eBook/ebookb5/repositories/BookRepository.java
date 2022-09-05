@@ -3,6 +3,10 @@ package kg.eBook.ebookb5.repositories;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -40,10 +44,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                      Pageable pageable
     );
 
-//    @Query("select kg.eBook.ebookb5.dto.responses.SearchResponse(" +
-//            "id, search, searchType) where ")
-//    List<SearchResponse> globalSearchBooks(String search);
-
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
             " b.id, b.mainImage, b.name, b.publishedDate, b.price, b.isEnabled)  " +
             "from Book b " +
@@ -62,5 +62,31 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<AdminBooksResponse> findAllBooks(Long genre,
                                           BookType bookType,
                                           Pageable pageable);
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse(" +
+            "b.id, b.mainImage, b.name, b.author, b.price) from Book b group by b.id order by b.likes.size desc ")
+    List<FavoriteBooksResponse> findAllFavoriteBooks(Pageable pageable);
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse(" +
+            "b.id, b.mainImage, b.description, b.price) from Book b where b.bestseller is true " +
+            "group by b.id order by b.likes.size desc ")
+    List<BestsellerBooksResponse> findAllBestsellerBooks(Pageable pageable);
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse(" +
+            "b.id, b.mainImage, b.description, b.price, b.genre) from Book b where b.publishedDate in (" +
+            "select  max(b2.publishedDate) from Book b2)" +
+            "group by b.id order by b.likes.size desc ")
+    List<LastPublicationsBooksResponse> findAllLastPublicationsBooks(Pageable pageable);
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse("+
+            "b.id, b.mainImage, b.name, b.author, b.price, b.duration) from Book b where b.bookType = 'AUDIO_BOOK' " +
+            "group by b.id order by b.likes.size desc ")
+    List<FavoriteAudioBooksResponse> findAllFavoriteAudioBooks(Pageable pageable);
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse("+
+         "b.id, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
+         "group by b.id order by b.likes.size desc ")
+    List<BestsellerBooksResponse> findAllFavoriteElectronicBooks(Pageable pageable);
+
 }
 

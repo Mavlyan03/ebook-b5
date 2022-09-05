@@ -36,8 +36,7 @@ public class AdminApplicationApi {
     @Operation(summary = "Get applications", description = "User with role 'Admin' can get book applications")
     public ApplicationResponse getApplications(
             @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "8") int size
-    ) {
+            @RequestParam(required = false, defaultValue = "8") int size) {
         return bookService.applications(
                 page,
                 size

@@ -3,10 +3,10 @@ package kg.eBook.ebookb5.repositories;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.Genre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,9 +61,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                           Pageable pageable);
 
 
-    @Query(value = "select book_id, count(*) as amount_of_books from users_favorite_books " +
-            "group by book_id order by count(*) desc limit 3 ", nativeQuery = true)
-    List<Long> findAllFavoriteBooks();
+//    @Query(value = "select book_id, count(*) as amount_of_books from users_favorite_books " +
+//            "group by book_id order by count(*) desc limit 3 ", nativeQuery = true)
+//    List<Long> findAllFavoriteBooks();
+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse(" +
+            "b.id, b.mainImage, b.name, b.author, b.price) from Book b group by b.id order by b.likes.size desc ")
+    Page<FavoriteBooksResponse> findAllFavoriteBooks(Pageable pageable);
 
 
     @Query(value = "select b.id, b.main_image, b.description, b.price from books b " +
@@ -91,5 +95,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "where b.book_type = 'ELECTRONIC_BOOK' " +
             "group by b.id order by amount_of_favorite desc limit 5", nativeQuery = true)
     List<Long> findAllFavoriteElectronicBooks();
+
 }
 

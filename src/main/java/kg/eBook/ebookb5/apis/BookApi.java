@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
 import kg.eBook.ebookb5.dto.responses.userMainPage.MainPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
@@ -62,9 +63,16 @@ public class BookApi {
         return bookService.findById(bookId, authentication);
     }
 
+//    @GetMapping("/main-page")
+//    @Operation(summary = "get all books in the main page")
+//    public MainPageResponse mainPageResponse() {
+//        return bookService.mainPageResponse();
+//    }
+
     @GetMapping("/main-page")
     @Operation(summary = "get all books in the main page")
-    public MainPageResponse mainPageResponse() {
+    public Page<FavoriteBooksResponse> mainPageResponse() {
         return bookService.mainPageResponse();
     }
+
 }

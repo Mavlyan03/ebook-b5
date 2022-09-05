@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.dto.responses.userMainPage;
 
 import kg.eBook.ebookb5.models.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteBooksResponse {
 
     private Long bookId;
@@ -19,7 +21,6 @@ public class FavoriteBooksResponse {
     private String name;
     private String author;
     private int price;
-
 
     public FavoriteBooksResponse(Book books) {
         this.bookId = books.getId();

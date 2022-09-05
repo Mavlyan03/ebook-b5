@@ -32,7 +32,7 @@ public class ElectronicBookResponse extends BookInnerPageResponse {
     private boolean isNew;
     private int likes;
     private int basket;
-    private boolean isEnabled;
+
     private Long vendorId;
     private String firstName;
     private String lastName;
@@ -60,7 +60,6 @@ public class ElectronicBookResponse extends BookInnerPageResponse {
         this.isNew = eBook.isNew();
         this.likes = eBook.getLikes().size();
         this.basket = eBook.getBookBasket().size();
-        this.isEnabled = eBook.isEnabled();
 
         this.vendorId = eBook.getOwner().getId();
         this.firstName = eBook.getOwner().getFirstName();

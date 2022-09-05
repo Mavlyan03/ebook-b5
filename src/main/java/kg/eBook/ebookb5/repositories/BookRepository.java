@@ -3,6 +3,7 @@ package kg.eBook.ebookb5.repositories;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -62,5 +63,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<AdminBooksResponse> findAllBooks(Long genre,
                                           BookType bookType,
                                           Pageable pageable);
+
+    List<Book> findBooksByOwnerId(Long owner_id, Pageable pageable);
+
+    List<Book> findBooksByOwnerIdAndBookStatus(Long owner_id, BookStatus bookStatus, Pageable pageable);
+
+    @Query("select b from Book b where b.owner.id = :owner_id and b.discount > 0")
+    List<Book> findBooksByOwnerIdAndDiscountNotNull(Long owner_id, Pageable pageable);
+
+    List<Book> findBooksByOwnerIdAndBookBasketIsNotNull(Long owner_id, Pageable pageable);
+
+    List<Book> findBooksByOwnerIdAndLikesIsNotNull(Long owner_id, Pageable pageable);
+
+    @Query("select b from Book b where b.id in (:ids)")
+    List<Book> findAllById(List<Long> ids, Pageable pageable);
 }
 

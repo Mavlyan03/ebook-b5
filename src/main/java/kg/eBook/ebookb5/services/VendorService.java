@@ -5,7 +5,7 @@ import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
+import kg.eBook.ebookb5.dto.responses.vendorBooksResponses.VendorBookResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
@@ -20,8 +20,6 @@ import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -33,6 +31,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kg.eBook.ebookb5.dto.responses.vendorBooksResponses.ABookVendorResponse.viewBooks;
 import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
 @Service
@@ -121,117 +120,78 @@ public class VendorService {
         return viewVendors(personRepository.findAllVendors());
     }
 
-    public Page<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
+    public VendorBookResponse findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
 
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
         Pageable pageable = PageRequest.of(page - 1, size);
         switch (aboutBooks) {
             case ALL:
-                List<ABookVendorResponse> bookVendorResponses = ABookVendorResponse.viewBooks(vendor.getBooks());
-                return new PageImpl<>(bookVendorResponses.subList(start(pageable, bookVendorResponses),
-                        end(pageable, bookVendorResponses)), pageable, bookVendorResponses.size());
+                return new VendorBookResponse(vendor.getBooks().size(),
+                        viewBooks(bookRepository.findBooksByOwnerId(vendorId, pageable)));
             case REJECTED:
-                return new PageImpl<>(booksRejected(vendor.getBooks()).subList(
-                        start(pageable, booksRejected(vendor.getBooks())),
-                        end(pageable, booksRejected(vendor.getBooks()))),
-                        pageable, booksRejected(vendor.getBooks()).size());
+                return new VendorBookResponse(totalElement(vendor.getBooks(), BookStatus.REJECTED, null),
+                        viewBooks(bookRepository.findBooksByOwnerIdAndBookStatus(
+                                vendorId, BookStatus.REJECTED, pageable)));
             case IN_THE_PROCESS:
-                return new PageImpl<>(booksInTheProcess(vendor.getBooks()).subList(
-                        start(pageable, booksInTheProcess(vendor.getBooks())),
-                        end(pageable, booksInTheProcess(vendor.getBooks()))),
-                        pageable, booksInTheProcess(vendor.getBooks()).size());
+                return new VendorBookResponse(totalElement(vendor.getBooks(), BookStatus.IN_PROCESSING, null),
+                        viewBooks(bookRepository.findBooksByOwnerIdAndBookStatus(
+                                vendorId, BookStatus.IN_PROCESSING, pageable)));
             case WITH_DISCOUNTS:
-                return new PageImpl<>(booksWithDiscounts(vendor.getBooks()).subList(
-                        start(pageable, booksWithDiscounts(vendor.getBooks())),
-                        end(pageable, booksWithDiscounts(vendor.getBooks()))),
-                        pageable, booksWithDiscounts(vendor.getBooks()).size());
+                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
+                        viewBooks(bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable)));
             case IN_THE_BASKET:
-                return new PageImpl<>(booksInTheBasket(vendor.getBooks()).subList(
-                        start(pageable, booksInTheBasket(vendor.getBooks())),
-                        end(pageable, booksInTheBasket(vendor.getBooks()))),
-                        pageable, booksInTheBasket(vendor.getBooks()).size());
+                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
+                        viewBooks(bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable)));
             case FAVORITES:
-                return new PageImpl<>(booksFavorites(vendor.getBooks()).subList(
-                        start(pageable, booksFavorites(vendor.getBooks())),
-                        end(pageable, booksFavorites(vendor.getBooks()))),
-                        pageable, booksFavorites(vendor.getBooks()).size());
+                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
+                        viewBooks(bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable)));
             case SOLD_OUT:
-                return new PageImpl<>(booksSoldOut(vendor.getBooks()).subList(
-                        start(pageable, booksSoldOut(vendor.getBooks())),
-                        end(pageable, booksSoldOut(vendor.getBooks()))),
-                        pageable, booksSoldOut(vendor.getBooks()).size());
+                return new VendorBookResponse(booksSoldOut(vendor.getBooks()).size(),
+                viewBooks(bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable)));
             default:
                 return null;
         }
     }
 
-    private int start(Pageable pageable, List<ABookVendorResponse> bookVendorResponses) {
-        return Math.min((int) pageable.getOffset(), bookVendorResponses.size());
-    }
+    private int totalElement(List<Book> books, BookStatus bookStatus, AboutBooks aboutBooks) {
 
-    private int end(Pageable pageable, List<ABookVendorResponse> bookVendorResponses) {
-        return Math.min((start(pageable, bookVendorResponses) + pageable.getPageSize()),
-                bookVendorResponses.size());
-    }
-
-    private List<ABookVendorResponse> booksRejected(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookStatus().equals(BookStatus.REJECTED)) {
-                bookList.add(new ABookVendorResponse(book));
+        int count = 0;
+        if (bookStatus != null) {
+            for (Book book : books) {
+                if (book.getBookStatus().equals(bookStatus)) {
+                    count++;
+                }
+            }
+        } else if (aboutBooks.equals(AboutBooks.IN_THE_BASKET)) {
+            for (Book book : books) {
+                if (book.getBookBasket().size() > 0) {
+                    count++;
+                }
+            }
+        } else if (aboutBooks.equals(AboutBooks.FAVORITES)) {
+            for (Book book : books) {
+                if (book.getLikes().size() > 0) {
+                    count++;
+                }
+            }
+        } else {
+            for (Book book : books) {
+                if (book.getDiscount() > 0) {
+                    count++;
+                }
             }
         }
-        return bookList;
+        return count;
     }
 
-    private List<ABookVendorResponse> booksInTheProcess(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookStatus().equals(BookStatus.IN_PROCESSING)) {
-                bookList.add(new ABookVendorResponse(book));
-            }
-        }
-        return bookList;
-    }
-
-    private List<ABookVendorResponse> booksWithDiscounts(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getDiscount() > 0) {
-                bookList.add(new ABookVendorResponse(book));
-            }
-        }
-        return bookList;
-    }
-
-    private List<ABookVendorResponse> booksInTheBasket(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookBasket().size() > 0) {
-                bookList.add(new ABookVendorResponse(book));
-            }
-        }
-        return bookList;
-    }
-
-    private List<ABookVendorResponse> booksFavorites(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getLikes().size() > 0) {
-                bookList.add(new ABookVendorResponse(book));
-            }
-        }
-        return bookList;
-    }
-
-    private List<ABookVendorResponse> booksSoldOut(List<Book> books) {
-        List<ABookVendorResponse> bookList = new ArrayList<>();
+    private List<Long> booksSoldOut(List<Book> books) {
+        List<Long> bookIds = new ArrayList<>();
         for (Book book : books) {
             if (purchasedUserBooksRepository.existsPurchasedUserBooksByBookId(book.getId())) {
-                bookList.add(new ABookVendorResponse(book));
+                bookIds.add(book.getId());
             }
         }
-        return bookList;
+        return bookIds;
     }
 }

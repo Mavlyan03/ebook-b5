@@ -4,11 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.requests.VendorProfileRequest;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
+import kg.eBook.ebookb5.dto.responses.vendorBooksResponses.VendorBookResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +39,10 @@ public class VendorApi {
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
     @Operation(summary = "find all books with vendor id", description = "can be obtained using vendor id " +
             "all books, in favorites, in the basket, sold out with discounts in processing and rejected")
-    public Page<ABookVendorResponse> findABookVendor(@PathVariable Long vendorId,
-                                                     @RequestParam AboutBooks aboutBooks,
-                                                     @RequestParam(required = false, defaultValue = "1") int page,
-                                                     @RequestParam(required = false, defaultValue = "16") int size) {
+    public VendorBookResponse findABookVendor(@PathVariable Long vendorId,
+                                              @RequestParam AboutBooks aboutBooks,
+                                              @RequestParam(required = false, defaultValue = "1") int page,
+                                              @RequestParam(required = false, defaultValue = "16") int size) {
         return vendorService.findABookVendor(vendorId, aboutBooks, page, size);
     }
 }

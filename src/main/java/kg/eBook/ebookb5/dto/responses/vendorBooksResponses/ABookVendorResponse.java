@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.dto.responses;
+package kg.eBook.ebookb5.dto.responses.vendorBooksResponses;
 
 import kg.eBook.ebookb5.models.Book;
 import lombok.Getter;

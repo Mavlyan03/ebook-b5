@@ -72,10 +72,9 @@ public class VendorService {
     public VendorResponse update(Authentication authentication,
                                  VendorProfileRequest vendorProfileRequest) {
         User vendor = personRepository.findByEmail(authentication.getName()).get();
-        String password = passwordEncoder.encode(vendorProfileRequest.getPassword());
-        String newPassword = passwordEncoder.encode(vendorProfileRequest.getNewPassword());
-        if (!password.equals(vendor.getPassword())) {
-            throw new WrongPasswordException("Не правильный пароль");
+
+        if (!passwordEncoder.matches(vendorProfileRequest.getPassword(), vendor.getPassword())) {
+            throw new WrongPasswordException("Неверный пароль");
         }
         if (!vendor.getFirstName().equals(vendorProfileRequest.getFirstName()) &&
                 vendorProfileRequest.getFirstName() != null) {
@@ -93,8 +92,9 @@ public class VendorService {
                 vendorProfileRequest.getPhoneNumber() != null) {
             vendor.setPhoneNumber(vendorProfileRequest.getPhoneNumber());
         }
-        if (!password.equals(newPassword) && newPassword != null) {
-            vendor.setPassword(newPassword);
+        if (!passwordEncoder.matches(vendorProfileRequest.getNewPassword(), vendor.getPassword())
+                && !vendorProfileRequest.getNewPassword().equals("")) {
+            vendor.setPassword(passwordEncoder.encode(vendorProfileRequest.getNewPassword()));
         }
         personRepository.save(vendor);
         return new VendorResponse(vendor);

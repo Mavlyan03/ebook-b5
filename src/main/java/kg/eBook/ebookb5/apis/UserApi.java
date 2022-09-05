@@ -2,7 +2,6 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.requests.UserRequest;
-import kg.eBook.ebookb5.dto.responses.OperationsHistoryResponse;
 import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.UserResponse;

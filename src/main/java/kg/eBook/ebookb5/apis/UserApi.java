@@ -32,6 +32,13 @@ public class UserApi {
         return userService.updateByUser(authentication, userRequest);
     }
 
+    @GetMapping("/{userId}")
+    @Operation(summary = "find by user with id")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    public UserResponse findByUserId(@PathVariable Long userId) {
+        return userService.findById(userId);
+    }
+
     @DeleteMapping("/{userId}")
     @Operation(summary = "delete by user with user id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")

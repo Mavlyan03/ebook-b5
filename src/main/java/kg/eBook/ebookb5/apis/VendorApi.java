@@ -28,6 +28,13 @@ public class VendorApi {
         return vendorService.update(authentication, vendorProfileRequest);
     }
 
+    @GetMapping("/{vendorId}")
+    @Operation(summary = "find by vendor with id")
+    @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
+    public VendorResponse findByVendor(@PathVariable Long vendorId) {
+        return vendorService.findByVendor(vendorId);
+    }
+
     @DeleteMapping("/{vendorId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
     @Operation(summary = "delete by vendor with vendor id")

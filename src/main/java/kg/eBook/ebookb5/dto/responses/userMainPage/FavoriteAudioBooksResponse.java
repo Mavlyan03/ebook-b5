@@ -1,29 +1,22 @@
 package kg.eBook.ebookb5.dto.responses.userMainPage;
 
-import kg.eBook.ebookb5.models.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteAudioBooksResponse extends FavoriteBooksResponse {
 
     private LocalTime duration;
 
-    public FavoriteAudioBooksResponse(Book books, LocalTime duration) {
-        super(books);
+    public FavoriteAudioBooksResponse(Long bookId, String mainImage, String name, String author, int price, LocalTime duration) {
+        super(bookId, mainImage, name, author, price);
         this.duration = duration;
-    }
-
-    public static List<FavoriteAudioBooksResponse> viewFavoriteAudioBooksMain(List<Book> bookList) {
-        List<FavoriteAudioBooksResponse> favoriteAudioBookResponses = new ArrayList<>();
-        for (Book book : bookList) {
-            favoriteAudioBookResponses.add(new FavoriteAudioBooksResponse(book, book.getDuration()));
-        }
-        return favoriteAudioBookResponses;
     }
 }

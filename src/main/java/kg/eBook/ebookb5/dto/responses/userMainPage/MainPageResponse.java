@@ -19,5 +19,4 @@ public class MainPageResponse {
     private List<FavoriteAudioBooksResponse> favoriteAudioBookResponses;
     private List<BestsellerBooksResponse> favoriteElectronicBooksResponses;
 
-
 }

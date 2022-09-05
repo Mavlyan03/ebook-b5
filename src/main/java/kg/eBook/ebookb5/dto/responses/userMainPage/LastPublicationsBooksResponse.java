@@ -1,30 +1,19 @@
 package kg.eBook.ebookb5.dto.responses.userMainPage;
 
-import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.Genre;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
-
+@NoArgsConstructor
 public class LastPublicationsBooksResponse extends BestsellerBooksResponse {
 
     private String genre;
 
-    public LastPublicationsBooksResponse(Book books, Genre genre) {
-        super(books);
+    public LastPublicationsBooksResponse(Long bookId, String mainImage, String description, int price, Genre genre) {
+        super(bookId, mainImage, description, price);
         this.genre = genre.getName();
-    }
-
-    public static List<LastPublicationsBooksResponse> viewLastPublicationsMain(List<Book> bookList) {
-        List<LastPublicationsBooksResponse> lastPublicationsBooksResponses = new ArrayList<>();
-        for (Book book : bookList) {
-            lastPublicationsBooksResponses.add(new LastPublicationsBooksResponse(book, book.getGenre()));
-        }
-        return lastPublicationsBooksResponses;
     }
 }

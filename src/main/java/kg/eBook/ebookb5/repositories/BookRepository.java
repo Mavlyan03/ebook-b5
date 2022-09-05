@@ -3,7 +3,10 @@ package kg.eBook.ebookb5.repositories;
 import kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse;
 import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse;
 import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -60,41 +63,30 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                           BookType bookType,
                                           Pageable pageable);
 
-
-//    @Query(value = "select book_id, count(*) as amount_of_books from users_favorite_books " +
-//            "group by book_id order by count(*) desc limit 3 ", nativeQuery = true)
-//    List<Long> findAllFavoriteBooks();
-
     @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse(" +
             "b.id, b.mainImage, b.name, b.author, b.price) from Book b group by b.id order by b.likes.size desc ")
-    Page<FavoriteBooksResponse> findAllFavoriteBooks(Pageable pageable);
+    List<FavoriteBooksResponse> findAllFavoriteBooks(Pageable pageable);
 
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse(" +
+            "b.id, b.mainImage, b.description, b.price) from Book b where b.bestseller is true " +
+            "group by b.id order by b.likes.size desc ")
+    List<BestsellerBooksResponse> findAllBestsellerBooks(Pageable pageable);
 
-    @Query(value = "select b.id, b.main_image, b.description, b.price from books b " +
-            "left outer join users_favorite_books ufb on b.id = ufb.book_id " +
-            "where bestseller is true group by b.id order by count(*) desc limit 5", nativeQuery = true)
-    List<Long> findAllBestsellerBooks();
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse(" +
+            "b.id, b.mainImage, b.description, b.price, b.genre) from Book b where b.publishedDate in (" +
+            "select  max(b2.publishedDate) from Book b2)" +
+            "group by b.id order by b.likes.size desc ")
+    List<LastPublicationsBooksResponse> findAllLastPublicationsBooks(Pageable pageable);
 
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse("+
+            "b.id, b.mainImage, b.name, b.author, b.price, b.duration) from Book b where b.bookType = 'AUDIO_BOOK' " +
+            "group by b.id order by b.likes.size desc ")
+    List<FavoriteAudioBooksResponse> findAllFavoriteAudioBooks(Pageable pageable);
 
-    @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) as amount " +
-            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
-            "where b.published_date in (select max(b2.published_date) from books b2) " +
-            "group by b.id order by amount desc;", nativeQuery = true)
-    List<Long> findAllLastPublicationsBooks();
-
-
-    @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) amount_of_favorite " +
-            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
-            "where b.book_type = 'AUDIO_BOOK' " +
-            "group by b.id order by amount_of_favorite desc limit 3", nativeQuery = true)
-    List<Long> findAllFavoriteAudioBooks();
-
-
- @Query(value = "select b.id, b.main_image, b.description, b.price, count(ufb.book_id) amount_of_favorite " +
-            "from books b  join users_favorite_books ufb on b.id = ufb.book_id " +
-            "where b.book_type = 'ELECTRONIC_BOOK' " +
-            "group by b.id order by amount_of_favorite desc limit 5", nativeQuery = true)
-    List<Long> findAllFavoriteElectronicBooks();
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse("+
+         "b.id, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
+         "group by b.id order by b.likes.size desc ")
+    List<BestsellerBooksResponse> findAllFavoriteElectronicBooks(Pageable pageable);
 
 }
 

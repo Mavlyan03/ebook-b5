@@ -42,7 +42,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     );
 
     @Query("select new kg.eBook.ebookb5.dto.responses.AdminApplicationsResponse( " +
-            " b.id, b.mainImage, b.name, b.publishedDate, b.price)  " +
+            " b.id, b.mainImage, b.name, b.publishedDate, b.price, b.isEnabled)  " +
             "from Book b " +
             "where b.bookStatus='IN_PROCESSING' " +
             "order by b.isEnabled asc ")

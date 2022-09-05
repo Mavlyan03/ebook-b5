@@ -19,6 +19,8 @@ public class AdminApplicationsResponse {
 
     private int price;
 
+    private boolean isEnabled;
+
     public AdminApplicationsResponse() {
 
     }
@@ -27,12 +29,14 @@ public class AdminApplicationsResponse {
                                      String mainImage,
                                      String name,
                                      LocalDate publishedDate,
-                                     int price) {
+                                     int price,
+                                     boolean isEnabled) {
         this.id = id;
         this.mainImage = mainImage;
         this.name = name;
         this.publishedDate = publishedDate;
         this.price = price;
+        this.isEnabled=isEnabled;
     }
 
 

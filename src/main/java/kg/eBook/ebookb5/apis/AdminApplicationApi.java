@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping("api/admin/application")
+@RequestMapping("api/admin/applications")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AdminApplicationApi {
 
@@ -32,7 +32,7 @@ public class AdminApplicationApi {
         return notificationService.rejectedBook(bookId, description);
     }
 
-    @GetMapping("/applications")
+    @GetMapping
     @Operation(summary = "Get applications", description = "User with role 'Admin' can get book applications")
     public ApplicationResponse getApplications(
             @RequestParam(required = false, defaultValue = "1") int page,

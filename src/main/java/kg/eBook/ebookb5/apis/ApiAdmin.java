@@ -22,23 +22,14 @@ import java.util.List;
 public class ApiAdmin {
 
     private final UserService userService;
-
     private final PurchasedUserBooksService userBooksService;
-
     private final VendorService vendorService;
-
     private final BookService bookService;
 
     @GetMapping("/users")
     @Operation(summary = "find all users")
     public List<UserResponse> findAllUsers() {
         return userService.findAllUsers();
-    }
-
-    @GetMapping("/users/{userId}")
-    @Operation(summary = "find by user with id")
-    public UserResponse findByUserId(@PathVariable Long userId) {
-        return userService.findById(userId);
     }
 
     @GetMapping("/users/{userId}/operationsHistory")
@@ -56,12 +47,6 @@ public class ApiAdmin {
     @Operation(summary = "find all vendors")
     public List<VendorResponse> findAllVendors() {
         return vendorService.findAllVendors();
-    }
-
-    @GetMapping("/vendors/{vendorId}")
-    @Operation(summary = "find by vendor with id")
-    public VendorResponse findByVendor(@PathVariable Long vendorId) {
-        return vendorService.findByVendor(vendorId);
     }
 
     @GetMapping("/books")

@@ -6,12 +6,15 @@ import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
+import kg.eBook.ebookb5.exceptions.WrongEmailException;
 import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +29,11 @@ public class VendorApi {
     @PreAuthorize("hasAuthority('VENDOR')")
     @Operation(summary = "update by vendor")
     public VendorResponse update(Authentication authentication,
-                                 @RequestBody VendorProfileRequest vendorProfileRequest) {
+                                 @RequestBody @Valid VendorProfileRequest vendorProfileRequest,
+                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new WrongEmailException("Неправильный адрес электронной почты");
+        }
         return vendorService.update(authentication, vendorProfileRequest);
     }
 

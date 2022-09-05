@@ -5,7 +5,7 @@ import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
-import kg.eBook.ebookb5.dto.responses.vendorBooksResponses.VendorBookResponse;
+import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
@@ -20,6 +20,7 @@ import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kg.eBook.ebookb5.dto.responses.vendorBooksResponses.ABookVendorResponse.viewBooks;
 import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
 @Service
@@ -120,69 +120,22 @@ public class VendorService {
         return viewVendors(personRepository.findAllVendors());
     }
 
-    public VendorBookResponse findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
+    public Page<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
 
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
+
         Pageable pageable = PageRequest.of(page - 1, size);
-        switch (aboutBooks) {
-            case ALL:
-                return new VendorBookResponse(vendor.getBooks().size(),
-                        viewBooks(bookRepository.findBooksByOwnerId(vendorId, pageable)));
-            case REJECTED:
-                return new VendorBookResponse(totalElement(vendor.getBooks(), BookStatus.REJECTED, null),
-                        viewBooks(bookRepository.findBooksByOwnerIdAndBookStatus(
-                                vendorId, BookStatus.REJECTED, pageable)));
-            case IN_THE_PROCESS:
-                return new VendorBookResponse(totalElement(vendor.getBooks(), BookStatus.IN_PROCESSING, null),
-                        viewBooks(bookRepository.findBooksByOwnerIdAndBookStatus(
-                                vendorId, BookStatus.IN_PROCESSING, pageable)));
-            case WITH_DISCOUNTS:
-                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
-                        viewBooks(bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable)));
-            case IN_THE_BASKET:
-                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
-                        viewBooks(bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable)));
-            case FAVORITES:
-                return new VendorBookResponse(totalElement(vendor.getBooks(), null, aboutBooks),
-                        viewBooks(bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable)));
-            case SOLD_OUT:
-                return new VendorBookResponse(booksSoldOut(vendor.getBooks()).size(),
-                viewBooks(bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable)));
-            default:
-                return null;
-        }
-    }
 
-    private int totalElement(List<Book> books, BookStatus bookStatus, AboutBooks aboutBooks) {
-
-        int count = 0;
-        if (bookStatus != null) {
-            for (Book book : books) {
-                if (book.getBookStatus().equals(bookStatus)) {
-                    count++;
-                }
-            }
-        } else if (aboutBooks.equals(AboutBooks.IN_THE_BASKET)) {
-            for (Book book : books) {
-                if (book.getBookBasket().size() > 0) {
-                    count++;
-                }
-            }
-        } else if (aboutBooks.equals(AboutBooks.FAVORITES)) {
-            for (Book book : books) {
-                if (book.getLikes().size() > 0) {
-                    count++;
-                }
-            }
-        } else {
-            for (Book book : books) {
-                if (book.getDiscount() > 0) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        return switch (aboutBooks) {
+            case ALL -> bookRepository.findBooksByOwnerId(vendorId, pageable);
+            case REJECTED, IN_PROCESSING ->
+                    bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.valueOf(aboutBooks.name()), pageable);
+            case WITH_DISCOUNTS -> bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable);
+            case IN_THE_BASKET -> bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable);
+            case FAVORITES -> bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable);
+            case SOLD_OUT -> bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable);
+        };
     }
 
     private List<Long> booksSoldOut(List<Book> books) {

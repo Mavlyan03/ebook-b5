@@ -10,8 +10,7 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,19 +19,19 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 import static kg.eBook.ebookb5.enums.BookType.ELECTRONIC_BOOK;
+
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class ElectronicBookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final GenreRepository genreRepository;
-    private final Logger logger = LoggerFactory.getLogger(ElectronicBookService.class);
 
     public BookResponse saveElectronicBook(Authentication authentication, ElectronicBookSaveRequest eBook) {
 
-        logger.info("Save electronic book");
         isBookExists(eBook);
 
         Book book = new Book(eBook);
@@ -49,7 +48,7 @@ public class ElectronicBookService {
 
         Book savedBook = bookRepository.save(book);
 
-        logger.info("Electronic book successfully saved");
+        log.info("Electronic book successfully saved");
         return new BookResponse(
                 savedBook.getId(),
                 savedBook.getName(),
@@ -60,12 +59,10 @@ public class ElectronicBookService {
 
     private void isBookExists(ElectronicBookSaveRequest electronicBookSaveRequest) {
 
-        logger.info("Check if book exists");
         Book book = bookRepository.findByName(electronicBookSaveRequest.getName()).orElse(null);
 
-        if(book != null) {
-            if(book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) && book.getBookType().equals(ELECTRONIC_BOOK)) {
-                logger.error("This book is already in the database");
+        if (book != null) {
+            if (book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) && book.getBookType().equals(ELECTRONIC_BOOK)) {
                 throw new AlreadyExistException("Эта книга уже есть в базе");
             }
         }
@@ -74,12 +71,11 @@ public class ElectronicBookService {
 
     public ResponseEntity<HttpStatus> updateBook(Authentication authentication, Long bookId, ElectronicBookSaveRequest eBook) {
 
-        logger.info("Update electronic book ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"));
 
-        if(book.getBookType().equals(ELECTRONIC_BOOK)) {
+        if (book.getBookType().equals(ELECTRONIC_BOOK)) {
             book.setName(eBook.getName());
             genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с ID: " + eBook.getGenreId() + " не найден"
@@ -102,11 +98,9 @@ public class ElectronicBookService {
             user.setBook(book);
             book.setOwner(user);
 
-            logger.info("Electronic book successfuly updated");
+            log.info("Electronic book successfuly updated");
             return ResponseEntity.ok(HttpStatus.OK);
         } else
-            logger.error("Vendor cannot edit this book!");
             throw new IllegalStateException("Вы не можете редактировать эту книгу");
-
     }
 }

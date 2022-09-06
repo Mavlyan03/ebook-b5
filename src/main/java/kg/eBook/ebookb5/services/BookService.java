@@ -22,8 +22,6 @@ import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,14 +35,13 @@ import java.util.List;
 
 import static kg.eBook.ebookb5.enums.SearchType.*;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
     private final GenreRepository genreRepository;
-    private final Logger logger = LoggerFactory.getLogger(BookService.class);
     private final UserRepository personRepository;
 
     public Page<BookResponse> getAllBooks(
@@ -60,7 +57,6 @@ public class BookService {
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        logger.info("All accepted books are displayed on the main page");
         return bookRepository.customFindAll(
                 genres,
                 bookType,
@@ -80,18 +76,15 @@ public class BookService {
 
     public ApplicationResponse applications(int page, int size) {
 
-        logger.info("Get all applications ...");
         ApplicationResponse applicationResponse = new ApplicationResponse(
                 bookRepository.countOfUnseen(),
                 getApplications(page, size)
         );
-        logger.info("All books that are being processed are displayed on the application page");
         return applicationResponse;
     }
 
     public List<SearchResponse> globalSearchBooks(String search) {
 
-        logger.info("Global search ...");
         List<SearchResponse> all = new ArrayList<>();
 
         String finalSearch = search.toLowerCase();
@@ -114,7 +107,6 @@ public class BookService {
                 all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
-        logger.info("The global search was successful");
         return all;
     }
 
@@ -138,7 +130,6 @@ public class BookService {
 
     public BookInnerPageResponse findById(Long id, Authentication authentication) {
 
-        logger.info("Find by book with id ... ");
         Book book = bookRepository.findById(id).get();
 
         User user = personRepository.findByEmail(authentication.getName()).get();
@@ -154,16 +145,12 @@ public class BookService {
         }
         switch (book.getBookType()) {
             case AUDIO_BOOK:
-                logger.info(book + " audio book with {} displayed on inner page", id);
                 return new AudioBookResponse(book);
             case ELECTRONIC_BOOK:
-                logger.info(book + " electronic book with {} displayed on inner page", id);
                 return new ElectronicBookResponse(book);
             case PAPER_BOOK:
-                logger.info(book + " paper book with {} displayed on inner page", id);
                 return new PaperBookResponse(book);
             default:
-                logger.info("Not found book with = " + id);
                 return null;
         }
     }
@@ -186,7 +173,6 @@ public class BookService {
                                                  int size) {
         Pageable pageable = PageRequest.of(page-1, size);
 
-        logger.info("All books are displayed on the admin panel of the book");
         return bookRepository.findAllBooks(genreId,
                 bookType,
                 pageable);

@@ -98,7 +98,7 @@ public class ElectronicBookService {
             user.setBook(book);
             book.setOwner(user);
 
-            log.info("Electronic book successfuly updated");
+            log.info("Electronic book successfully updated");
             return ResponseEntity.ok(HttpStatus.OK);
         } else
             throw new IllegalStateException("Вы не можете редактировать эту книгу");

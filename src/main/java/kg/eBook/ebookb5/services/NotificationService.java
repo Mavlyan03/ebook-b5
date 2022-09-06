@@ -13,8 +13,7 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.NotificationRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.NotificationResponse.view;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -31,17 +31,16 @@ public class NotificationService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final MailingService mailingService;
-    private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     public SimpleResponse acceptedBook(Long bookId) {
 
-        logger.info("Accepted book ...");
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
 
         Notification notification = new Notification();
 
         book.setBookStatus(BookStatus.ACCEPTED);
         book.setPublishedDate(LocalDate.now());
+        book.setEnabled(true);
         bookRepository.save(book);
 
         notification.setBookStatus(BookStatus.ACCEPTED);
@@ -50,6 +49,8 @@ public class NotificationService {
         notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
+
+        log.info("Save new notification");
 
         MailNewBookRequest mailNewBookRequest = new MailNewBookRequest(
                 book.getMainImage(),
@@ -60,15 +61,11 @@ public class NotificationService {
         if(book.getBookStatus().equals(BookStatus.ACCEPTED)) {
             mailingService.sendNewBookMessage(mailNewBookRequest);
         }
-
-        logger.info(book + "book was successfully accepted!\n" +
-                "and sent a notification to the vendor");
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }
 
     public SimpleResponse rejectedBook(Long bookId, String description) {
 
-        logger.info("Rejected book ...");
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
 
         Notification notification = new Notification();
@@ -85,34 +82,31 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
-        logger.info("book was rejected and sent a notification to the vendor");
+        log.info("Save new notification");
         return new SimpleResponse(book.getName() + " был отклонён!");
     }
 
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
+
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        logger.info("vendor views all notification");
         return notificationRepository.findAllNotifications(vendor.getId());
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
 
-        logger.info("Find by notification ...");
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NotFoundException("Уведомление не найдено"));
 
         notification.setRead(true);
         notificationRepository.save(notification);
 
-        logger.info("vendor view notification = " + notification);
         return new NotificationFindByIdResponse(notification);
     }
 
     public List<NotificationResponse> markAsRead(Authentication authentication) {
 
-        logger.info("Mark as read ...");
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         for (Notification notification : vendor.getNotifications()) {
@@ -120,7 +114,7 @@ public class NotificationService {
         }
         notificationRepository.saveAll(vendor.getNotifications());
 
-        logger.info("vendor marked all notifications as viewed");
+        log.info("vendor marked all notifications as viewed");
         return view(vendor.getNotifications());
     }
 }

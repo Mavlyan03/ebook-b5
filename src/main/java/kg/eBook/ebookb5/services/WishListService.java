@@ -13,9 +13,8 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,19 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class WishListService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final Logger logger = LoggerFactory.getLogger(WishListService.class);
 
     public void addBookToWishList(Long bookId, Authentication authentication) {
 
-        logger.info("Add book to wish list ...");
         User user1 = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -48,18 +46,16 @@ public class WishListService {
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
 
-                logger.error("This {} book has already been added to your favorites", i);
                 throw new AlreadyExistException("Эта книга уже добавлена в избранное");
         }
 
         user1.setFavoriteBook(book);
         book.setUserToBook(user1);
-        logger.info("The book has been successfully added to the wishlist");
+        log.info("The book has been successfully added to the wishlist");
     }
 
     public List<? extends BookResponseGeneral> getBooks(Authentication authentication) {
 
-        logger.info("Get book wish list");
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         List<Book> userFavorite = user.getFavorite();

@@ -20,8 +20,7 @@ import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,9 +33,10 @@ import java.util.List;
 import static kg.eBook.ebookb5.dto.responses.ABookVendorResponse.viewBooks;
 import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class VendorService {
 
     private final UserRepository personRepository;
@@ -44,11 +44,9 @@ public class VendorService {
     private final PurchasedUserBooksRepository purchasedUserBooksRepository;
     private final NotificationRepository notificationRepository;
     private final JWTUtil jwtUtil;
-    private final Logger logger = LoggerFactory.getLogger(VendorService.class);
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
 
-        logger.info("Vendor register ... ");
         User vendor = new User(
                 vendorRegisterRequest.getFirstName(),
                 vendorRegisterRequest.getLastName(),
@@ -60,15 +58,13 @@ public class VendorService {
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
         if (personRepository.existsByEmail(vendorRegisterRequest.getEmail())) {
-
-            logger.error("This email = {} al ready", vendorRegisterRequest.getEmail());
             throw new AlreadyExistException("Почта: " + vendorRegisterRequest.getEmail() + " уже занята!");
         }
         User savedVendor = personRepository.save(vendor);
 
         String token = jwtUtil.generateToken(vendorRegisterRequest.getEmail());
 
-        logger.info("User successfully created!");
+        log.info("Vendor successfully created!");
         return new JwtResponse(
                 savedVendor.getId(),
                 token,
@@ -76,10 +72,8 @@ public class VendorService {
                 savedVendor.getFirstName());
     }
 
-    public VendorResponse update(Authentication authentication,
-                                 VendorProfileRequest vendorProfileRequest) {
+    public VendorResponse update(Authentication authentication, VendorProfileRequest vendorProfileRequest) {
 
-        logger.info("Update user ... ");
         User vendor = personRepository.findByEmail(authentication.getName()).get();
 
         if (!passwordEncoder.matches(vendorProfileRequest.getPassword(), vendor.getPassword())) {
@@ -107,37 +101,31 @@ public class VendorService {
         }
         personRepository.save(vendor);
 
-        logger.info("User update successful");
+        log.info("Vendor update successful");
         return new VendorResponse(vendor);
     }
 
     public VendorResponse findByVendor(Long vendorId) {
-
-        logger.info("Find by vendor with id = " + vendorId);
         return new VendorResponse(personRepository.findById(vendorId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено")));
     }
 
     public SimpleResponse deleteByVendorId(Long vendorId) {
 
-        logger.info("Delete vendor ...");
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
 
         personRepository.delete(vendor);
-        logger.info("Vendor successfully deleted");
+        log.info("Vendor successfully deleted");
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }
 
     public List<VendorResponse> findAllVendors() {
-
-        logger.info("Find all vendors favorite books");
         return viewVendors(personRepository.findAllVendors());
     }
 
     public List<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks) {
 
-        logger.info("Find books vendor ...");
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
 
@@ -145,22 +133,16 @@ public class VendorService {
             case ALL:
                 return viewBooks(vendor.getBooks());
             case REJECTED:
-                logger.info("Books rejected");
                 return viewBooks(booksRejected(vendor.getBooks()));
             case IN_THE_PROCESS:
-                logger.info("Books in the process");
                 return viewBooks(booksInTheProcess(vendor.getBooks()));
             case WITH_DISCOUNTS:
-                logger.info("Books with discounts");
                 return viewBooks(booksWithDiscounts(vendor.getBooks()));
             case IN_THE_BASKET:
-                logger.info("Books in the basked");
                 return viewBooks(booksInTheBasket(vendor.getBooks()));
             case FAVORITES:
-                logger.info("Books favorite");
                 return viewBooks(booksFavorites(vendor.getBooks()));
             case SOLD_OUT:
-                logger.info("Books sold out");
                 return viewBooks(booksSoldOut(vendor.getBooks()));
             default:
                 return null;

@@ -1,5 +1,6 @@
 package kg.eBook.ebookb5.services.book;
 
+
 import com.sun.jdi.request.InvalidRequestStateException;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
@@ -12,8 +13,7 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,20 +23,18 @@ import javax.transaction.Transactional;
 
 import static kg.eBook.ebookb5.enums.BookType.PAPER_BOOK;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class PaperBookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final GenreRepository genreRepository;
-    private final Logger logger = LoggerFactory.getLogger(ElectronicBookService.class);
-
 
     public BookResponse savePaperBook(Authentication authentication, PaperBookSaveRequest paperBook) {
 
-        logger.info("Save paper book ...");
         isBookExists(paperBook);
 
         Book book = new Book(paperBook);
@@ -54,7 +52,7 @@ public class PaperBookService {
 
         Book savedBook = bookRepository.save(book);
 
-        logger.info("Paper book successfully saved");
+        log.info("Paper book successfully saved");
         return new BookResponse(
                 savedBook.getId(),
                 savedBook.getName(),
@@ -65,12 +63,10 @@ public class PaperBookService {
 
     private void isBookExists(PaperBookSaveRequest paperBookSaveRequest) {
 
-        logger.info("Check if book exists");
         Book book = bookRepository.findByName(paperBookSaveRequest.getName()).orElse(null);
 
         if(book != null) {
             if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) && book.getBookType().equals(PAPER_BOOK)) {
-                logger.error("This book is already in the database");
                 throw new AlreadyExistException("Эта книга уже есть в базе");
             }
         }
@@ -79,16 +75,14 @@ public class PaperBookService {
 
     public void deleteBook(Authentication authentication, Long bookId) {
 
-        logger.info("Delete book ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         if(user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR)) {
             bookRepository.deleteById(bookId);
 
-            logger.info("Book successfully deleted");
+            log.info("Book successfully deleted");
         }
         else {
-            logger.error("You cannot delete this book!");
             throw new InvalidRequestStateException("Вы не можете удалить эту книгу");
         }
         ResponseEntity.ok(HttpStatus.OK);
@@ -97,7 +91,6 @@ public class PaperBookService {
 
     public void updateBook(Authentication authentication, Long bookId, PaperBookSaveRequest paperBook) {
 
-        logger.info("Update paper book ...");
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -123,10 +116,9 @@ public class PaperBookService {
             book.setDiscount(paperBook.getDiscount());
             book.setBestseller(paperBook.isBestseller());
 
-            logger.info("Paper book successfully updated");
+            log.info("Paper book successfully updated");
             ResponseEntity.ok(HttpStatus.OK);
         } else
-            logger.error("Vendor cannot edit this book!");
             throw new IllegalStateException("Вы не можете редактировать эту книгу");
     }
 }

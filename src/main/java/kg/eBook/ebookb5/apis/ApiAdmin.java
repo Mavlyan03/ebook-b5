@@ -54,10 +54,10 @@ public class ApiAdmin {
     public Page<AdminBooksResponse> getAllBooks(@RequestParam(required = false) Long genreId,
                                                 @RequestParam(required = false) BookType bookType,
                                                 @RequestParam(required = false, defaultValue = "1") int page,
-                                                @RequestParam(required = false, defaultValue = "8") int size
-    ) {
+                                                @RequestParam(required = false, defaultValue = "8") int size) {
         return bookService.findAllBooks(genreId,
                 bookType,
-                page, size);
+                page, size
+        );
     }
 }

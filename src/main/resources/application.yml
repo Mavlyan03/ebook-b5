@@ -13,12 +13,6 @@ spring:
         defer-datasource-initialization: true
         hibernate:
             ddl-auto: create
-
-#            flyway
-#        properties:
-#            hibernate:
-#                dialect: org.hibernate.dialect.PostgreSQL10Dialect
-
     mail:
         host: smtp.gmail.com
         password: cktwqeupkaixidfo

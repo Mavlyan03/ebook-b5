@@ -117,12 +117,7 @@ public class UserService {
         logger.info("Update user ... ");
         User user = personRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
-
-        String password = passwordEncoder.encode(userRequest.getPassword());
-        String newPassword = passwordEncoder.encode(userRequest.getNewPassword());
-
-        if (!user.getPassword().equals(password)) {
-            logger.error("Password entered incorrectly");
+        if (!passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
             throw new WrongPasswordException("Пароль введен неправильно");
         }
         if (!user.getFirstName().equals(userRequest.getName()) && userRequest.getName() != null) {
@@ -131,8 +126,9 @@ public class UserService {
         if (!user.getEmail().equals(userRequest.getEmail()) && userRequest.getEmail() != null) {
             user.setEmail(userRequest.getEmail());
         }
-        if (!password.equals(newPassword) && newPassword != null) {
-            user.setPassword(newPassword);
+        if (!passwordEncoder.matches(userRequest.getNewPassword(), user.getPassword())
+        && !userRequest.getNewPassword().equals("")) {
+            user.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
         }
         personRepository.save(user);
 

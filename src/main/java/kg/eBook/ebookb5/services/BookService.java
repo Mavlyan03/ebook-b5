@@ -9,13 +9,13 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.PaperBookResponse;
+import kg.eBook.ebookb5.dto.responses.userMainPage.MainPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.enums.SortBy;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.Genre;
 import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.GenreRepository;
@@ -124,13 +124,13 @@ public class BookService {
                 "Книга с ID: " + bookId + " не найдена!"
         ));
 
-        if(bookById.getBookType().equals(BookType.PAPER_BOOK)) {
+        if (bookById.getBookType().equals(BookType.PAPER_BOOK)) {
             return Collections.singletonList(bookToPaperBookResponse(bookById));
         }
-        if(bookById.getBookType().equals(BookType.ELECTRONIC_BOOK)) {
+        if (bookById.getBookType().equals(BookType.ELECTRONIC_BOOK)) {
             return Collections.singletonList(bookToEbookResponse(bookById));
         }
-        if(bookById.getBookType().equals(BookType.AUDIO_BOOK)) {
+        if (bookById.getBookType().equals(BookType.AUDIO_BOOK)) {
             return Collections.singletonList(bookToAudioBookResponse(bookById));
         }
         return null;
@@ -188,9 +188,17 @@ public class BookService {
 
         logger.info("All books are displayed on the admin panel of the book");
         return bookRepository.findAllBooks(genreId,
-                                            bookType,
-                                            pageable);
+                bookType,
+                pageable);
     }
 
+    public MainPageResponse mainPageResponse() {
 
+        return new MainPageResponse(
+                bookRepository.findAllFavoriteBooks(PageRequest.of(0, 3)),
+                bookRepository.findAllBestsellerBooks(PageRequest.of(0, 5)),
+                bookRepository.findAllLastPublicationsBooks(PageRequest.of(0, 1)),
+                bookRepository.findAllFavoriteAudioBooks(PageRequest.of(0, 3)),
+                bookRepository.findAllFavoriteElectronicBooks(PageRequest.of(0, 5)));
+    }
 }

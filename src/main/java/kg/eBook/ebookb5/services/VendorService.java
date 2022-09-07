@@ -127,15 +127,24 @@ public class VendorService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        return switch (aboutBooks) {
-            case ALL -> bookRepository.findBooksByOwnerId(vendorId, pageable);
-            case REJECTED, IN_PROCESSING ->
-                    bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.valueOf(aboutBooks.name()), pageable);
-            case WITH_DISCOUNTS -> bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable);
-            case IN_THE_BASKET -> bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable);
-            case FAVORITES -> bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable);
-            case SOLD_OUT -> bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable);
-        };
+         switch (aboutBooks) {
+             case ALL:
+                 return bookRepository.findBooksByOwnerId(vendorId, pageable);
+             case REJECTED:
+                 return bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.REJECTED, pageable);
+             case IN_PROCESSING:
+                 return bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.IN_PROCESSING, pageable);
+             case WITH_DISCOUNTS:
+                 return bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable);
+             case IN_THE_BASKET:
+                 return bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable);
+             case FAVORITES:
+                 return bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable);
+             case SOLD_OUT:
+                 return bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable);
+             default:
+                 return null;
+        }
     }
 
     private List<Long> booksSoldOut(List<Book> books) {

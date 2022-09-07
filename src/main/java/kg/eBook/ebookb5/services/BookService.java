@@ -183,7 +183,7 @@ public class BookService {
         return new MainPageResponse(
                 bookRepository.findAllFavoriteBooks(PageRequest.of(0, 4)),
                 bookRepository.findAllBestsellerBooks(PageRequest.of(0, 5)),
-                bookRepository.findAllLastPublicationsBooks(PageRequest.of(0, 1)),
+                bookRepository.findAllLastPublicationsBooks(PageRequest.of(0, 6)),
                 bookRepository.findAllFavoriteAudioBooks(PageRequest.of(0, 3)),
                 bookRepository.findAllFavoriteElectronicBooks(PageRequest.of(0, 5)));
     }

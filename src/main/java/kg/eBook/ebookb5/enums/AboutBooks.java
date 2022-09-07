@@ -7,7 +7,7 @@ public enum AboutBooks {
     IN_THE_BASKET,
     SOLD_OUT,
     WITH_DISCOUNTS,
-    IN_THE_PROCESS,
+    IN_PROCESSING,
     REJECTED;
 
 }

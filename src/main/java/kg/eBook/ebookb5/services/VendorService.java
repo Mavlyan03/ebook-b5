@@ -2,10 +2,10 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.VendorProfileRequest;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
+import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
@@ -13,14 +13,17 @@ import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.Notification;
 import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.NotificationRepository;
 import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kg.eBook.ebookb5.dto.responses.ABookVendorResponse.viewBooks;
 import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
 @Slf4j
@@ -44,6 +46,7 @@ public class VendorService {
     private final PurchasedUserBooksRepository purchasedUserBooksRepository;
     private final NotificationRepository notificationRepository;
     private final JWTUtil jwtUtil;
+    private final BookRepository bookRepository;
 
     public JwtResponse registerVendor(VendorRegisterRequest vendorRegisterRequest) {
 
@@ -124,91 +127,40 @@ public class VendorService {
         return viewVendors(personRepository.findAllVendors());
     }
 
-    public List<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks) {
+    public Page<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
 
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
 
-        switch (aboutBooks) {
-            case ALL:
-                return viewBooks(vendor.getBooks());
-            case REJECTED:
-                return viewBooks(booksRejected(vendor.getBooks()));
-            case IN_THE_PROCESS:
-                return viewBooks(booksInTheProcess(vendor.getBooks()));
-            case WITH_DISCOUNTS:
-                return viewBooks(booksWithDiscounts(vendor.getBooks()));
-            case IN_THE_BASKET:
-                return viewBooks(booksInTheBasket(vendor.getBooks()));
-            case FAVORITES:
-                return viewBooks(booksFavorites(vendor.getBooks()));
-            case SOLD_OUT:
-                return viewBooks(booksSoldOut(vendor.getBooks()));
-            default:
-                return null;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+         switch (aboutBooks) {
+             case ALL:
+                 return bookRepository.findBooksByOwnerId(vendorId, pageable);
+             case REJECTED:
+                 return bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.REJECTED, pageable);
+             case IN_PROCESSING:
+                 return bookRepository.findBooksByOwnerIdAndBookStatus(vendorId, BookStatus.IN_PROCESSING, pageable);
+             case WITH_DISCOUNTS:
+                 return bookRepository.findBooksByOwnerIdAndDiscountNotNull(vendorId, pageable);
+             case IN_THE_BASKET:
+                 return bookRepository.findBooksByOwnerIdAndBookBasketIsNotNull(vendorId, pageable);
+             case FAVORITES:
+                 return bookRepository.findBooksByOwnerIdAndLikesIsNotNull(vendorId, pageable);
+             case SOLD_OUT:
+                 return bookRepository.findAllById(booksSoldOut(vendor.getBooks()), pageable);
+             default:
+                 return null;
         }
     }
 
-    private List<Book> booksRejected(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookStatus().equals(BookStatus.REJECTED)) {
-                Notification notification = notificationRepository.findByBookId(book.getId()).orElseThrow(
-                        () -> new NotFoundException("Уведомление не найдено"));
-                book.setPublishedDate(notification.getCreatedAt());
-                bookList.add(book);
-            }
-        }
-        return bookList;
-    }
-
-    private List<Book> booksInTheProcess(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookStatus().equals(BookStatus.IN_PROCESSING)) {
-                bookList.add(book);
-            }
-        }
-        return bookList;
-    }
-
-    private List<Book> booksWithDiscounts(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getDiscount() > 0) {
-                bookList.add(book);
-            }
-        }
-        return bookList;
-    }
-
-    private List<Book> booksInTheBasket(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getBookBasket().size() > 0) {
-                bookList.add(book);
-            }
-        }
-        return bookList;
-    }
-
-    private List<Book> booksFavorites(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getLikes().size() > 0) {
-                bookList.add(book);
-            }
-        }
-        return bookList;
-    }
-
-    private List<Book> booksSoldOut(List<Book> books) {
-        List<Book> bookList = new ArrayList<>();
+    private List<Long> booksSoldOut(List<Book> books) {
+        List<Long> bookIds = new ArrayList<>();
         for (Book book : books) {
             if (purchasedUserBooksRepository.existsPurchasedUserBooksByBookId(book.getId())) {
-                bookList.add(book);
+                bookIds.add(book.getId());
             }
         }
-        return bookList;
+        return bookIds;
     }
 }

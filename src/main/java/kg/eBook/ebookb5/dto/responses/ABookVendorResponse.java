@@ -1,40 +1,28 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.Book;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+import kg.eBook.ebookb5.enums.BookStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ABookVendorResponse {
 
     private Long id;
     private String name;
     private String mainImage;
     private int price;
+    private BookStatus bookStatus;
+
+    @JsonFormat(pattern="dd-MM-yyyy")
+    @ApiModelProperty(dataType = "java.sql.Date")
     private LocalDate dateOfRegistration;
     private Integer favorite;
     private Integer basket;
-
-    public ABookVendorResponse(Book book) {
-        this.id = book.getId();
-        this.name = book.getName();
-        this.mainImage = book.getMainImage();
-        this.price = book.getPrice();
-        this.basket = book.getBookBasket().size();
-        this.favorite = book.getLikes().size();
-        this.dateOfRegistration = book.getPublishedDate();
-    }
-
-    public static List<ABookVendorResponse> viewBooks(List<Book> books) {
-        List<ABookVendorResponse> aBookVendorResponses = new ArrayList<>();
-        for (Book book : books) {
-            aBookVendorResponses.add(new ABookVendorResponse(book));
-        }
-        return aBookVendorResponses;
-    }
 }

@@ -12,8 +12,8 @@ public class LastPublicationsBooksResponse extends BestsellerBooksResponse {
 
     private String genre;
 
-    public LastPublicationsBooksResponse(Long bookId, String mainImage, String description, int price, Genre genre) {
-        super(bookId, mainImage, description, price);
+    public LastPublicationsBooksResponse(Long bookId, String name, String mainImage, String description, int price, Genre genre) {
+        super(bookId, name, mainImage, description, price);
         this.genre = genre.getName();
     }
 }

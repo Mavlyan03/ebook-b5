@@ -70,12 +70,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<FavoriteBooksResponse> findAllFavoriteBooks(Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse(" +
-            "b.id, b.mainImage, b.description, b.price) from Book b where b.bestseller is true " +
+            "b.id, b.name, b.mainImage, b.description, b.price) from Book b where b.bestseller is true " +
             "group by b.id order by b.likes.size desc ")
     List<BestsellerBooksResponse> findAllBestsellerBooks(Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse(" +
-            "b.id, b.mainImage, b.description, b.price, b.genre) from Book b where b.publishedDate in (" +
+            "b.id, b.name, b.mainImage, b.description, b.price, b.genre) from Book b where b.publishedDate in (" +
             "select  max(b2.publishedDate) from Book b2)" +
             "group by b.id order by b.likes.size desc ")
     List<LastPublicationsBooksResponse> findAllLastPublicationsBooks(Pageable pageable);
@@ -86,7 +86,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<FavoriteAudioBooksResponse> findAllFavoriteAudioBooks(Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse("+
-         "b.id, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
+         "b.id, b.name, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
          "group by b.id order by b.likes.size desc ")
     List<BestsellerBooksResponse> findAllFavoriteElectronicBooks(Pageable pageable);
 

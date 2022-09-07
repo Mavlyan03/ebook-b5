@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.services;
 
-import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.requests.LoginRequest;
+import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
 import kg.eBook.ebookb5.models.User;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class LoginService {
 
     private final JWTUtil jwtUtil;

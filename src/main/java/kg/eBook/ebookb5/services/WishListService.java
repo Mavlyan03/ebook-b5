@@ -13,6 +13,7 @@ import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class WishListService {
 
     private final BookRepository bookRepository;
@@ -43,11 +45,13 @@ public class WishListService {
                     i.getLanguage().equals(book.getLanguage()) &&
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
+
                 throw new AlreadyExistException("Эта книга уже добавлена в избранное");
         }
 
         user1.setFavoriteBook(book);
         book.setUserToBook(user1);
+        log.info("The book has been successfully added to the wishlist");
     }
 
     public List<? extends BookResponseGeneral> getBooks(Authentication authentication) {

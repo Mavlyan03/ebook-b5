@@ -14,9 +14,9 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 @Service
 @Getter@Setter
-@Slf4j
 public class S3Service {
 
     private final S3Client s3;

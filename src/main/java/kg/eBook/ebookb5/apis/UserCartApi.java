@@ -30,8 +30,8 @@ public class UserCartApi {
     }
 
     @PostMapping("/minus-button/{bookId}")
-    public int minusButton(@PathVariable Long bookId, @RequestParam Integer minus) {
-        return promocodeService.decreaseBookToBuy(bookId, minus);
+    public int minusButton(@PathVariable Long bookId, @RequestParam Integer minus, Authentication authentication) {
+        return promocodeService.decreaseBookToBuy(bookId, minus, authentication);
     }
 
 }

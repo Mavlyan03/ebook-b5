@@ -12,6 +12,7 @@ import lombok.Setter;
 public class BestsellerBooksResponse {
 
     private Long bookId;
+    private String name;
     private String mainImage;
     private String description;
     private int price;

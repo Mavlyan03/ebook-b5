@@ -2,7 +2,10 @@ package kg.eBook.ebookb5.services;
 
 import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.requests.UserRequest;
-import kg.eBook.ebookb5.dto.responses.*;
+import kg.eBook.ebookb5.dto.responses.JwtResponse;
+import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
+import kg.eBook.ebookb5.dto.responses.SimpleResponse;
+import kg.eBook.ebookb5.dto.responses.UserResponse;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
@@ -12,6 +15,7 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,9 +27,10 @@ import java.util.List;
 import static kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse.viewUserBooks;
 import static kg.eBook.ebookb5.dto.responses.UserResponse.view;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository personRepository;
@@ -43,12 +48,13 @@ public class UserService {
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(userRegisterRequest.getEmail()))
+        if(personRepository.existsByEmail(userRegisterRequest.getEmail())) {
             throw new AlreadyExistException("Эта почта " + userRegisterRequest.getEmail() + " уже занята!");
-
+        }
         User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(userRegisterRequest.getEmail());
 
+        log.info("User successfully created!");
         return new JwtResponse(
                 savedPerson.getId(),
                 token,
@@ -68,6 +74,7 @@ public class UserService {
     }
 
     public SimpleResponse deleteByUserId(Long userId) {
+
         User user = personRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено")
         );
@@ -81,20 +88,25 @@ public class UserService {
         bookRepository.saveAll(user.getFavorite());
 
         personRepository.delete(user);
+
+        log.info("User successfully deleted");
         return new SimpleResponse("Пользователь успешно удален!");
     }
 
     public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(Long userId) {
+
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getFavorite());
     }
 
     public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(Long userId) {
+
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getUserBasket());
     }
 
     public SimpleResponse updateByUser(Authentication authentication, UserRequest userRequest) {
+
         User user = personRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
         if (!passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
@@ -111,6 +123,8 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
         }
         personRepository.save(user);
+
+        log.info("User update successful");
         return new SimpleResponse("Пользователь успешно сохранен");
     }
 }

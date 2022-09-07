@@ -35,16 +35,13 @@ import java.util.List;
 
 import static kg.eBook.ebookb5.enums.SearchType.*;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-
     private final ModelMapper modelMapper;
-
     private final GenreRepository genreRepository;
-
     private final UserRepository personRepository;
 
     public Page<BookResponse> getAllBooks(
@@ -59,6 +56,7 @@ public class BookService {
             int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
+
         return bookRepository.customFindAll(
                 genres,
                 bookType,
@@ -86,6 +84,7 @@ public class BookService {
     }
 
     public List<SearchResponse> globalSearchBooks(String search) {
+
         List<SearchResponse> all = new ArrayList<>();
 
         String finalSearch = search.toLowerCase();
@@ -108,11 +107,11 @@ public class BookService {
                 all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
-
         return all;
     }
 
     public List<? extends BookResponseGeneral> findBookById(Long bookId) {
+
         Book bookById = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID: " + bookId + " не найдена!"
         ));
@@ -130,6 +129,7 @@ public class BookService {
     }
 
     public BookInnerPageResponse findById(Long id, Authentication authentication) {
+
         Book book = bookRepository.findById(id).get();
 
         User user = personRepository.findByEmail(authentication.getName()).get();
@@ -171,7 +171,8 @@ public class BookService {
                                                  BookType bookType,
                                                  int page,
                                                  int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable = PageRequest.of(page-1, size);
+
         return bookRepository.findAllBooks(genreId,
                 bookType,
                 pageable);

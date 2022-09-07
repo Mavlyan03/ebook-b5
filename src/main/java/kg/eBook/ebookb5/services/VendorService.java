@@ -20,6 +20,7 @@ import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import kg.eBook.ebookb5.security.JWT.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ import java.util.List;
 import static kg.eBook.ebookb5.dto.responses.ABookVendorResponse.viewBooks;
 import static kg.eBook.ebookb5.dto.responses.VendorResponse.viewVendors;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class VendorService {
 
     private final UserRepository personRepository;
@@ -55,13 +57,14 @@ public class VendorService {
         vendor.setRole(Role.VENDOR);
         vendor.setPassword(passwordEncoder.encode(vendorRegisterRequest.getPassword()));
 
-        if (personRepository.existsByEmail(vendorRegisterRequest.getEmail()))
+        if (personRepository.existsByEmail(vendorRegisterRequest.getEmail())) {
             throw new AlreadyExistException("Почта: " + vendorRegisterRequest.getEmail() + " уже занята!");
-
+        }
         User savedVendor = personRepository.save(vendor);
 
         String token = jwtUtil.generateToken(vendorRegisterRequest.getEmail());
 
+        log.info("Vendor successfully created!");
         return new JwtResponse(
                 savedVendor.getId(),
                 token,
@@ -69,8 +72,8 @@ public class VendorService {
                 savedVendor.getFirstName());
     }
 
-    public VendorResponse update(Authentication authentication,
-                                 VendorProfileRequest vendorProfileRequest) {
+    public VendorResponse update(Authentication authentication, VendorProfileRequest vendorProfileRequest) {
+
         User vendor = personRepository.findByEmail(authentication.getName()).get();
 
         if (!passwordEncoder.matches(vendorProfileRequest.getPassword(), vendor.getPassword())) {
@@ -97,6 +100,8 @@ public class VendorService {
             vendor.setPassword(passwordEncoder.encode(vendorProfileRequest.getNewPassword()));
         }
         personRepository.save(vendor);
+
+        log.info("Vendor update successful");
         return new VendorResponse(vendor);
     }
 
@@ -106,10 +111,12 @@ public class VendorService {
     }
 
     public SimpleResponse deleteByVendorId(Long vendorId) {
+
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
 
         personRepository.delete(vendor);
+        log.info("Vendor successfully deleted");
         return new SimpleResponse("Вы успешно удалили аккаунт");
     }
 
@@ -118,8 +125,10 @@ public class VendorService {
     }
 
     public List<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks) {
+
         User vendor = personRepository.findById(vendorId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найдено"));
+
         switch (aboutBooks) {
             case ALL:
                 return viewBooks(vendor.getBooks());

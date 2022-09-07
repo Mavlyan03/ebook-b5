@@ -7,11 +7,14 @@ import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
 import kg.eBook.ebookb5.exceptions.InvalidPromocodeException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
-import kg.eBook.ebookb5.models.*;
+import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.models.Promocode;
+import kg.eBook.ebookb5.models.User;
 import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.PromocodeRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -19,32 +22,33 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PromocodeService {
 
     private final BookRepository bookRepository;
-
     private final PromocodeRepository promocodeRepository;
     private final UserRepository userRepository;
 
     public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
 
+        User user = userRepository.findByEmail(authentication.getName()).get();
         if (promoCodeRequest.getDateOfStart().isAfter(promoCodeRequest.getDateOfFinish())) {
             throw new InvalidDateException("Дата, которую вы написали, более ранняя, чем дата начала");
         } else if (promoCodeRequest.getDateOfStart().plusDays(1L).isAfter(promoCodeRequest.getDateOfFinish())) {
             throw new InvalidDateException(
                     "Разница между началом и окончанием действия промокода должна быть более 1 дня");
         }
-
         if (promocodeRepository.existsByName(promoCodeRequest.getName())) {
             throw new AlreadyExistException("Уже существует с таким названием");
         }
 
         Promocode promocode = new Promocode(promoCodeRequest);
-        User user = userRepository.findByEmail(authentication.getName()).get();
         promocode.setVendor(user);
         promocodeRepository.save(promocode);
+
+        log.info("Promo code successfully created!");
         return new SimpleResponse("Промокод успешно создан!");
     }
 
@@ -54,7 +58,6 @@ public class PromocodeService {
             User client = userRepository.findByEmail(authentication.getName()).get();
             return viewMapper(client.getUserBasket(), null, null);
         }
-
         Promocode promocode = promocodeRepository.findByName(promocodeName).orElseThrow(
                 () -> new InvalidPromocodeException("Данный промокод не действителен"));
 
@@ -126,8 +129,9 @@ public class PromocodeService {
     }
 
 
-    public int decreaseBookToBuy(Long bookId, Integer quantity) {
+    public int decreaseBookToBuy(Long bookId, Integer quantity, Authentication authentication) {
 
+        User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 "Книга с ID "  + bookId + " не найдена"
         ));

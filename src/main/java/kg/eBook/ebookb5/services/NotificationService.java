@@ -13,6 +13,7 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.NotificationRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.NotificationResponse.view;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -38,6 +40,7 @@ public class NotificationService {
 
         book.setBookStatus(BookStatus.ACCEPTED);
         book.setPublishedDate(LocalDate.now());
+        book.setEnabled(true);
         bookRepository.save(book);
 
         notification.setBookStatus(BookStatus.ACCEPTED);
@@ -46,6 +49,8 @@ public class NotificationService {
         notification.setBookId(book.getId());
 
         notificationRepository.save(notification);
+
+        log.info("Save new notification");
 
         MailNewBookRequest mailNewBookRequest = new MailNewBookRequest(
                 book.getMainImage(),
@@ -56,7 +61,6 @@ public class NotificationService {
         if(book.getBookStatus().equals(BookStatus.ACCEPTED)) {
             mailingService.sendNewBookMessage(mailNewBookRequest);
         }
-
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }
 
@@ -78,14 +82,16 @@ public class NotificationService {
 
         notificationRepository.save(notification);
 
+        log.info("Save new notification");
         return new SimpleResponse(book.getName() + " был отклонён!");
     }
 
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
+
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        List<NotificationResponse> findAllNotitcation = notificationRepository.findAllNotifications(vendor.getId());
-        return findAllNotitcation;
+
+        return notificationRepository.findAllNotifications(vendor.getId());
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
@@ -100,12 +106,15 @@ public class NotificationService {
     }
 
     public List<NotificationResponse> markAsRead(Authentication authentication) {
+
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         for (Notification notification : vendor.getNotifications()) {
             notification.setRead(true);
         }
         notificationRepository.saveAll(vendor.getNotifications());
+
+        log.info("vendor marked all notifications as viewed");
         return view(vendor.getNotifications());
     }
 }

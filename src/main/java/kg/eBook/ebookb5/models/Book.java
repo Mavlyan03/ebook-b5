@@ -98,6 +98,10 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket = new ArrayList<>();
 
+    public void setUserToBasket(User user) {
+        this.bookBasket.add(user);
+    }
+
     private boolean isNew;
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");

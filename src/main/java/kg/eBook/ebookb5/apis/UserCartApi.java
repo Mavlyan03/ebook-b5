@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.services.PromocodeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -34,4 +36,10 @@ public class UserCartApi {
         return promocodeService.decreaseBookToBuy(bookId, minus, authentication);
     }
 
+    @PostMapping("/{bookId}")
+    @Operation(summary = "Adding book to cart")
+    public ResponseEntity<HttpStatus> addBookToBasketList(@PathVariable Long bookId, Authentication authentication) {
+        promocodeService.addBookToBasketList(bookId, authentication);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }

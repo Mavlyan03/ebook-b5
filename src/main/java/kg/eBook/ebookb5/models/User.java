@@ -66,6 +66,9 @@ public class User {
     public void setFavoriteBook(Book book) {
         this.favorite.add(book);
     }
+    public void setBasketBook(Book book) {
+        this.userBasket.add(book);
+    }
 
     public User(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;

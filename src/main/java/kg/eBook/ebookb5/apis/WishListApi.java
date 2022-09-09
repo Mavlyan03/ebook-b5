@@ -22,9 +22,7 @@ public class WishListApi {
     @PutMapping("/{bookId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<HttpStatus> addBookToWishList(@PathVariable Long bookId, Authentication authentication) {
-
         wishListService.addBookToWishList(bookId, authentication);
-
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

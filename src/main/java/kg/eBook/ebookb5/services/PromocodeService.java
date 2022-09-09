@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PromocodeService {
 
@@ -128,7 +130,6 @@ public class PromocodeService {
         return quantity;
     }
 
-
     public int decreaseBookToBuy(Long bookId, Integer quantity, Authentication authentication) {
 
         User user = userRepository.findByEmail(authentication.getName()).get();
@@ -142,4 +143,25 @@ public class PromocodeService {
         return quantity;
     }
 
+    public void addBookToBasketList(Long bookId, Authentication authentication) {
+
+        User user1 = userRepository.findByEmail(authentication.getName()).get();
+
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"
+                ));
+
+        for(Book i: user1.getUserBasket()) {
+            if(i.getBookType().equals(book.getBookType()) &&
+                    i.getLanguage().equals(book.getLanguage()) &&
+                    i.getGenre().equals(book.getGenre()) &&
+                    i.getName().equals(book.getName()))
+
+                throw new AlreadyExistException("Эта книга уже добавлена в корзину");
+        }
+
+        user1.setBasketBook(book);
+        book.setUserToBasket(user1);
+        log.info("The book has been successfully added to the basket list");
+    }
 }

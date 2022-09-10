@@ -17,18 +17,26 @@ public class PurchasedUserBooksResponse {
 
     private Long bookId;
     private String name;
-
     private int price;
-
     private String author;
-
     private LocalDate purchaseDate;
-
     private int quantityOfBook;
-
     private String mainImage;
-
     private int promocode;
+    private int discount;
+    public PurchasedUserBooksResponse(Long bookId, String name, int price, String author,
+                                      LocalDate purchaseDate, int quantityOfBook, String mainImage,
+                                      int promocode, int discount) {
+        this.bookId = bookId;
+        this.name = name;
+        this.price = price;
+        this.author = author;
+        this.purchaseDate = purchaseDate;
+        this.quantityOfBook = quantityOfBook;
+        this.mainImage = mainImage;
+        this.promocode = promocode;
+        this.discount = discount;
+    }
 
     private LocalDate dateTheBookWasAddedToFavorites;
 

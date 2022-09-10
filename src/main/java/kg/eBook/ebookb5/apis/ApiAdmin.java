@@ -10,6 +10,7 @@ import kg.eBook.ebookb5.services.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +35,12 @@ public class ApiAdmin {
 
     @GetMapping("/users/{userId}/operationsHistory")
     @Operation(summary = "find all purchased user books with user id")
-    public OperationsHistoryResponse operationsHistory(@PathVariable Long userId) {
+    public OperationsHistoryResponse operationsHistory(@PathVariable Long userId,
+                                                       @RequestParam(required = false) int page,
+                                                       @RequestParam(required = false) int size) {
         List<PurchasedUserBooksResponse> allUsersFavoriteBooks = userService.findAllUsersFavoriteBooks(userId);
         List<PurchasedUserBooksResponse> allUserBooksInBasket = userService.findAllUserBooksInBasket(userId);
-        List<PurchasedUserBooksResponse> purchasedUserBooksResponses = userBooksService.purchasedUserBooks(userId);
+        Page<PurchasedUserBooksResponse> purchasedUserBooksResponses = userBooksService.purchasedUserBooks(userId, page, size);
 
         return  new OperationsHistoryResponse(purchasedUserBooksResponses,
                 allUsersFavoriteBooks, allUserBooksInBasket);

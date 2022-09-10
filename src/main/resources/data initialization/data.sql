@@ -47,9 +47,9 @@ VALUES (3, 3),
 insert into promocodes(id, name, date_of_start, date_of_finish, discount , vendor_id)
 values (1,'Промо', '2022-08-23', '2022-09-23', 15, 2);
 
-insert into purchased_user_books(id, book_author, book_id, book_main_image, book_name, price, promocode, purchase_date, quantity_of_book, user_id)
-values (1, 'Чынгыз Айтматов', 3, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 'Биринчи мугалим', 355, 15, '2022-08-24', 1, 3),
-       (2, 'Чынгыз Айтматов', 4, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 'Биринчи мугалим', 355, 0, '2022-08-24', 1, 3);
+insert into purchased_user_books(id, book_author, book_id, book_main_image,discount, book_name, price, promocode, purchase_date, quantity_of_book, user_id)
+values (1, 'Чынгыз Айтматов', 3, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 30, 'Биринчи мугалим', 355, 15, '2022-08-24', 1, 3),
+       (2, 'Чынгыз Айтматов', 4, 'https://ebookjava5.s3.eu-central-1.amazonaws.com/16611702063041024w-iRBldJ_jyLw.webp', 25, 'Биринчи мугалим', 355, 0, '2022-08-24', 1, 3);
 
 insert into notifications(id, book_id, book_status, created_at, description, read, vendor_id)
 values (1, 2, 'ACCEPTED', '2022-08-24', null, false, 2),

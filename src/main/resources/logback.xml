@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- Closes gracefully and finishes the log drain -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">
+        <!-- Replace these parameters with your configuration -->
+        <token>fNBkYcKffurXoHBVimmlLTQoABXIKWfm</token>
+        <logzioUrl>https://listener-eu.logz.io:8071</logzioUrl>
+        <logzioType>Ebook</logzioType>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <root level="debug">
+        <!-- IMPORTANT: This line is required -->
+        <appender-ref ref="LogzioLogbackAppender"/>
+    </root>
+</configuration>

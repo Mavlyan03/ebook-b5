@@ -38,4 +38,6 @@ public class PurchasedUserBooks {
     private String bookMainImage;
 
     private int promocode;
+
+    private int discount;
 }

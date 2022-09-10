@@ -4,6 +4,9 @@ import kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse;
 import kg.eBook.ebookb5.models.PurchasedUserBooks;
 import kg.eBook.ebookb5.repositories.PurchasedUserBooksRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,16 +18,9 @@ public class PurchasedUserBooksService {
 
     private final PurchasedUserBooksRepository userBooksRepository;
 
-    public List<PurchasedUserBooksResponse> purchasedUserBooks(Long userId) {
-        return viewUserPurchase(userBooksRepository.findAllByUserId(userId));
-    }
+    public Page<PurchasedUserBooksResponse> purchasedUserBooks(Long userId, int page, int size) {
 
-    private List<PurchasedUserBooksResponse> viewUserPurchase(List<PurchasedUserBooks> userBooks) {
-        List<PurchasedUserBooksResponse> booksResponse = new ArrayList<>();
-        for (PurchasedUserBooks userBook : userBooks) {
-            booksResponse.add(new PurchasedUserBooksResponse(userBook));
-        }
-        return booksResponse;
+        Pageable pageable = PageRequest.of(page, size);
+        return userBooksRepository.findAllByUserId(userId, pageable);
     }
-
 }

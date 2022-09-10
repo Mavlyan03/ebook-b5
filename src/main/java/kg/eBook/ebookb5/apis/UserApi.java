@@ -11,6 +11,7 @@ import kg.eBook.ebookb5.services.BookService;
 import kg.eBook.ebookb5.services.PurchasedUserBooksService;
 import kg.eBook.ebookb5.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -58,8 +59,10 @@ public class UserApi {
     @GetMapping("/{userId}/operationsHistory")
     @Operation(summary = "find all purchased user books with user id")
     @PreAuthorize("hasAuthority('USER')")
-    public List<PurchasedUserBooksResponse> operationsHistory(@PathVariable Long userId) {
-        return userBooksService.purchasedUserBooks(userId);
+    public Page<PurchasedUserBooksResponse> operationsHistory(@PathVariable Long userId,
+                                                              @RequestParam(required = false) int page,
+                                                              @RequestParam(required = false) int size) {
+        return userBooksService.purchasedUserBooks(userId, page, size);
     }
 
     @GetMapping("/mainPage")

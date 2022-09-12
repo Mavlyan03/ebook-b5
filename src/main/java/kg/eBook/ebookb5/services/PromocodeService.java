@@ -108,10 +108,12 @@ public class PromocodeService {
         for (Book book : books) {
             basketResponses.add(new BookBasketResponse(book));
         }
-        for (BookBasketResponse basketRespons : basketResponses) {
-            for (Long aLong : bookId) {
-                if (basketRespons.getId().equals(aLong)) {
-                    basketRespons.setPromocode(discountPromocode);
+        if (bookId != null) {
+            for (BookBasketResponse basketRespons : basketResponses) {
+                for (Long aLong : bookId) {
+                    if (basketRespons.getId().equals(aLong)) {
+                        basketRespons.setPromocode(discountPromocode);
+                    }
                 }
             }
         }

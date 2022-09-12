@@ -22,7 +22,8 @@ public class UserCartApi {
 
     @GetMapping("/check")
     @Operation(summary = "get all books in users cart, check promo code with name", description = "if the promo code is valid, it will return discounted books")
-    public List<BookBasketResponse> findAllBooksWithPromocode(@RequestParam String promocodeName, Authentication authentication) {
+    public List<BookBasketResponse> findAllBooksWithPromocode(
+            @RequestParam(required = false) String promocodeName, Authentication authentication) {
         return promocodeService.findAllBooksWithPromocode(promocodeName, authentication);
     }
 

@@ -10,12 +10,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cart")
 @PreAuthorize("hasAuthority('USER')")
+@CrossOrigin
 public class UserCartApi {
 
     private final PromocodeService promocodeService;

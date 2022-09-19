@@ -61,6 +61,4 @@ public class BookApi {
     public BookInnerPageResponse findById(@PathVariable Long bookId, Authentication authentication) {
         return bookService.findById(bookId, authentication);
     }
-
-
 }

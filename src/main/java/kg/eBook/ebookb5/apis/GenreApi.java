@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.GenreResponse;
 import kg.eBook.ebookb5.services.GenreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class GenreApi {
 
     @GetMapping
     @Operation(summary = "find all genres", description = "how many books in each genre")
-    public List<GenreResponse> findAllGenres() {
-        return genreService.findAll();
+    public List<GenreResponse> findAllGenres(Authentication authentication) {
+        return genreService.findAll(authentication);
     }
 }

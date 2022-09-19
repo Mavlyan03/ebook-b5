@@ -3,7 +3,6 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import kg.eBook.ebookb5.dto.responses.NotificationFindByIdResponse;
 import kg.eBook.ebookb5.dto.responses.NotificationResponse;
-import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

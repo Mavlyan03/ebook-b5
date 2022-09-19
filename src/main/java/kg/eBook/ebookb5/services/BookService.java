@@ -104,7 +104,7 @@ public class BookService {
 
         genreRepository.findAll().forEach(genre -> {
             if (genre.getName().toLowerCase().startsWith(finalSearch)) {
-                all.add(new kg.eBook.ebookb5.dto.responses.SearchResponse(genre.getId(), genre.getName(), GENRE));
+                all.add(new SearchResponse(genre.getId(), genre.getName(), GENRE));
             }
         });
         return all;

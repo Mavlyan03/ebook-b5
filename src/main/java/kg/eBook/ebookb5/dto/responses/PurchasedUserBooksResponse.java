@@ -2,11 +2,9 @@ package kg.eBook.ebookb5.dto.responses;
 
 import kg.eBook.ebookb5.models.Book;
 import kg.eBook.ebookb5.models.PurchasedUserBooks;
-import kg.eBook.ebookb5.models.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

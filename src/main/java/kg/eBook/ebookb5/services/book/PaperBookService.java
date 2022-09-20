@@ -4,6 +4,7 @@ package kg.eBook.ebookb5.services.book;
 import com.sun.jdi.request.InvalidRequestStateException;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
+import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
@@ -115,6 +116,10 @@ public class PaperBookService {
             book.setPrice(paperBook.getPrice());
             book.setDiscount(paperBook.getDiscount());
             book.setBestseller(paperBook.isBestseller());
+            book.setBookStatus(BookStatus.IN_PROCESSING);
+
+            user.setBook(book);
+            book.setOwner(user);
 
             log.info("Paper book successfully updated");
             ResponseEntity.ok(HttpStatus.OK);

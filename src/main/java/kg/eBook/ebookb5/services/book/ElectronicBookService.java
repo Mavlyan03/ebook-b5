@@ -2,6 +2,7 @@ package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
+import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
@@ -94,6 +95,7 @@ public class ElectronicBookService {
             book.setThirdImage(eBook.getThirdImage());
             book.setFragment(eBook.getFragment());
             book.setElectronicBook(eBook.getElectronicBook());
+            book.setBookStatus(BookStatus.IN_PROCESSING);
 
             user.setBook(book);
             book.setOwner(user);

@@ -45,4 +45,19 @@ public class UserCartApi {
         promocodeService.addBookToBasketList(bookId, authentication);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @PutMapping("/{bookId}")
+    @Operation(summary = "Remove book to cart")
+    public ResponseEntity<HttpStatus> removeBookToBasketList(@PathVariable Long bookId, Authentication authentication) {
+        promocodeService.removeBookToBasketList(bookId, authentication);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping
+    @Operation(summary = "Remove all book to cart")
+    public ResponseEntity<HttpStatus> removeAllBooksToBasketList(Authentication authentication) {
+        promocodeService.removeAllBooksToBasketList(authentication);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }

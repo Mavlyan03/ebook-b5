@@ -3,6 +3,7 @@ package kg.eBook.ebookb5.apis;
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
+import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
 import kg.eBook.ebookb5.services.BookService;
@@ -10,7 +11,6 @@ import kg.eBook.ebookb5.services.book.AudioBookService;
 import kg.eBook.ebookb5.services.book.ElectronicBookService;
 import kg.eBook.ebookb5.services.book.PaperBookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -49,33 +49,33 @@ public class BookSaveApi {
 
     @DeleteMapping("/delete/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
-    public ResponseEntity<String> deleteBook(Authentication authentication, @PathVariable Long bookId) {
+    public SimpleResponse deleteBook(Authentication authentication, @PathVariable Long bookId) {
         paperBookService.deleteBook(authentication, bookId);
-        return ResponseEntity.ok("Книга успешно удалена!");
+        return new SimpleResponse("Книга успешно удалена!");
     }
 
     @PutMapping("/update/paperBook/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
-    public ResponseEntity<String> updatePaperBook(Authentication authentication, @PathVariable Long bookId,
-                                                  @RequestBody @Valid PaperBookSaveRequest paperBook) {
+    public SimpleResponse updatePaperBook(Authentication authentication, @PathVariable Long bookId,
+                                          @RequestBody @Valid PaperBookSaveRequest paperBook) {
         paperBookService.updateBook(authentication, bookId, paperBook);
-        return ResponseEntity.ok("Книга успешно обновлена!");
+        return new SimpleResponse("Книга успешно обновлена!");
     }
 
     @PutMapping("/update/electronicBook/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
-    public ResponseEntity<String> updateEBook(Authentication authentication, @PathVariable Long bookId,
+    public SimpleResponse updateEBook(Authentication authentication, @PathVariable Long bookId,
                                               @RequestBody @Valid ElectronicBookSaveRequest eBook) {
         eBookService.updateBook(authentication, bookId, eBook);
-        return ResponseEntity.ok("Книга успешно обновлена!");
+        return new SimpleResponse("Книга успешно обновлена!");
     }
 
     @PutMapping("/update/audioBook/{bookId}")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
-    public ResponseEntity<String> updateEBook(Authentication authentication, @PathVariable Long bookId,
+    public SimpleResponse updateEBook(Authentication authentication, @PathVariable Long bookId,
                                               @RequestBody @Valid AudioBookSaveRequest audioBook) {
         audioBookService.updateBook(authentication, bookId, audioBook);
-        return ResponseEntity.ok("Книга успешно обновлена!");
+        return new SimpleResponse("Книга успешно обновлена!");
     }
 
     @GetMapping("/find/{bookId}")

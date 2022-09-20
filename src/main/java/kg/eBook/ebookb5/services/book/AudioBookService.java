@@ -2,6 +2,7 @@ package kg.eBook.ebookb5.services.book;
 
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
+import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
@@ -95,6 +96,7 @@ public class AudioBookService {
             book.setFragment(audioBook.getFragment());
             book.setDuration(LocalTime.parse(audioBook.getDuration(), timeFormatter));
             book.setAudioBook(audioBook.getAudioBook());
+            book.setBookStatus(BookStatus.IN_PROCESSING);
 
             user.setBook(book);
             book.setOwner(user);

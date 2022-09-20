@@ -1,11 +1,6 @@
 package kg.eBook.ebookb5.services;
 
-
-import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
-import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
-import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
-import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
-import kg.eBook.ebookb5.enums.BookType;
+import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.models.Book;
@@ -14,13 +9,13 @@ import kg.eBook.ebookb5.repositories.BookRepository;
 import kg.eBook.ebookb5.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse.mapperFavoriteBooksResponse;
 
 @Slf4j
 @Service
@@ -30,7 +25,6 @@ public class WishListService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     public void addBookToWishList(Long bookId, Authentication authentication) {
 
@@ -38,10 +32,10 @@ public class WishListService {
 
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"
-        ));
+                ));
 
-        for(Book i: user1.getFavorite()) {
-            if(i.getBookType().equals(book.getBookType()) &&
+        for (Book i : user1.getFavorite()) {
+            if (i.getBookType().equals(book.getBookType()) &&
                     i.getLanguage().equals(book.getLanguage()) &&
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
@@ -54,41 +48,16 @@ public class WishListService {
         log.info("The book has been successfully added to the wishlist");
     }
 
-    public List<? extends BookResponseGeneral> getBooks(Authentication authentication) {
+    public List<FavoriteBooksResponse> getBooks(Authentication authentication) {
 
         User user = userRepository.findByEmail(authentication.getName()).get();
 
-        List<Book> userFavorite = user.getFavorite();
-        List<PBookResponse> paperBookResponseList = new ArrayList<>();
-        List<EbookResponse> ebookResponseList = new ArrayList<>();
-        List<ABookResponse> audioBookResponseList = new ArrayList<>();
-
-        for(Book i: userFavorite) {
-            if (i.getBookType().equals(BookType.PAPER_BOOK)) {
-                paperBookResponseList.add(paperBookToResponse(i));
-                return paperBookResponseList;
-            }
-            else if (i.getBookType().equals(BookType.AUDIO_BOOK)) {
-                audioBookResponseList.add(audioBookToResponse(i));
-                return audioBookResponseList;
-            }
-            else if (i.getBookType().equals(BookType.ELECTRONIC_BOOK)) {
-                ebookResponseList.add(ebookToResponse(i));
-                return ebookResponseList;
-            }
-        }
-        return null;
+        return mapperFavoriteBooksResponse(user.getFavorite());
     }
 
-    private PBookResponse paperBookToResponse(Book book) {
-        return modelMapper.map(book, PBookResponse.class);
-    }
+    public void removeBook(Long bookId, Authentication authentication) {
 
-    private ABookResponse audioBookToResponse(Book book) {
-        return modelMapper.map(book, ABookResponse.class);
-    }
-
-    private EbookResponse ebookToResponse(Book book) {
-        return modelMapper.map(book, EbookResponse.class);
+        User user = userRepository.findByEmail(authentication.getName()).get();
+        bookRepository.detache(bookId, user.getId());
     }
 }

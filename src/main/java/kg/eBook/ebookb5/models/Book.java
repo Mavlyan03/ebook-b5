@@ -10,6 +10,7 @@ import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -41,16 +42,20 @@ public class Book {
 
     private String publishingHouse;
 
+    @Size(min = 10, max = 1234)
     private String description;
+
     @Enumerated(EnumType.STRING)
     private Language language;
 
     private LocalDate publishedDate;
 
+    @Size(max = 4)
     private int yearOfIssue;
 
     private int quantityOfBook;
 
+    @Size(max = 100)
     private int discount;
 
     private boolean bestseller;
@@ -69,6 +74,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookType bookType;
 
+    @Size(min = 10, max = 9234)
     private String fragment;
 
     private String audioBookFragment;
@@ -79,7 +85,7 @@ public class Book {
 
     private String electronicBook;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = {MERGE, DETACH, REFRESH, PERSIST})
     @JoinTable(name = "users_favorite_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class User {
 
     private String email;
 
+    @Pattern(regexp="(^$|[0-9]{12})")
     private String phoneNumber;
 
     private String password;

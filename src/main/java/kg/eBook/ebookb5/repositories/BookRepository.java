@@ -126,5 +126,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query(value = "delete from users_favorite_books b where b.book_id = :book_id and b.user_id = :user_id ", nativeQuery = true)
     void detache(@Param("book_id") Long book_id, @Param("user_id") Long user_id);
+
+    @Modifying
+    @Query(value = "delete from users_basket_books b where b.book_id = :book_id and b.user_id = :user_id ", nativeQuery = true)
+    void detacheBasket(@Param("book_id") Long book_id, @Param("user_id") Long user_id);
+
+    @Modifying
+    @Query(value = "delete from users_basket_books b where b.user_id = :user_id ", nativeQuery = true)
+    void detacheAllBasket(@Param("user_id") Long user_id);
 }
 

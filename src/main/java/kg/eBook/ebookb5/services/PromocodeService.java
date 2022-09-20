@@ -166,4 +166,17 @@ public class PromocodeService {
         book.setUserToBasket(user1);
         log.info("The book has been successfully added to the basket list");
     }
+
+    public void removeBookToBasketList(Long bookId, Authentication authentication) {
+
+        User user = userRepository.findByEmail(authentication.getName()).get();
+
+        bookRepository.detacheBasket(bookId, user.getId());
+    }
+
+    public void removeAllBooksToBasketList(Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName()).get();
+
+        bookRepository.detacheAllBasket(user.getId());
+    }
 }

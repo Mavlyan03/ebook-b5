@@ -32,7 +32,6 @@ public class User {
 
     private String email;
 
-    @Pattern(regexp="(^$|[0-9]{12})")
     private String phoneNumber;
 
     private String password;

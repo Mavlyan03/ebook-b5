@@ -79,7 +79,7 @@ public class Book {
 
     private String electronicBook;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = {MERGE, DETACH, REFRESH, PERSIST})
     @JoinTable(name = "users_favorite_books", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;

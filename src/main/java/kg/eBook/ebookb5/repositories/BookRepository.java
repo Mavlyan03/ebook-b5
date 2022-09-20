@@ -15,7 +15,9 @@ import kg.eBook.ebookb5.models.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -120,5 +122,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.id in (:ids) ")
     Page<ABookVendorResponse> findAllById(List<Long> ids, Pageable pageable);
+
+    @Modifying
+    @Query(value = "delete from users_favorite_books b where b.book_id = :book_id and b.user_id = :user_id ", nativeQuery = true)
+    void detache(@Param("book_id") Long book_id, @Param("user_id") Long user_id);
 }
 

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/file")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin
 public class S3Api {
 
     private final S3Service s3service;

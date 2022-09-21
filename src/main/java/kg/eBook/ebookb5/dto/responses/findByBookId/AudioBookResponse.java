@@ -33,6 +33,7 @@ public class AudioBookResponse extends BookInnerPageResponse {
     private boolean isNew;
     private int likes;
     private int basket;
+    private int quantityOfBook;
 
     private Long vendorId;
     private String firstName;
@@ -61,6 +62,8 @@ public class AudioBookResponse extends BookInnerPageResponse {
         this.isNew = audioBook.isNew();
         this.likes = audioBook.getLikes().size();
         this.basket = audioBook.getBookBasket().size();
+        this.quantityOfBook = audioBook.getQuantityOfBook();
+
 
         this.vendorId = audioBook.getOwner().getId();
         this.firstName = audioBook.getOwner().getFirstName();

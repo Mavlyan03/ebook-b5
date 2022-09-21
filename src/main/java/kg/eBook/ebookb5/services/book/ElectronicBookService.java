@@ -70,7 +70,7 @@ public class ElectronicBookService {
 
     }
 
-    public ResponseEntity<HttpStatus> updateBook(Authentication authentication, Long bookId, ElectronicBookSaveRequest eBook) {
+    public void updateBook(Authentication authentication, Long bookId, ElectronicBookSaveRequest eBook) {
 
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -101,7 +101,7 @@ public class ElectronicBookService {
             book.setOwner(user);
 
             log.info("Electronic book successfully updated");
-            return ResponseEntity.ok(HttpStatus.OK);
+            ResponseEntity.ok(HttpStatus.OK);
         } else
             throw new IllegalStateException("Вы не можете редактировать эту книгу");
     }

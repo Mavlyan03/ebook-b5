@@ -16,8 +16,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/wishlist")
-@CrossOrigin
 @PreAuthorize("hasAuthority('USER')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class WishListApi {
 
     private final WishListService wishListService;

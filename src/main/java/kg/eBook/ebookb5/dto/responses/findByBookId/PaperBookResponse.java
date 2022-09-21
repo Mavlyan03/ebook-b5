@@ -1,6 +1,5 @@
 package kg.eBook.ebookb5.dto.responses.findByBookId;
 
-import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.models.Book;
@@ -31,6 +30,8 @@ public class PaperBookResponse extends BookInnerPageResponse {
     private boolean isNew;
     private int likes;
     private int basket;
+    private int quantityOfBook;
+
 
     private Long vendorId;
     private String firstName;
@@ -58,6 +59,7 @@ public class PaperBookResponse extends BookInnerPageResponse {
         this.isNew = eBook.isNew();
         this.likes = eBook.getLikes().size();
         this.basket = eBook.getBookBasket().size();
+        this.quantityOfBook = eBook.getQuantityOfBook();
 
         this.vendorId = eBook.getOwner().getId();
         this.firstName = eBook.getOwner().getFirstName();

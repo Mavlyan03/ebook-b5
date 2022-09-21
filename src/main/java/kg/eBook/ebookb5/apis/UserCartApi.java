@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/cart")
 @PreAuthorize("hasAuthority('USER')")
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserCartApi {
 
     private final PromocodeService promocodeService;

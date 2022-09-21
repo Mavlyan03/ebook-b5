@@ -1,24 +1,22 @@
 package kg.eBook.ebookb5.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
 import kg.eBook.ebookb5.dto.requests.books.AudioBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.ElectronicBookSaveRequest;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
-import lombok.*;
-import org.hibernate.validator.constraints.Range;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import static javax.persistence.CascadeType.*;
 
 @Entity
@@ -45,6 +43,7 @@ public class Book {
 
     private String publishingHouse;
 
+    @Column(length = 10000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -74,6 +73,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookType bookType;
 
+    @Column(length = 10000)
     private String fragment;
 
     private String audioBookFragment;
@@ -167,6 +167,7 @@ public class Book {
         this.bestseller = paperBook.isBestseller();
         this.bookStatus = BookStatus.IN_PROCESSING;
         this.publishedDate = LocalDate.now();
+        this.fragment = paperBook.getFragment();
     }
 
     public void removeUserFromBasket(User user) {

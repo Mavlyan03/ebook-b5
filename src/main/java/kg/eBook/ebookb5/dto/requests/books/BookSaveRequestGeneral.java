@@ -47,5 +47,4 @@ public class BookSaveRequestGeneral {
 
     @NotEmpty(message = "Поле не может быть пустым")
     private String fragment;
-
 }

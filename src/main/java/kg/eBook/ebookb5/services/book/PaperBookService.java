@@ -95,7 +95,7 @@ public class PaperBookService {
         User user = userRepository.findByEmail(authentication.getName()).get();
 
         Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundException("Book with id: " + bookId + " not found"));
+                () -> new NotFoundException("Книга с идентификатором: " + bookId + " не найдена"));
 
         if(book.getBookType().equals(PAPER_BOOK)) {
             book.setMainImage(paperBook.getMainImage());
@@ -104,7 +104,7 @@ public class PaperBookService {
             book.setName(paperBook.getName());
             book.setAuthor(paperBook.getAuthor());
             genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
-                    "Genre with id: " + paperBook.getGenreId() + " not found"
+                    "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
             ));
             book.setPublishingHouse(paperBook.getPublishingHouse());
             book.setDescription(paperBook.getDescription());

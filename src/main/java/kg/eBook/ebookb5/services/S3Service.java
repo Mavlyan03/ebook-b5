@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -40,7 +41,8 @@ public class S3Service {
                 .bucket(bucketName)
                 .key(key)
                 .contentType("audio/mp3; audio/wav; audio/flac; audio/ogg; audio/m3u; audio/acc; audio/wma;" +
-                        "audio/midi; audio/aif; audio/m4a; audio/mpa; audio/pls")
+                        "audio/midi; audio/mpeg; audio/m4a; audio/mpa; audio/pls")
+                .acl(ObjectCannedACL.PUBLIC_READ)
                 .build();
 
         s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));

@@ -139,9 +139,9 @@ public class BookService {
             }
         }
         bookRepository.save(book);
-        if (book.getPublishedDate() != null) {
-            if (book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
-                book.setNew(true);
+        if (book.isNew()) {
+            if (!book.getPublishedDate().plusDays(10).isAfter(LocalDate.now())) {
+                book.setNew(false);
             }
         }
         switch (book.getBookType()) {
@@ -172,7 +172,7 @@ public class BookService {
                                                  BookType bookType,
                                                  int page,
                                                  int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         return bookRepository.findAllBooks(genreId,
                 bookType,

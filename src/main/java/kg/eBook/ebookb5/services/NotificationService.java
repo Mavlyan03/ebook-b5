@@ -41,6 +41,7 @@ public class NotificationService {
         book.setBookStatus(BookStatus.ACCEPTED);
         book.setPublishedDate(LocalDate.now());
         book.setEnabled(true);
+        book.setNew(true);
         bookRepository.save(book);
 
         notification.setBookStatus(BookStatus.ACCEPTED);

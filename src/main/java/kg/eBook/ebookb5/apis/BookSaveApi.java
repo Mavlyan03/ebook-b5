@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/book")
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class BookSaveApi {
 
     private final PaperBookService paperBookService;

@@ -167,6 +167,7 @@ public class Book {
         this.bestseller = paperBook.isBestseller();
         this.bookStatus = BookStatus.IN_PROCESSING;
         this.publishedDate = LocalDate.now();
+        this.fragment = paperBook.getFragment();
     }
 
     public void removeUserFromBasket(User user) {

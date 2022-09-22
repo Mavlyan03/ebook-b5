@@ -10,8 +10,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/file")
-@CrossOrigin(origins = "*", maxAge = 5000, exposedHeaders = "Access-Control-Allow-Origin",
-allowedHeaders = {"authorization", "content-type", "x-auth-token", "origin"})
+@CrossOrigin(origins = "http://localhost:3000", originPatterns = "*",
+        maxAge = 5000, exposedHeaders = "Access-Control-Allow-Origin", allowedHeaders = "*")
 public class S3Api {
 
     private final S3Service s3service;

@@ -40,9 +40,9 @@ public class S3Service {
         PutObjectRequest por = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
-                .contentType(file.getContentType())
-//                .contentType("application/json; audio/mp3; audio/wav; audio/flac; audio/ogg; audio/m3u; audio/acc; audio/wma;" +
-//                        "audio/midi; audio/mpeg; audio/m4a; audio/mpa; audio/pls")
+                .contentType("audio/mp3; audio/wav; audio/wma; audio/midi; audio/mpeg; audio/m4a;" +
+                        "image/jpeg; image/png; image/svg; image/webp; image/gif; image/apng;" +
+                        "application/pdf")
                 .build();
 
         s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));

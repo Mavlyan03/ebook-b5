@@ -17,6 +17,9 @@ public class AudioBookSaveRequest extends BookSaveRequestGeneral{
     private String duration;
 
     @NotEmpty(message = "Поле не может быть пустым")
+    private String audioBookFragment;
+
+    @NotEmpty(message = "Поле не может быть пустым")
     private String audioBook;
 
 }

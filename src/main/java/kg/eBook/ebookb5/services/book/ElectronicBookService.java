@@ -78,9 +78,9 @@ public class ElectronicBookService {
 
         if (book.getBookType().equals(ELECTRONIC_BOOK)) {
             book.setName(eBook.getName());
-            genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+            book.setGenre(genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с ID: " + eBook.getGenreId() + " не найден"
-            ));
+            )));
             book.setPrice(eBook.getPrice());
             book.setAuthor(eBook.getAuthor());
             book.setPageSize(eBook.getPageSize());

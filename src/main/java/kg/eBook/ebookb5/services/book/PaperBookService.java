@@ -103,9 +103,9 @@ public class PaperBookService {
             book.setThirdImage(paperBook.getThirdImage());
             book.setName(paperBook.getName());
             book.setAuthor(paperBook.getAuthor());
-            genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+            book.setGenre(genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
-            ));
+            )));
             book.setPublishingHouse(paperBook.getPublishingHouse());
             book.setDescription(paperBook.getDescription());
             book.setFragment(paperBook.getFragment());

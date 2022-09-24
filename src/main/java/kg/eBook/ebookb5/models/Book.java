@@ -145,6 +145,7 @@ public class Book {
         this.thirdImage = audioBook.getThirdImage();
         this.fragment = audioBook.getFragment();
         this.duration = LocalTime.parse(audioBook.getDuration(), timeFormatter);
+        this.audioBookFragment = audioBook.getAudioBookFragment();
         this.audioBook = audioBook.getAudioBook();
         this.bookStatus = BookStatus.IN_PROCESSING;
         this.publishedDate = LocalDate.now();

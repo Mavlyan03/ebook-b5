@@ -80,9 +80,9 @@ public class AudioBookService {
 
         if (book.getBookType().equals(AUDIO_BOOK)) {
             book.setName(audioBook.getName());
-            genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
+            book.setGenre(genreRepository.findById(audioBook.getGenreId()).orElseThrow(() -> new NotFoundException(
                     "Жанр с  ID: " + audioBook.getGenreId() + " не найден"
-            ));
+            )));
             book.setPrice(audioBook.getPrice());
             book.setAuthor(audioBook.getAuthor());
             book.setDescription(audioBook.getDescription());

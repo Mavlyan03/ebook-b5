@@ -11,7 +11,7 @@ spring:
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
         hibernate:
-            ddl-auto: none
+            ddl-auto: create
         show-sql: true
     mail:
         host: smtp.gmail.com
@@ -33,11 +33,11 @@ spring:
                 enabled: true
 
 #         data init
-    sql:
-        init:
-            continue-on-error: false
-            data-locations: classpath:data initialization/data.sql
-            mode: always
+#    sql:
+#        init:
+#            continue-on-error: false
+#            data-locations: classpath:data initialization/data.sql
+#            mode: always
 
 
 springdoc:

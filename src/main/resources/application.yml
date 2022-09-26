@@ -33,11 +33,11 @@ spring:
                 enabled: true
 
 #         data init
-#    sql:
-#        init:
-#            continue-on-error: false
-#            data-locations: classpath:data initialization/data.sql
-#            mode: always
+    sql:
+        init:
+            continue-on-error: false
+            data-locations: classpath:data initialization/data.sql
+            mode: always
 
 
 springdoc:

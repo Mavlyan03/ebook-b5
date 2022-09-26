@@ -38,9 +38,6 @@ spring:
             data-locations: classpath:data initialization/data.sql
             mode: always
 
-#         flyway
-#    flyway:
-#        baseline-on-migrate: true
 
 springdoc:
     swagger-ui:

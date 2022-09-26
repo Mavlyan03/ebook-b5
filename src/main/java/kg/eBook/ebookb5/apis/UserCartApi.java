@@ -59,5 +59,4 @@ public class UserCartApi {
         promocodeService.removeAllBooksToBasketList(authentication);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
 }

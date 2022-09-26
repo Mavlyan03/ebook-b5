@@ -54,3 +54,4 @@ aws:
         region: eu-central-1
         name: ebookjava5
         path: https://ebookjava5.s3.eu-central-1.amazonaws.com/
+        

@@ -10,7 +10,6 @@ spring:
         username: postgres
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-        defer-datasource-initialization: true
         hibernate:
             ddl-auto: create
     mail:

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("api/admin/applications")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Admin API", description = "Admin book application endpoints")
+@Tag(name = "Admin Application API", description = "Admin book application endpoints")
 public class AdminApplicationApi {
 
     private final NotificationService notificationService;

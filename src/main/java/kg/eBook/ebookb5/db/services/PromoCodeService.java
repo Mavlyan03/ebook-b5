@@ -11,7 +11,7 @@ import kg.eBook.ebookb5.db.models.Book;
 import kg.eBook.ebookb5.db.models.Promocode;
 import kg.eBook.ebookb5.db.models.User;
 import kg.eBook.ebookb5.db.repositories.BookRepository;
-import kg.eBook.ebookb5.db.repositories.PromocodeRepository;
+import kg.eBook.ebookb5.db.repositories.PromoCodeRepository;
 import kg.eBook.ebookb5.db.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +27,10 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PromocodeService {
+public class PromoCodeService {
 
     private final BookRepository bookRepository;
-    private final PromocodeRepository promocodeRepository;
+    private final PromoCodeRepository promocodeRepository;
     private final UserRepository userRepository;
 
     public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {

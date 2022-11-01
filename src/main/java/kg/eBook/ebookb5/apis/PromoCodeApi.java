@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
-import kg.eBook.ebookb5.db.services.PromocodeService;
+import kg.eBook.ebookb5.db.services.PromoCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -25,9 +25,9 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/promocode")
 @Tag(name = "Promocode API", description = "Promo code endpoints for Vendor & User")
-public class PromocodeApi {
+public class PromoCodeApi {
 
-    private final PromocodeService promocodeService;
+    private final PromoCodeService promocodeService;
 
     @Operation(summary = "Create promo code", description = "Vendor can create promo code")
     @PreAuthorize("hasAuthority('VENDOR')")

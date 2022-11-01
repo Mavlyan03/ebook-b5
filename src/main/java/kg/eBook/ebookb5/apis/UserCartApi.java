@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
-import kg.eBook.ebookb5.db.services.PromocodeService;
+import kg.eBook.ebookb5.db.services.PromoCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ import java.util.List;
 @Tag(name = "Cart API", description = "Cart endpoints for user")
 public class UserCartApi {
 
-    private final PromocodeService promocodeService;
+    private final PromoCodeService promocodeService;
 
     @Operation(summary = "Get all books in users cart", description = "If the promo code is valid, it will return discounted books")
     @GetMapping("check")

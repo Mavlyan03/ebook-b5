@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
+public interface PromoCodeRepository extends JpaRepository<Promocode, Long> {
 
     Boolean existsByName(String name);
 
     Optional<Promocode> findByName(String name);
+
 }

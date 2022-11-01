@@ -92,32 +92,32 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "group by b.id order by b.likes.size desc ")
     List<BestsellerBooksResponse> findAllFavoriteElectronicBooks(Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id order by b.publishedDate desc")
     Page<aBookVendorResponse> findBooksByOwnerId(Long owner_id, Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.bookStatus = :bookStatus order by b.publishedDate desc ")
     Page<aBookVendorResponse> findBooksByOwnerIdAndBookStatus(Long owner_id, BookStatus bookStatus, Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.discount > 0 order by b.publishedDate desc")
     Page<aBookVendorResponse> findBooksByOwnerIdAndDiscountNotNull(Long owner_id, Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.bookBasket.size > 0 order by b.publishedDate desc ")
     Page<aBookVendorResponse> findBooksByOwnerIdAndBookBasketIsNotNull(Long owner_id, Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.likes.size > 0 order by b.publishedDate desc")
     Page<aBookVendorResponse> findBooksByOwnerIdAndLikesIsNotNull(Long owner_id, Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
+    @Query("select new kg.eBook.ebookb5.dto.responses.aBookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.id in (:ids) order by b.publishedDate desc")
     Page<aBookVendorResponse> findAllById(List<Long> ids, Pageable pageable);

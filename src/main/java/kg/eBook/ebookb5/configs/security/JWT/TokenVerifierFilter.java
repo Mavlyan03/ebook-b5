@@ -22,7 +22,6 @@ public class TokenVerifierFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserDetailsService personDetailsService;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,
                                     HttpServletResponse httpServletResponse,
@@ -40,11 +39,8 @@ public class TokenVerifierFilter extends OncePerRequestFilter {
                         );
             } else {
                 try {
-
                     String username = jwtUtil.validateTokenAndRetrieveClaim(jwt);
-
                     UserDetails userDetails = personDetailsService.loadUserByUsername(username);
-
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails,
                                     userDetails.getPassword(),

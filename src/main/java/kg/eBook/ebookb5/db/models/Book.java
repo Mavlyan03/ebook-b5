@@ -10,14 +10,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REFRESH;
 
 @Entity
 @Table(name = "books")
@@ -32,6 +48,7 @@ public class Book {
     private Long id;
 
     private String name;
+
     @ManyToOne
     private Genre genre;
 
@@ -89,10 +106,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;
 
-    public void setUserToBook(User user) {
-        this.likes.add(user);
-    }
-
     @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
 
@@ -103,13 +116,17 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> bookBasket = new ArrayList<>();
 
-    public void setUserToBasket(User user) {
-        this.bookBasket.add(user);
-    }
-
     private boolean isNew;
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    public void setUserToBook(User user) {
+        this.likes.add(user);
+    }
+
+    public void setUserToBasket(User user) {
+        this.bookBasket.add(user);
+    }
 
     public Book(ElectronicBookSaveRequest eBook) {
         this.name = eBook.getName();

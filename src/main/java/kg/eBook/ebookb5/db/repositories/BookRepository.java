@@ -82,16 +82,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "group by b.id order by b.likes.size desc ")
     List<LastPublicationsBooksResponse> findAllLastPublicationsBooks(Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse("+
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse(" +
             "b.id, b.mainImage, b.name, b.author, b.price, b.duration) from Book b where b.bookType = 'AUDIO_BOOK' " +
             "group by b.id order by b.likes.size desc ")
     List<FavoriteAudioBooksResponse> findAllFavoriteAudioBooks(Pageable pageable);
 
-    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse("+
-         "b.id, b.name, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
-         "group by b.id order by b.likes.size desc ")
+    @Query("select new kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse(" +
+            "b.id, b.name, b.mainImage, b.description, b.price) from Book b where b.bookType = 'ELECTRONIC_BOOK' " +
+            "group by b.id order by b.likes.size desc ")
     List<BestsellerBooksResponse> findAllFavoriteElectronicBooks(Pageable pageable);
-
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
@@ -134,5 +133,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query(value = "delete from users_basket_books b where b.user_id = :user_id ", nativeQuery = true)
     void detacheAllBasket(@Param("user_id") Long user_id);
+
 }
 

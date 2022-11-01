@@ -20,7 +20,8 @@ public class VendorResponse {
     private String phoneNumber;
     private String email;
     private Integer quantityOfBooks;
-    @JsonFormat(pattern="dd-MM-yyyy")
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @ApiModelProperty(dataType = "java.sql.Date")
     private LocalDate dateOfRegistration;
 
@@ -41,4 +42,5 @@ public class VendorResponse {
         }
         return vendorResponses;
     }
+
 }

@@ -25,47 +25,37 @@ public class MailingService {
     private final MailingListRepository mailingListRepository;
 
     public void sendSignUpMessage(RequestMailingList requestMailingList) {
-
         MailingList mailingList = new MailingList(requestMailingList.getEmail());
         mailingListRepository.save(mailingList);
-
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("ebook.peaksoft@gmail.com");
         simpleMailMessage.setSubject("PEAKSOFT");
         simpleMailMessage.setTo(mailingList.getEmail());
         simpleMailMessage.setText("Поздравляем, Вы подписаны на рассылку!");
         this.javaMailSender.send(simpleMailMessage);
-
         log.info("User subscribed to the newsletter!");
     }
 
-
     public void sendNewBookMessage(MailNewBookRequest mailNewBookRequest) {
-
         List<MailingList> emailLists = mailingListRepository.findAll();
-        for(MailingList i: emailLists) {
+        for (MailingList i : emailLists) {
             sendHTMLMessage(i.getEmail(), mailNewBookRequest.createHtmlMessage());
         }
     }
 
     @Async
     public void sendHTMLMessage(String email, String htmlMessage) {
-
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             log.warn("Sending HTML message may be an error");
-            MimeMessageHelper helper = new MimeMessageHelper(
-                    mimeMessage,
-                    true,
-                    "UTF-8");
-
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom("ebook.peaksoft@gmail.com");
             helper.setTo(email);
-            helper.setText(htmlMessage,true);
+            helper.setText(htmlMessage, true);
             javaMailSender.send(mimeMessage);
-
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
+
 }

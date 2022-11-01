@@ -3,12 +3,13 @@ package kg.eBook.ebookb5.configs.security;
 import kg.eBook.ebookb5.db.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @RequiredArgsConstructor
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final User person;
 
@@ -46,4 +47,5 @@ public class UserDetails implements org.springframework.security.core.userdetail
     public boolean isEnabled() {
         return true;
     }
+
 }

@@ -16,4 +16,5 @@ public class LastPublicationsBooksResponse extends BestsellerBooksResponse {
         super(bookId, name, mainImage, description, price);
         this.genre = genre.getName();
     }
+
 }

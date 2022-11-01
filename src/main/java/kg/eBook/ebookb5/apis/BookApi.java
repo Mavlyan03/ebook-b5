@@ -8,7 +8,7 @@ import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
 import kg.eBook.ebookb5.enums.SortBy;
-import kg.eBook.ebookb5.services.BookService;
+import kg.eBook.ebookb5.db.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;

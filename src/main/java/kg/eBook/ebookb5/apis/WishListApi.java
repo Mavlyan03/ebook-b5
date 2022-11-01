@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
-import kg.eBook.ebookb5.services.WishListService;
+import kg.eBook.ebookb5.db.services.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

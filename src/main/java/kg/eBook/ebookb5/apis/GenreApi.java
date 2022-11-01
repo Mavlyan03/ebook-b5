@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.responses.GenreResponse;
-import kg.eBook.ebookb5.services.GenreService;
+import kg.eBook.ebookb5.db.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 

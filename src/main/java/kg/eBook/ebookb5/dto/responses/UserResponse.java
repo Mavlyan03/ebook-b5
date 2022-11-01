@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.db.models.User;
 import lombok.Getter;
 import lombok.Setter;
 

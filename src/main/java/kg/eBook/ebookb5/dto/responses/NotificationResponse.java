@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.dto.responses;
 
 import kg.eBook.ebookb5.enums.BookStatus;
-import kg.eBook.ebookb5.models.Notification;
+import kg.eBook.ebookb5.db.models.Notification;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
-import kg.eBook.ebookb5.services.PromocodeService;
+import kg.eBook.ebookb5.db.services.PromocodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

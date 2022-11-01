@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.responses.NotificationFindByIdResponse;
 import kg.eBook.ebookb5.dto.responses.NotificationResponse;
-import kg.eBook.ebookb5.services.NotificationService;
+import kg.eBook.ebookb5.db.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

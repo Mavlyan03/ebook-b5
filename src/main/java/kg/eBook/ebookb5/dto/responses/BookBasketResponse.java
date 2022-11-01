@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.db.models.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

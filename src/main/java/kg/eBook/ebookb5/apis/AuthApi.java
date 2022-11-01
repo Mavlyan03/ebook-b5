@@ -7,9 +7,9 @@ import kg.eBook.ebookb5.dto.requests.UserRegisterRequest;
 import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.exceptions.WrongEmailException;
-import kg.eBook.ebookb5.services.LoginService;
-import kg.eBook.ebookb5.services.UserService;
-import kg.eBook.ebookb5.services.VendorService;
+import kg.eBook.ebookb5.db.services.LoginService;
+import kg.eBook.ebookb5.db.services.UserService;
+import kg.eBook.ebookb5.db.services.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 

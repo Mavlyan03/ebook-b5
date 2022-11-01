@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.apis;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.requests.RequestMailingList;
-import kg.eBook.ebookb5.services.MailingService;
+import kg.eBook.ebookb5.db.services.MailingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

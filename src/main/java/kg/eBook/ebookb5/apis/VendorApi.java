@@ -8,7 +8,7 @@ import kg.eBook.ebookb5.dto.responses.VendorResponse;
 import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.exceptions.WrongEmailException;
-import kg.eBook.ebookb5.services.VendorService;
+import kg.eBook.ebookb5.db.services.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.eBook.ebookb5.services.S3Service;
+import kg.eBook.ebookb5.db.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 

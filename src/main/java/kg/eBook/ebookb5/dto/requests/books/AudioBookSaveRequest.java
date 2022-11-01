@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AudioBookSaveRequest extends BookSaveRequestGeneral{
+public class AudioBookSaveRequest extends BookSaveRequestGeneral {
 
     @NotEmpty(message = "Поле не может быть пустым")
     private String duration;

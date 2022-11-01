@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+
 import java.util.List;
 
 import static kg.eBook.ebookb5.dto.responses.PurchasedUserBooksResponse.viewUserBooks;
@@ -39,22 +40,17 @@ public class UserService {
     private final BookRepository bookRepository;
 
     public JwtResponse registerUser(UserRegisterRequest userRegisterRequest) {
-
-        User person = new User(
-                userRegisterRequest.getFirstName(),
-                userRegisterRequest.getEmail()
-        );
+        User person = new User(userRegisterRequest.getFirstName(), userRegisterRequest.getEmail());
         person.setCreatedAt(LocalDate.now());
         person.setRole(Role.USER);
         person.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
 
-        if(personRepository.existsByEmail(userRegisterRequest.getEmail())) {
+        if (personRepository.existsByEmail(userRegisterRequest.getEmail())) {
             throw new AlreadyExistException("Эта почта " + userRegisterRequest.getEmail() + " уже занята!");
         }
         User savedPerson = personRepository.save(person);
         String token = jwtUtil.generateToken(userRegisterRequest.getEmail());
 
-        log.info("User successfully created!");
         return new JwtResponse(
                 savedPerson.getId(),
                 token,
@@ -68,16 +64,13 @@ public class UserService {
     }
 
     public UserResponse findById(Long userId) {
-        return new UserResponse(personRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь не найдено")
-        ));
+        return new UserResponse(personRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException("Пользователь не найдено")));
     }
 
     public SimpleResponse deleteByUserId(Long userId) {
-
-        User user = personRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь не найдено")
-        );
+        User user = personRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException("Пользователь не найдено"));
 
         // detach table users_basket_books
         user.getUserBasket().forEach(x -> x.removeUserFromBasket(user));
@@ -88,27 +81,23 @@ public class UserService {
         bookRepository.saveAll(user.getFavorite());
 
         personRepository.delete(user);
-
-        log.info("User successfully deleted");
         return new SimpleResponse("Пользователь успешно удален!");
     }
 
     public List<PurchasedUserBooksResponse> findAllUsersFavoriteBooks(Long userId) {
-
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getFavorite());
     }
 
     public List<PurchasedUserBooksResponse> findAllUserBooksInBasket(Long userId) {
-
         User user = personRepository.findById(userId).get();
         return viewUserBooks(user.getUserBasket());
     }
 
     public SimpleResponse updateByUser(Authentication authentication, UserRequest userRequest) {
+        User user = personRepository.findByEmail(authentication.getName()).orElseThrow(() ->
+                new NotFoundException("Пользователь не найдено"));
 
-        User user = personRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("Пользователь не найдено"));
         if (!passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
             throw new WrongPasswordException("Пароль введен неправильно");
         }
@@ -119,12 +108,11 @@ public class UserService {
             user.setEmail(userRequest.getEmail());
         }
         if (!passwordEncoder.matches(userRequest.getNewPassword(), user.getPassword())
-        && !userRequest.getNewPassword().equals("")) {
+                && !userRequest.getNewPassword().equals("")) {
             user.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
         }
         personRepository.save(user);
-
-        log.info("User update successful");
         return new SimpleResponse("Пользователь успешно сохранен");
     }
+
 }

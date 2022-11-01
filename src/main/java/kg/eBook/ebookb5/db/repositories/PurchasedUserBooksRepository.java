@@ -17,4 +17,5 @@ public interface PurchasedUserBooksRepository extends JpaRepository<PurchasedUse
     Page<PurchasedUserBooksResponse> findAllByUserId(Long userId, Pageable pageable);
 
     Boolean existsPurchasedUserBooksByBookId(Long bookId);
+
 }

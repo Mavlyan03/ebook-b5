@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.apis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
+import kg.eBook.ebookb5.dto.requests.PromoCodeRequest;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.db.services.PromoCodeService;
@@ -32,7 +32,7 @@ public class PromoCodeApi {
     @Operation(summary = "Create promo code", description = "Vendor can create promo code")
     @PreAuthorize("hasAuthority('VENDOR')")
     @PostMapping
-    public SimpleResponse create(@RequestBody PromocodeRequest promoCodeRequest, Authentication authentication) {
+    public SimpleResponse create(@RequestBody PromoCodeRequest promoCodeRequest, Authentication authentication) {
         return promocodeService.createPromoCode(promoCodeRequest, authentication);
     }
 

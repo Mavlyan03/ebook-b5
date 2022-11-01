@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.db.services;
 
-import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
+import kg.eBook.ebookb5.dto.requests.PromoCodeRequest;
 import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
@@ -34,7 +34,7 @@ public class PromoCodeService {
     private final PromoCodeRepository promocodeRepository;
     private final UserRepository userRepository;
 
-    public SimpleResponse createPromoCode(PromocodeRequest promoCodeRequest, Authentication authentication) {
+    public SimpleResponse createPromoCode(PromoCodeRequest promoCodeRequest, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName()).get();
         if (promoCodeRequest.getDateOfStart().isAfter(promoCodeRequest.getDateOfFinish())) {
             throw new InvalidDateException("Дата, которую вы написали, более ранняя, чем дата начала");

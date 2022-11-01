@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.db.models;
 
-import kg.eBook.ebookb5.dto.requests.PromocodeRequest;
+import kg.eBook.ebookb5.dto.requests.PromoCodeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +40,7 @@ public class PromoCode {
     @ManyToOne
     private User vendor;
 
-    public PromoCode(PromocodeRequest request) {
+    public PromoCode(PromoCodeRequest request) {
         this.name = request.getName();
         this.discount = request.getDiscount();
         this.dateOfStart = request.getDateOfStart();

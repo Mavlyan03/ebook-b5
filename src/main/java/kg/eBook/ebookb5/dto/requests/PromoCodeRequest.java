@@ -9,7 +9,8 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class PromocodeRequest {
+public class PromoCodeRequest {
+
     private String name;
     private int discount;
 
@@ -20,4 +21,5 @@ public class PromocodeRequest {
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfFinish;
+
 }

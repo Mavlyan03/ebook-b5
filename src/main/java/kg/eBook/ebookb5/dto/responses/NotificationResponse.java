@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.dto.responses;
 
 import kg.eBook.ebookb5.enums.BookStatus;
-import kg.eBook.ebookb5.models.Notification;
+import kg.eBook.ebookb5.db.models.Notification;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +15,9 @@ public class NotificationResponse {
 
     private Long id;
     private BookStatus bookStatus;
-
     private LocalDate dateOfStatus;
-
     private boolean read;
+
     public NotificationResponse(Notification notification) {
         this.id = notification.getId();
         this.bookStatus = notification.getBookStatus();
@@ -41,4 +40,5 @@ public class NotificationResponse {
         this.dateOfStatus = dateOfStatus;
         this.read = read;
     }
+
 }

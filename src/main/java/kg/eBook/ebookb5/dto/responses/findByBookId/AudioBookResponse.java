@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.dto.responses.findByBookId;
 
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
-import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.db.models.Book;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +34,6 @@ public class AudioBookResponse extends BookInnerPageResponse {
     private int likes;
     private int basket;
     private int quantityOfBook;
-
     private Long vendorId;
     private String firstName;
     private String lastName;
@@ -63,11 +62,10 @@ public class AudioBookResponse extends BookInnerPageResponse {
         this.likes = audioBook.getLikes().size();
         this.basket = audioBook.getBookBasket().size();
         this.quantityOfBook = audioBook.getQuantityOfBook();
-
-
         this.vendorId = audioBook.getOwner().getId();
         this.firstName = audioBook.getOwner().getFirstName();
         this.lastName = audioBook.getOwner().getLastName();
         this.phoneNumber = audioBook.getOwner().getPhoneNumber();
     }
+
 }

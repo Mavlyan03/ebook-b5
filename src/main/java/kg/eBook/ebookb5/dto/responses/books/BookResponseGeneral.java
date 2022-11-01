@@ -13,29 +13,17 @@ import lombok.Setter;
 public class BookResponseGeneral {
 
     private String mainImage;
-
     private String secondImage;
-
     private String thirdImage;
-
     private String name;
-
     private Long genreId;
-
     private int price;
-
     private String author;
-
     private String description;
-
     private Language language;
-
     private int yearOfIssue;
-
     private int discount;
-
     private boolean bestseller;
-
     private String fragment;
 
 }

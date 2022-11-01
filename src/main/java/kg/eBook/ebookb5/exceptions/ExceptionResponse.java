@@ -13,4 +13,5 @@ public class ExceptionResponse {
 
     private String exceptionClassname;
     private String message;
+
 }

@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.dto.responses.userMainPage;
 
-import kg.eBook.ebookb5.models.Genre;
+import kg.eBook.ebookb5.db.models.Genre;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,4 +16,5 @@ public class LastPublicationsBooksResponse extends BestsellerBooksResponse {
         super(bookId, name, mainImage, description, price);
         this.genre = genre.getName();
     }
+
 }

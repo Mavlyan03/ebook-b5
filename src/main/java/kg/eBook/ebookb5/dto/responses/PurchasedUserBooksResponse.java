@@ -1,7 +1,7 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.Book;
-import kg.eBook.ebookb5.models.PurchasedUserBooks;
+import kg.eBook.ebookb5.db.models.Book;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,11 +20,13 @@ public class PurchasedUserBooksResponse {
     private LocalDate purchaseDate;
     private int quantityOfBook;
     private String mainImage;
-    private int promocode;
+    private int promoCode;
     private int discount;
+    private LocalDate dateTheBookWasAddedToFavorites;
+
     public PurchasedUserBooksResponse(Long bookId, String name, int price, String author,
                                       LocalDate purchaseDate, int quantityOfBook, String mainImage,
-                                      int promocode, int discount) {
+                                      int promoCode, int discount) {
         this.bookId = bookId;
         this.name = name;
         this.price = price;
@@ -32,21 +34,8 @@ public class PurchasedUserBooksResponse {
         this.purchaseDate = purchaseDate;
         this.quantityOfBook = quantityOfBook;
         this.mainImage = mainImage;
-        this.promocode = promocode;
+        this.promoCode = promoCode;
         this.discount = discount;
-    }
-
-    private LocalDate dateTheBookWasAddedToFavorites;
-
-    public PurchasedUserBooksResponse(PurchasedUserBooks userBooks) {
-       this.bookId = userBooks.getBookId();
-       this.name = userBooks.getBookName();
-       this.price = userBooks.getPrice();
-       this.author = userBooks.getBookAuthor();
-       this.purchaseDate = userBooks.getPurchaseDate();
-       this.quantityOfBook = userBooks.getQuantityOfBook();
-       this.mainImage = userBooks.getBookMainImage();
-       this.promocode = userBooks.getPromocode();
     }
 
     public PurchasedUserBooksResponse(Book userBooks) {
@@ -61,9 +50,10 @@ public class PurchasedUserBooksResponse {
 
     public static List<PurchasedUserBooksResponse> viewUserBooks(List<Book> userBooks) {
         List<PurchasedUserBooksResponse> booksResponse = new ArrayList<>();
-        for (Book book: userBooks) {
+        for (Book book : userBooks) {
             booksResponse.add(new PurchasedUserBooksResponse(book));
         }
         return booksResponse;
     }
+
 }

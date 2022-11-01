@@ -1,10 +1,10 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.db.models.Book;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -12,18 +12,12 @@ import lombok.Setter;
 public class BookBasketResponse {
 
     private Long id;
-
     private String name;
-
     private int price;
-
     private String author;
-
     private int discount;
-
     private String mainImage;
-
-    private String promocode;
+    private String promoCode;
 
     public BookBasketResponse(Book book) {
         this.id = book.getId();
@@ -33,4 +27,5 @@ public class BookBasketResponse {
         this.discount = book.getDiscount();
         this.mainImage = book.getMainImage();
     }
+
 }

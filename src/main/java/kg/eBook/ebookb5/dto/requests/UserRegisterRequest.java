@@ -18,4 +18,5 @@ public class UserRegisterRequest {
     @Email
     private String email;
     private String password;
+
 }

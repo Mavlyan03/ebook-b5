@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.dto.responses.userMainPage;
 
-import kg.eBook.ebookb5.models.Book;
+import kg.eBook.ebookb5.db.models.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -30,4 +29,5 @@ public class FavoriteBooksResponse {
         }
         return favoriteBooksResponses;
     }
+
 }

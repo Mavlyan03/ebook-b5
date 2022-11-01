@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.dto.responses;
 
-import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.db.models.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,12 +25,11 @@ public class UserResponse {
     }
 
     public static List<UserResponse> view(List<User> users) {
-
         List<UserResponse> userResponses = new ArrayList<>();
-
         for (User user : users) {
             userResponses.add(new UserResponse(user));
         }
         return userResponses;
     }
+
 }

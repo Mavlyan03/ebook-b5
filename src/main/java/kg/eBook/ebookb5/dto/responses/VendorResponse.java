@@ -2,7 +2,7 @@ package kg.eBook.ebookb5.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
-import kg.eBook.ebookb5.models.User;
+import kg.eBook.ebookb5.db.models.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +20,8 @@ public class VendorResponse {
     private String phoneNumber;
     private String email;
     private Integer quantityOfBooks;
-    @JsonFormat(pattern="dd-MM-yyyy")
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @ApiModelProperty(dataType = "java.sql.Date")
     private LocalDate dateOfRegistration;
 
@@ -41,4 +42,5 @@ public class VendorResponse {
         }
         return vendorResponses;
     }
+
 }

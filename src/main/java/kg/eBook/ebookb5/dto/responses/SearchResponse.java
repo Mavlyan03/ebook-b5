@@ -7,10 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SearchResponse {
+
     private Long id;
-
     private String search;
-
     private SearchType searchType;
 
     public SearchResponse(Long id, String search, SearchType searchType) {
@@ -18,9 +17,5 @@ public class SearchResponse {
         this.search = search;
         this.searchType = searchType;
     }
-
-    public SearchResponse() {
-    }
-
 
 }

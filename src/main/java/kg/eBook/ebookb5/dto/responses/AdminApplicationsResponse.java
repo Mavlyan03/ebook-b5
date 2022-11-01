@@ -10,20 +10,11 @@ import java.time.LocalDate;
 public class AdminApplicationsResponse {
 
     private Long id;
-
     private String mainImage;
-
     private String name;
-
     private LocalDate publishedDate;
-
     private int price;
-
     private boolean isEnabled;
-
-    public AdminApplicationsResponse() {
-
-    }
 
     public AdminApplicationsResponse(Long id,
                                      String mainImage,
@@ -36,8 +27,7 @@ public class AdminApplicationsResponse {
         this.name = name;
         this.publishedDate = publishedDate;
         this.price = price;
-        this.isEnabled=isEnabled;
+        this.isEnabled = isEnabled;
     }
-
 
 }

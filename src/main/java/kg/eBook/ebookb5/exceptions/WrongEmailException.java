@@ -1,6 +1,6 @@
 package kg.eBook.ebookb5.exceptions;
 
-public class WrongEmailException extends RuntimeException{
+public class WrongEmailException extends RuntimeException {
 
     public WrongEmailException() {
     }
@@ -8,4 +8,5 @@ public class WrongEmailException extends RuntimeException{
     public WrongEmailException(String message) {
         super(message);
     }
+
 }

@@ -25,4 +25,5 @@ public class OperationsHistoryResponse {
         this.totalElementBasketBooks = basketBooks.size();
         this.basketBooks = basketBooks;
     }
+
 }

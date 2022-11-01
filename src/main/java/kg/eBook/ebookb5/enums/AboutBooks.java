@@ -8,6 +8,6 @@ public enum AboutBooks {
     SOLD_OUT,
     WITH_DISCOUNTS,
     IN_PROCESSING,
-    REJECTED;
+    REJECTED
 
 }

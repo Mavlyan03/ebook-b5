@@ -6,7 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import java.time.LocalDate;
 
 @Entity
@@ -23,8 +30,11 @@ public class Promocode {
     private Long id;
 
     private String name;
+
     private int discount;
+
     private LocalDate dateOfStart;
+
     private LocalDate dateOfFinish;
 
     @ManyToOne
@@ -36,4 +46,5 @@ public class Promocode {
         this.dateOfStart = request.getDateOfStart();
         this.dateOfFinish = request.getDateOfFinish();
     }
+
 }

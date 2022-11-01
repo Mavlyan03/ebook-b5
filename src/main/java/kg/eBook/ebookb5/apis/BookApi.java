@@ -24,9 +24,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/books")
+@RequestMapping("api/public/books")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Book API", description = "Public endpoints for user")
+@Tag(name = "Public Book API", description = "Public book endpoints")
 public class BookApi {
 
     private final BookService bookService;

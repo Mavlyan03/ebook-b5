@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Promocode {
+public class PromoCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promo_gen")
@@ -40,7 +40,7 @@ public class Promocode {
     @ManyToOne
     private User vendor;
 
-    public Promocode(PromocodeRequest request) {
+    public PromoCode(PromocodeRequest request) {
         this.name = request.getName();
         this.discount = request.getDiscount();
         this.dateOfStart = request.getDateOfStart();

@@ -35,7 +35,7 @@ public class UserCartApi {
     @GetMapping("check")
     public List<BookBasketResponse> findAllBooksWithPromocode(
             @RequestParam(required = false) String promocodeName, Authentication authentication) {
-        return promocodeService.findAllBooksWithPromocode(promocodeName, authentication);
+        return promocodeService.findAllBooksWithPromoCode(promocodeName, authentication);
     }
 
     @Operation(summary = "Increase book quantity", description = "Increase book quantity in cart by user")

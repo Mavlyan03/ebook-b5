@@ -40,7 +40,7 @@ public class PromoCodeApi {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/check")
     public List<BookBasketResponse> findAllBooksWithPromocode(@RequestParam String promocodeName, Authentication authentication) {
-        return promocodeService.findAllBooksWithPromocode(promocodeName, authentication);
+        return promocodeService.findAllBooksWithPromoCode(promocodeName, authentication);
     }
 
 }

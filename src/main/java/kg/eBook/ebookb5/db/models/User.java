@@ -60,7 +60,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "vendor", cascade = ALL)
-    private List<Promocode> promoCodes = new ArrayList<>();
+    private List<PromoCode> promoCodes = new ArrayList<>();
 
     @ManyToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "bookBasket")
     private List<Book> userBasket = new ArrayList<>();

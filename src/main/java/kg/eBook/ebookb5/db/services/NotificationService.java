@@ -33,11 +33,8 @@ public class NotificationService {
     private final MailingService mailingService;
 
     public SimpleResponse acceptedBook(Long bookId) {
-
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
-
         Notification notification = new Notification();
-
         book.setBookStatus(BookStatus.ACCEPTED);
         book.setPublishedDate(LocalDate.now());
         book.setEnabled(true);
@@ -48,29 +45,24 @@ public class NotificationService {
         notification.setVendor(book.getOwner());
         notification.setCreatedAt(LocalDate.now());
         notification.setBookId(book.getId());
-
         notificationRepository.save(notification);
 
         log.info("Save new notification");
-
         MailNewBookRequest mailNewBookRequest = new MailNewBookRequest(
                 book.getMainImage(),
                 book.getName(),
                 book.getPrice()
         );
 
-        if(book.getBookStatus().equals(BookStatus.ACCEPTED)) {
+        if (book.getBookStatus().equals(BookStatus.ACCEPTED)) {
             mailingService.sendNewBookMessage(mailNewBookRequest);
         }
         return new SimpleResponse(book.getName() + " был успешно принят!");
     }
 
     public SimpleResponse rejectedBook(Long bookId, String description) {
-
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("Книга не найдено"));
-
         Notification notification = new Notification();
-
         book.setBookStatus(BookStatus.REJECTED);
         book.setPublishedDate(LocalDate.now());
         bookRepository.save(book);
@@ -80,7 +72,6 @@ public class NotificationService {
         notification.setCreatedAt(LocalDate.now());
         notification.setDescription(description);
         notification.setBookId(book.getId());
-
         notificationRepository.save(notification);
 
         log.info("Save new notification");
@@ -88,26 +79,20 @@ public class NotificationService {
     }
 
     public List<NotificationResponse> findAllNotificationsByVendor(Authentication authentication) {
-
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-
         return notificationRepository.findAllNotifications(vendor.getId());
     }
 
     public NotificationFindByIdResponse findByNotificationId(Long notificationId) {
-
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NotFoundException("Уведомление не найдено"));
-
         notification.setRead(true);
         notificationRepository.save(notification);
-
         return new NotificationFindByIdResponse(notification);
     }
 
     public List<NotificationResponse> markAsRead(Authentication authentication) {
-
         User vendor = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         for (Notification notification : vendor.getNotifications()) {
@@ -118,4 +103,5 @@ public class NotificationService {
         log.info("vendor marked all notifications as viewed");
         return view(vendor.getNotifications());
     }
+
 }

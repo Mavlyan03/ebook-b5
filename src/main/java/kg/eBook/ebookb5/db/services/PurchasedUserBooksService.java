@@ -15,8 +15,8 @@ public class PurchasedUserBooksService {
     private final PurchasedUserBooksRepository userBooksRepository;
 
     public Page<PurchasedUserBooksResponse> purchasedUserBooks(Long userId, int page, int size) {
-
         Pageable pageable = PageRequest.of(page - 1, size);
         return userBooksRepository.findAllByUserId(userId, pageable);
     }
+
 }

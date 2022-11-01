@@ -16,4 +16,5 @@ public class BestsellerBooksResponse {
     private String mainImage;
     private String description;
     private int price;
+
 }

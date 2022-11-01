@@ -19,4 +19,5 @@ public class FavoriteAudioBooksResponse extends FavoriteBooksResponse {
         super(bookId, mainImage, name, author, price);
         this.duration = duration;
     }
+
 }

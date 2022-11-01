@@ -32,21 +32,15 @@ public class ElectronicBookService {
     private final GenreRepository genreRepository;
 
     public BookResponse saveElectronicBook(Authentication authentication, ElectronicBookSaveRequest eBook) {
-
         isBookExists(eBook);
-
         Book book = new Book(eBook);
-
         book.setBookType(ELECTRONIC_BOOK);
-
         book.setGenre(genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
-                "Жанр с ID: " + eBook.getGenreId() + " не был найден"
-        )));
+                "Жанр с ID: " + eBook.getGenreId() + " не был найден")));
 
         User user = userRepository.findByEmail(authentication.getName()).get();
         book.setOwner(user);
         user.setBook(book);
-
         Book savedBook = bookRepository.save(book);
 
         log.info("Electronic book successfully saved");
@@ -59,28 +53,23 @@ public class ElectronicBookService {
     }
 
     private void isBookExists(ElectronicBookSaveRequest electronicBookSaveRequest) {
-
         Book book = bookRepository.findByName(electronicBookSaveRequest.getName()).orElse(null);
-
         if (book != null) {
             if (book.getLanguage().equals(electronicBookSaveRequest.getLanguage()) && book.getBookType().equals(ELECTRONIC_BOOK)) {
                 throw new AlreadyExistException("Эта книга уже есть в базе");
             }
         }
-
     }
 
     public void updateBook(Authentication authentication, Long bookId, ElectronicBookSaveRequest eBook) {
-
         User user = userRepository.findByEmail(authentication.getName()).get();
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"));
-
         if (book.getBookType().equals(ELECTRONIC_BOOK)) {
             book.setName(eBook.getName());
             book.setGenre(genreRepository.findById(eBook.getGenreId()).orElseThrow(() -> new NotFoundException(
-                    "Жанр с ID: " + eBook.getGenreId() + " не найден"
-            )));
+                    "Жанр с ID: " + eBook.getGenreId() + " не найден")));
+
             book.setPrice(eBook.getPrice());
             book.setAuthor(eBook.getAuthor());
             book.setPageSize(eBook.getPageSize());
@@ -105,4 +94,5 @@ public class ElectronicBookService {
         } else
             throw new IllegalStateException("Вы не можете редактировать эту книгу");
     }
+
 }

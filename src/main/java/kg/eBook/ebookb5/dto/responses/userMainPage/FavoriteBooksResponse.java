@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,4 +29,5 @@ public class FavoriteBooksResponse {
         }
         return favoriteBooksResponses;
     }
+
 }

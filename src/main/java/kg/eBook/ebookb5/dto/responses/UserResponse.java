@@ -25,12 +25,11 @@ public class UserResponse {
     }
 
     public static List<UserResponse> view(List<User> users) {
-
         List<UserResponse> userResponses = new ArrayList<>();
-
         for (User user : users) {
             userResponses.add(new UserResponse(user));
         }
         return userResponses;
     }
+
 }

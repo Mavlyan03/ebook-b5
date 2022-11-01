@@ -15,6 +15,8 @@ public class VendorProfileRequest {
 
     @Email
     private String email;
+
     private String password;
     private String newPassword;
+
 }

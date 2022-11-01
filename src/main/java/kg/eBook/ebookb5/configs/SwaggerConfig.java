@@ -1,4 +1,4 @@
-package kg.eBook.ebookb5.db.repositories.util;
+package kg.eBook.ebookb5.configs;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -17,7 +17,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenApi() {
         return new OpenAPI()
                 .components(new Components()
-                        .addSecuritySchemes("Bearer Token",apiKeySecurityScheme()))
+                        .addSecuritySchemes("Bearer Token", apiKeySecurityScheme()))
                 .info(new Info().title("Ebook Project").description("Written by Ebook Team"))
                 .security(List.of(new SecurityRequirement().addList("Bearer Token")));
     }

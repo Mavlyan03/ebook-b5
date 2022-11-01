@@ -1,6 +1,7 @@
 package kg.eBook.ebookb5.enums;
 
 public enum BookType {
+
     PAPER_BOOK("Бумажная"),
     AUDIO_BOOK("Аудиокнига"),
     ELECTRONIC_BOOK("Электронная книга");
@@ -10,4 +11,5 @@ public enum BookType {
     BookType(String book) {
         this.book = book;
     }
+
 }

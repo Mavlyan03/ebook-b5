@@ -22,21 +22,15 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     public JwtResponse authenticate(LoginRequest loginRequest) {
-
         User user = personRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(
-                        "Пользователь с почтой " + loginRequest.getEmail() + " не найден"
-                ));
-
+                        "Пользователь с почтой " + loginRequest.getEmail() + " не найден"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new WrongPasswordException(
-                    "Неверный пароль"
-            );
+            throw new WrongPasswordException("Неверный пароль");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-
         return new JwtResponse(
                 user.getId(),
                 token,
@@ -44,4 +38,5 @@ public class LoginService {
                 user.getFirstName()
         );
     }
+
 }

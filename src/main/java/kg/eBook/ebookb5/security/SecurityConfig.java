@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .cors().and().csrf().disable()
                 .authorizeRequests(auth -> auth
                         .antMatchers("/swagger", "/swagger-ui/index.html").permitAll()
-                        .antMatchers("/api/public/**").permitAll()
+                        .antMatchers("/", "/api/public/**", "/api/books/**").permitAll()
                         .anyRequest()
                         .permitAll()
                 )
@@ -81,7 +81,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer(){
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
         return new EmbeddedTomcatCustomizer();
     }
 

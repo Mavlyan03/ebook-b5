@@ -1,6 +1,5 @@
 package kg.eBook.ebookb5.db.services.book;
 
-
 import com.sun.jdi.request.InvalidRequestStateException;
 import kg.eBook.ebookb5.dto.requests.books.PaperBookSaveRequest;
 import kg.eBook.ebookb5.dto.responses.books.BookResponse;
@@ -35,22 +34,15 @@ public class PaperBookService {
     private final GenreRepository genreRepository;
 
     public BookResponse savePaperBook(Authentication authentication, PaperBookSaveRequest paperBook) {
-
         isBookExists(paperBook);
-
         Book book = new Book(paperBook);
-
         book.setBookType(PAPER_BOOK);
-
         book.setGenre(genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
-                "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
-        )));
+                "Жанр с ID: " + paperBook.getGenreId() + " не был найден")));
 
         User user = userRepository.findByEmail(authentication.getName()).get();
-
         book.setOwner(user);
         user.setBook(book);
-
         Book savedBook = bookRepository.save(book);
 
         log.info("Paper book successfully saved");
@@ -63,49 +55,38 @@ public class PaperBookService {
     }
 
     private void isBookExists(PaperBookSaveRequest paperBookSaveRequest) {
-
         Book book = bookRepository.findByName(paperBookSaveRequest.getName()).orElse(null);
-
-        if(book != null) {
-            if(book.getLanguage().equals(paperBookSaveRequest.getLanguage()) && book.getBookType().equals(PAPER_BOOK)) {
+        if (book != null) {
+            if (book.getLanguage().equals(paperBookSaveRequest.getLanguage()) && book.getBookType().equals(PAPER_BOOK)) {
                 throw new AlreadyExistException("Эта книга уже есть в базе");
             }
         }
-
     }
 
     public void deleteBook(Authentication authentication, Long bookId) {
-
         User user = userRepository.findByEmail(authentication.getName()).get();
-
-        if(user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR)) {
+        if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR)) {
             bookRepository.deleteById(bookId);
-
             log.info("Book successfully deleted");
-        }
-        else {
+        } else {
             throw new InvalidRequestStateException("Вы не можете удалить эту книгу");
         }
         ResponseEntity.ok(HttpStatus.OK);
     }
 
-
     public void updateBook(Authentication authentication, Long bookId, PaperBookSaveRequest paperBook) {
-
         User user = userRepository.findByEmail(authentication.getName()).get();
-
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundException("Книга с идентификатором: " + bookId + " не найдена"));
-
-        if(book.getBookType().equals(PAPER_BOOK)) {
+        if (book.getBookType().equals(PAPER_BOOK)) {
             book.setMainImage(paperBook.getMainImage());
             book.setSecondImage(paperBook.getSecondImage());
             book.setThirdImage(paperBook.getThirdImage());
             book.setName(paperBook.getName());
             book.setAuthor(paperBook.getAuthor());
             book.setGenre(genreRepository.findById(paperBook.getGenreId()).orElseThrow(() -> new NotFoundException(
-                    "Жанр с ID: " + paperBook.getGenreId() + " не был найден"
-            )));
+                    "Жанр с ID: " + paperBook.getGenreId() + " не был найден")));
+
             book.setPublishingHouse(paperBook.getPublishingHouse());
             book.setDescription(paperBook.getDescription());
             book.setFragment(paperBook.getFragment());
@@ -117,7 +98,6 @@ public class PaperBookService {
             book.setDiscount(paperBook.getDiscount());
             book.setBestseller(paperBook.isBestseller());
             book.setBookStatus(BookStatus.IN_PROCESSING);
-
             user.setBook(book);
             book.setOwner(user);
 
@@ -126,4 +106,5 @@ public class PaperBookService {
         } else
             throw new IllegalStateException("Вы не можете редактировать эту книгу");
     }
+
 }

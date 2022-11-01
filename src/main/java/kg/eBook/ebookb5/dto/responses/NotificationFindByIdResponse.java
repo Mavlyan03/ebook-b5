@@ -12,9 +12,7 @@ import java.time.LocalDate;
 public class NotificationFindByIdResponse {
 
     private BookStatus bookStatus;
-
     private LocalDate dateOfStatus;
-
     private String description;
 
     public NotificationFindByIdResponse(Notification notification) {
@@ -22,4 +20,5 @@ public class NotificationFindByIdResponse {
         this.dateOfStatus = notification.getCreatedAt();
         this.description = notification.getDescription();
     }
+
 }

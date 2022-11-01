@@ -11,19 +11,11 @@ import java.time.LocalDate;
 public class AdminBooksResponse {
 
     private Long id;
-
     private String mainImage;
-
     private String name;
-
     private LocalDate publishedDate;
-
     private int price;
-
     private String bookType;
-
-    public AdminBooksResponse() {
-    }
 
     public AdminBooksResponse(Long id,
                               String mainImage,
@@ -38,4 +30,5 @@ public class AdminBooksResponse {
         this.price = price;
         this.bookType = bookType.name();
     }
+
 }

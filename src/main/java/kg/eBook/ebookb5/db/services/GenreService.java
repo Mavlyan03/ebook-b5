@@ -19,7 +19,6 @@ import java.util.List;
 public class GenreService {
 
     private final GenreRepository genreRepository;
-
     private final UserRepository userRepository;
 
     public List<GenreResponse> findAll(Authentication authentication) {
@@ -27,11 +26,11 @@ public class GenreService {
         List<Genre> genres = genreRepository.findAll();
         if (authentication != null) {
             User user = userRepository.findByEmail(authentication.getName()).get();
-            if (user.getRole().equals(Role.ADMIN)  || user.getRole().equals(Role.VENDOR)) {
+            if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.VENDOR)) {
                 for (Genre genre : genres) {
                     genreResponses.add(new GenreResponse(genre, genreRepository.quantityOfBook(genre.getId()).orElse(null)));
                 }
-            }else if (user.getRole().equals(Role.USER)){
+            } else if (user.getRole().equals(Role.USER)) {
                 for (Genre genre : genres) {
                     genreResponses.add(new GenreResponse(genre, genreRepository.quantityOfBookACCEPTED(BookStatus.ACCEPTED, genre.getId()).orElse(null)));
                 }
@@ -41,7 +40,7 @@ public class GenreService {
                 genreResponses.add(new GenreResponse(genre, genreRepository.quantityOfBookACCEPTED(BookStatus.ACCEPTED, genre.getId()).orElse(null)));
             }
         }
-
         return genreResponses;
     }
+
 }

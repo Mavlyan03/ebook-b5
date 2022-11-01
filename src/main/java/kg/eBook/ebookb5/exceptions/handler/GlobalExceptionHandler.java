@@ -3,7 +3,7 @@ package kg.eBook.ebookb5.exceptions.handler;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.ExceptionResponse;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
-import kg.eBook.ebookb5.exceptions.InvalidPromocodeException;
+import kg.eBook.ebookb5.exceptions.InvalidPromoCodeException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.exceptions.WrongEmailException;
 import kg.eBook.ebookb5.exceptions.WrongPasswordException;
@@ -27,9 +27,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(InvalidPromocodeException.class)
+    @ExceptionHandler(InvalidPromoCodeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handlerThisPromocodeIsInvalid(InvalidPromocodeException e) {
+    public ExceptionResponse handlerThisPromocodeIsInvalid(InvalidPromoCodeException e) {
         return new ExceptionResponse(
                 e.getClass().getSimpleName(),
                 e.getMessage()

@@ -5,7 +5,7 @@ import kg.eBook.ebookb5.dto.responses.BookBasketResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.exceptions.AlreadyExistException;
 import kg.eBook.ebookb5.exceptions.InvalidDateException;
-import kg.eBook.ebookb5.exceptions.InvalidPromocodeException;
+import kg.eBook.ebookb5.exceptions.InvalidPromoCodeException;
 import kg.eBook.ebookb5.exceptions.NotFoundException;
 import kg.eBook.ebookb5.db.models.Book;
 import kg.eBook.ebookb5.db.models.PromoCode;
@@ -60,7 +60,7 @@ public class PromoCodeService {
             return viewMapper(client.getUserBasket(), null, null);
         }
         PromoCode promoCode = promocodeRepository.findByName(promoCodeName).orElseThrow(
-                () -> new InvalidPromocodeException("Данный промокод не действителен"));
+                () -> new InvalidPromoCodeException("Данный промокод не действителен"));
 
         if (LocalDate.now().isAfter(promoCode.getDateOfFinish())) {
             throw new InvalidDateException("Срок действия промокода истек");
@@ -70,7 +70,7 @@ public class PromoCodeService {
         String discountPromoCode = "";
         List<Long> bookId = new ArrayList<>();
         if (!thisPromocodeAppliesToBooks(client, promoCode.getVendor())) {
-            throw new InvalidPromocodeException("Данный промокод не действителен");
+            throw new InvalidPromoCodeException("Данный промокод не действителен");
         } else {
             for (Book book : client.getUserBasket()) {
                 for (Book vendorBook : promoCode.getVendor().getBooks()) {

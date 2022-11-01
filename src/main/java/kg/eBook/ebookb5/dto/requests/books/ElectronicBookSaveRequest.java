@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElectronicBookSaveRequest extends BookSaveRequestGeneral{
+public class ElectronicBookSaveRequest extends BookSaveRequestGeneral {
 
     @NotNull(message = "Поле не может быть пустым")
     private int pageSize;

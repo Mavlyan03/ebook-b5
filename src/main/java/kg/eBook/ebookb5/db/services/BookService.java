@@ -5,10 +5,10 @@ import kg.eBook.ebookb5.dto.responses.AdminBooksResponse;
 import kg.eBook.ebookb5.dto.responses.ApplicationResponse;
 import kg.eBook.ebookb5.dto.responses.BookResponse;
 import kg.eBook.ebookb5.dto.responses.SearchResponse;
-import kg.eBook.ebookb5.dto.responses.books.ABookResponse;
+import kg.eBook.ebookb5.dto.responses.books.aBookResponse;
 import kg.eBook.ebookb5.dto.responses.books.BookResponseGeneral;
-import kg.eBook.ebookb5.dto.responses.books.EbookResponse;
-import kg.eBook.ebookb5.dto.responses.books.PBookResponse;
+import kg.eBook.ebookb5.dto.responses.books.eBookResponse;
+import kg.eBook.ebookb5.dto.responses.books.pBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.AudioBookResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.BookInnerPageResponse;
 import kg.eBook.ebookb5.dto.responses.findByBookId.ElectronicBookResponse;
@@ -148,16 +148,16 @@ public class BookService {
         }
     }
 
-    private PBookResponse bookToPaperBookResponse(Book book) {
-        return modelMapper.map(book, PBookResponse.class);
+    private pBookResponse bookToPaperBookResponse(Book book) {
+        return modelMapper.map(book, pBookResponse.class);
     }
 
-    private EbookResponse bookToEbookResponse(Book book) {
-        return modelMapper.map(book, EbookResponse.class);
+    private eBookResponse bookToEbookResponse(Book book) {
+        return modelMapper.map(book, eBookResponse.class);
     }
 
-    private ABookResponse bookToAudioBookResponse(Book book) {
-        return modelMapper.map(book, ABookResponse.class);
+    private aBookResponse bookToAudioBookResponse(Book book) {
+        return modelMapper.map(book, aBookResponse.class);
     }
 
     public Page<AdminBooksResponse> findAllBooks(Long genreId,

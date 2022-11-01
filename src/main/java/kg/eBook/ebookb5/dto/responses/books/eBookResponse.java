@@ -9,12 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EbookResponse extends BookResponseGeneral {
+public class eBookResponse extends BookResponseGeneral {
 
     private int pageSize;
-
     private String publishingHouse;
-
     private String electronicBook;
 
 }

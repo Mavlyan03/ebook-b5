@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PBookResponse extends BookResponseGeneral{
+public class pBookResponse extends BookResponseGeneral{
 
     private int pageSize;
 

@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.eBook.ebookb5.dto.requests.VendorProfileRequest;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
+import kg.eBook.ebookb5.dto.responses.aBookVendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.exceptions.WrongEmailException;
 import kg.eBook.ebookb5.db.services.VendorService;
@@ -66,7 +66,7 @@ public class VendorApi {
             "all books, in favorites, in the basket, sold out with discounts in processing and rejected")
     @PreAuthorize("hasAnyAuthority('VENDOR', 'ADMIN')")
     @GetMapping("{vendorId}/books")
-    public Page<ABookVendorResponse> findABookVendor(@PathVariable Long vendorId,
+    public Page<aBookVendorResponse> findABookVendor(@PathVariable Long vendorId,
                                                      @RequestParam AboutBooks aboutBooks,
                                                      @RequestParam(required = false, defaultValue = "1") int page,
                                                      @RequestParam(required = false, defaultValue = "16") int size) {

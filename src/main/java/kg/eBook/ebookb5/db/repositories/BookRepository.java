@@ -7,7 +7,7 @@ import kg.eBook.ebookb5.dto.responses.userMainPage.BestsellerBooksResponse;
 import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteAudioBooksResponse;
 import kg.eBook.ebookb5.dto.responses.userMainPage.FavoriteBooksResponse;
 import kg.eBook.ebookb5.dto.responses.userMainPage.LastPublicationsBooksResponse;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
+import kg.eBook.ebookb5.dto.responses.aBookVendorResponse;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.BookType;
 import kg.eBook.ebookb5.enums.Language;
@@ -95,32 +95,32 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id order by b.publishedDate desc")
-    Page<ABookVendorResponse> findBooksByOwnerId(Long owner_id, Pageable pageable);
+    Page<aBookVendorResponse> findBooksByOwnerId(Long owner_id, Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.bookStatus = :bookStatus order by b.publishedDate desc ")
-    Page<ABookVendorResponse> findBooksByOwnerIdAndBookStatus(Long owner_id, BookStatus bookStatus, Pageable pageable);
+    Page<aBookVendorResponse> findBooksByOwnerIdAndBookStatus(Long owner_id, BookStatus bookStatus, Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.discount > 0 order by b.publishedDate desc")
-    Page<ABookVendorResponse> findBooksByOwnerIdAndDiscountNotNull(Long owner_id, Pageable pageable);
+    Page<aBookVendorResponse> findBooksByOwnerIdAndDiscountNotNull(Long owner_id, Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.bookBasket.size > 0 order by b.publishedDate desc ")
-    Page<ABookVendorResponse> findBooksByOwnerIdAndBookBasketIsNotNull(Long owner_id, Pageable pageable);
+    Page<aBookVendorResponse> findBooksByOwnerIdAndBookBasketIsNotNull(Long owner_id, Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.owner.id = :owner_id and b.likes.size > 0 order by b.publishedDate desc")
-    Page<ABookVendorResponse> findBooksByOwnerIdAndLikesIsNotNull(Long owner_id, Pageable pageable);
+    Page<aBookVendorResponse> findBooksByOwnerIdAndLikesIsNotNull(Long owner_id, Pageable pageable);
 
     @Query("select new kg.eBook.ebookb5.dto.responses.ABookVendorResponse(" +
             "b.id, b.name, b.mainImage, b.price, b.bookStatus, b.publishedDate, b.likes.size, b.bookBasket.size) " +
             "from Book b where b.id in (:ids) order by b.publishedDate desc")
-    Page<ABookVendorResponse> findAllById(List<Long> ids, Pageable pageable);
+    Page<aBookVendorResponse> findAllById(List<Long> ids, Pageable pageable);
 
     @Modifying
     @Query(value = "delete from users_favorite_books b where b.book_id = :book_id and b.user_id = :user_id ", nativeQuery = true)

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ABookVendorResponse {
+public class aBookVendorResponse {
 
     private Long id;
     private String name;
@@ -20,9 +20,11 @@ public class ABookVendorResponse {
     private int price;
     private BookStatus bookStatus;
 
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @ApiModelProperty(dataType = "java.sql.Date")
     private LocalDate dateOfRegistration;
+
     private Integer favorite;
     private Integer basket;
+
 }

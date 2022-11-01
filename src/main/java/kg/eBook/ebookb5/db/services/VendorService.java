@@ -5,7 +5,7 @@ import kg.eBook.ebookb5.dto.requests.VendorRegisterRequest;
 import kg.eBook.ebookb5.dto.responses.JwtResponse;
 import kg.eBook.ebookb5.dto.responses.SimpleResponse;
 import kg.eBook.ebookb5.dto.responses.VendorResponse;
-import kg.eBook.ebookb5.dto.responses.ABookVendorResponse;
+import kg.eBook.ebookb5.dto.responses.aBookVendorResponse;
 import kg.eBook.ebookb5.enums.AboutBooks;
 import kg.eBook.ebookb5.enums.BookStatus;
 import kg.eBook.ebookb5.enums.Role;
@@ -117,7 +117,7 @@ public class VendorService {
         return viewVendors(personRepository.findAllVendors());
     }
 
-    public Page<ABookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
+    public Page<aBookVendorResponse> findABookVendor(Long vendorId, AboutBooks aboutBooks, int page, int size) {
         User vendor = personRepository.findById(vendorId).orElseThrow(() ->
                 new NotFoundException("Пользователь не найдено"));
 

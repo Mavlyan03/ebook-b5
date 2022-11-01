@@ -110,7 +110,7 @@ public class PromoCodeService {
             for (BookBasketResponse basketRespons : basketResponses) {
                 for (Long aLong : bookId) {
                     if (basketRespons.getId().equals(aLong)) {
-                        basketRespons.setPromocode(discountPromocode);
+                        basketRespons.setPromoCode(discountPromocode);
                     }
                 }
             }

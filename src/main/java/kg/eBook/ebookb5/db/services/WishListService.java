@@ -27,19 +27,15 @@ public class WishListService {
     private final UserRepository userRepository;
 
     public void addBookToWishList(Long bookId, Authentication authentication) {
-
         User user1 = userRepository.findByEmail(authentication.getName()).get();
-
-        Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundException("Книга с ID: " + bookId + " не найдена"
-                ));
+        Book book = bookRepository.findById(bookId).orElseThrow(() ->
+                new NotFoundException("Книга с ID: " + bookId + " не найдена"));
 
         for (Book i : user1.getFavorite()) {
             if (i.getBookType().equals(book.getBookType()) &&
                     i.getLanguage().equals(book.getLanguage()) &&
                     i.getGenre().equals(book.getGenre()) &&
                     i.getName().equals(book.getName()))
-
                 throw new AlreadyExistException("Эта книга уже добавлена в избранное");
         }
 
@@ -49,15 +45,13 @@ public class WishListService {
     }
 
     public List<FavoriteBooksResponse> getBooks(Authentication authentication) {
-
         User user = userRepository.findByEmail(authentication.getName()).get();
-
         return mapperFavoriteBooksResponse(user.getFavorite());
     }
 
     public void removeBook(Long bookId, Authentication authentication) {
-
         User user = userRepository.findByEmail(authentication.getName()).get();
         bookRepository.detache(bookId, user.getId());
     }
+
 }
